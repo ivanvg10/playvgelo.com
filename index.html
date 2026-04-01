@@ -933,8 +933,8 @@ body {
     <div class="header-bg">
       <img id="header-splash-img" src="" alt="Banner" onerror="this.style.opacity='0'">
     </div>
-    <div class="header-subtitle">community competitive rankings</div>
-    <div class="live-text"><span class="live-dot"></span>Live — auto-updates every 60s</div>
+    <div class="header-subtitle" data-i18n="subtitle">community competitive rankings</div>
+    <div class="live-text"><span class="live-dot"></span><span data-i18n="live_text">Live — auto-updates every 60s</span></div>
     <button class="lang-toggle" id="lang-toggle" onclick="toggleLang()" title="Cambiar idioma / Change language">
       <span id="lang-flag">🇲🇽</span><span id="lang-label">Español</span>
     </button>
@@ -942,12 +942,12 @@ body {
 
   <!-- ═══ MAIN MENU ═══ -->
   <div class="main-menu">
-    <button class="main-btn" id="main-btn-game" onclick="showMainMenu('game')">GAME</button>
-    <button class="main-btn" id="main-btn-tourney" onclick="showMainMenu('tourney')">TOURNEY</button>
+    <button class="main-btn" id="main-btn-game" onclick="showMainMenu('game')" data-i18n="menu_game">GAME</button>
+    <button class="main-btn" id="main-btn-tourney" onclick="showMainMenu('tourney')" data-i18n="menu_tourney">TOURNEY</button>
   </div>
 
   <!-- ═══ DISCLAIMER ═══ -->
-  <div class="main-disclaimer" id="main-disclaimer">
+  <div class="main-disclaimer" id="main-disclaimer" data-i18n="disclaimer">
     Fan-made community tool · Not affiliated with Super Evil Megacorp · Vainglory and related assets are property of their respective owners.
   </div>
 
@@ -955,10 +955,10 @@ body {
   <div id="main-game" class="main-section">
     <!-- Level 2: Server select -->
     <div id="game-server-select">
-      <div class="section-group-label" style="margin-top:8px">Select Server</div>
+      <div class="section-group-label" style="margin-top:8px" data-i18n="select_server_label">Select Server</div>
       <div class="sub-tabs" id="game-region-tabs">
-        <div class="sub-tab" id="game-reg-na" onclick="setGameRegion('NA')">NORTH AMERICA</div>
-        <div class="sub-tab" id="game-reg-eu" onclick="setGameRegion('EU')">EUROPE</div>
+        <div class="sub-tab" id="game-reg-na" onclick="setGameRegion('NA')" data-i18n="server_na">NORTH AMERICA</div>
+        <div class="sub-tab" id="game-reg-eu" onclick="setGameRegion('EU')" data-i18n="server_eu">EUROPE</div>
       </div>
     </div>
 
@@ -966,85 +966,83 @@ body {
     <div id="game-content" style="display:none">
       <!-- Season Countdown -->
       <div class="season-container" style="margin-top:10px">
-        <div class="season-label">Season 2026</div>
+        <div class="season-label" data-i18n="season_label">Season 2026</div>
         <div class="countdown" id="countdown">
-          <div class="countdown-item"><div class="countdown-value" id="cd-days">000</div><div class="countdown-label">Days</div></div>
+          <div class="countdown-item"><div class="countdown-value" id="cd-days">000</div><div class="countdown-label" data-i18n="cd_days">Days</div></div>
           <div class="countdown-separator">:</div>
-          <div class="countdown-item"><div class="countdown-value" id="cd-hours">00</div><div class="countdown-label">Hours</div></div>
+          <div class="countdown-item"><div class="countdown-value" id="cd-hours">00</div><div class="countdown-label" data-i18n="cd_hours">Hours</div></div>
           <div class="countdown-separator">:</div>
-          <div class="countdown-item"><div class="countdown-value" id="cd-mins">00</div><div class="countdown-label">Mins</div></div>
+          <div class="countdown-item"><div class="countdown-value" id="cd-mins">00</div><div class="countdown-label" data-i18n="cd_mins">Mins</div></div>
           <div class="countdown-separator">:</div>
-          <div class="countdown-item"><div class="countdown-value" id="cd-secs">00</div><div class="countdown-label">Secs</div></div>
+          <div class="countdown-item"><div class="countdown-value" id="cd-secs">00</div><div class="countdown-label" data-i18n="cd_secs">Secs</div></div>
         </div>
         <a href="https://discord.gg/K5Thqmayys" target="_blank" class="discord-btn">
-          <span class="discord-btn-icon">💬</span>Join our Discord to participate
+          <span class="discord-btn-icon">💬</span><span data-i18n="discord_btn">Join our Discord to participate</span>
         </a>
       </div>
 
-      <!-- Category row: single row with emoji + label -->
+      <!-- Category row -->
       <div class="category-grid">
-        <button class="cat-btn" id="catbtn-ranked" onclick="showGameTab('ranked')"><span class="cat-icon">🏆</span>Public</button>
-        <button class="cat-btn" id="catbtn-private" onclick="showGameTab('private')"><span class="cat-icon">⚔️</span>Private</button>
-        <button class="cat-btn" id="catbtn-liga" onclick="showGameTab('liga')"><span class="cat-icon">🏟️</span><span data-i18n="league_tab">League</span></button>
-        <button class="cat-btn" id="catbtn-h2h" onclick="showGameTab('h2h')"><span class="cat-icon">🤝</span>H2H</button>
+        <button class="cat-btn" id="catbtn-ranked" onclick="showGameTab('ranked')"><span class="cat-icon">🏆</span><span data-i18n="tab_public">Public</span></button>
+        <button class="cat-btn" id="catbtn-private" onclick="showGameTab('private')"><span class="cat-icon">⚔️</span><span data-i18n="tab_private">Private</span></button>
+        <button class="cat-btn" id="catbtn-liga" onclick="showGameTab('liga')"><span class="cat-icon">🏟️</span><span data-i18n="tab_league">League</span></button>
+        <button class="cat-btn" id="catbtn-h2h" onclick="showGameTab('h2h')"><span class="cat-icon">🤝</span><span data-i18n="tab_h2h">H2H</span></button>
       </div>
 
       <!-- ── TAB CONTENTS ── -->
       <!-- Public -->
       <div id="gtab-content-ranked" class="game-tab-content active">
         <div id="ranked-mode-section" style="display:none">
-          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="section-group-label" style="margin-top:8px" data-i18n="game_mode">Game Mode</div>
           <div class="sub-tabs" id="ranked-mode-tabs">
-            <div class="sub-tab active-green" id="ranked-sub-3v3" onclick="setRankedMode('3v3')">Ranked 3v3</div>
-            <div class="sub-tab" id="ranked-sub-5v5" onclick="setRankedMode('5v5')">Ranked 5v5</div>
+            <div class="sub-tab active-green" id="ranked-sub-3v3" onclick="setRankedMode('3v3')" data-i18n="ranked_3v3">Ranked 3v3</div>
+            <div class="sub-tab" id="ranked-sub-5v5" onclick="setRankedMode('5v5')" data-i18n="ranked_5v5">Ranked 5v5</div>
           </div>
-          <!-- History popup trigger — appears after mode is selected -->
           <div id="ranked-history-btn-wrap" style="display:none">
-            <button class="sec-btn" style="width:100%;margin:6px 0 8px;" onclick="openHistoryPopup()"><span>📋</span> History</button>
+            <button class="sec-btn" style="width:100%;margin:6px 0 8px;" onclick="openHistoryPopup()"><span>📋</span> <span data-i18n="history_btn">History</span></button>
           </div>
           <div class="search-container">
             <span class="search-icon">🔍</span>
-            <input type="text" class="search-input" id="search-ranked" placeholder="Search your profile..." autocomplete="off">
+            <input type="text" class="search-input" id="search-ranked" placeholder="Search your profile..." autocomplete="off" data-i18n-placeholder="search_profile">
             <div class="search-autocomplete" id="search-ranked-list"></div>
           </div>
           <div class="section-label" id="ranked-label">Public Ranked 3v3</div>
           <div id="ranked-list"></div>
-          <button class="top10-load-more" id="ranked-load-more" onclick="loadMoreRanked()">Show all players</button>
+          <button class="top10-load-more" id="ranked-load-more" onclick="loadMoreRanked()" data-i18n="show_all">Show all players</button>
           <div class="top10-count" id="ranked-count"></div>
         </div>
         <div id="ranked-placeholder" class="region-placeholder">
           <div class="region-placeholder-icon">🌎</div>
-          <div class="region-placeholder-title">Select a server above to continue</div>
-          <div class="region-placeholder-sub">Choose your region</div>
+          <div class="region-placeholder-title" data-i18n="placeholder_title">Select a server above to continue</div>
+          <div class="region-placeholder-sub" data-i18n="placeholder_sub">Choose your region</div>
         </div>
       </div>
 
       <!-- Private -->
       <div id="gtab-content-private" class="game-tab-content">
         <div id="priv-mode-section" style="display:none">
-          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="section-group-label" style="margin-top:8px" data-i18n="game_mode">Game Mode</div>
           <div class="sub-tabs" id="priv-mode-tabs">
             <div class="sub-tab active-green" id="priv-sub-3v3" onclick="setPrivateMode('3v3')">3v3</div>
             <div class="sub-tab" id="priv-sub-5v5" onclick="setPrivateMode('5v5')">5v5</div>
           </div>
-          <!-- History popup trigger -->
           <div id="priv-history-btn-wrap" style="display:none">
-            <button class="sec-btn" style="width:100%;margin:6px 0 8px;" onclick="openHistoryPopup()"><span>📋</span> History</button>
+            <button class="sec-btn" style="width:100%;margin:6px 0 8px;" onclick="openHistoryPopup()"><span>📋</span> <span data-i18n="history_btn">History</span></button>
           </div>
           <div class="search-container">
             <span class="search-icon">🔍</span>
-            <input type="text" class="search-input" id="search-private" placeholder="Search your profile..." autocomplete="off">
+            <input type="text" class="search-input" id="search-private" placeholder="Search your profile..." autocomplete="off" data-i18n-placeholder="search_profile">
             <div class="search-autocomplete" id="search-private-list"></div>
           </div>
           <div class="section-label" id="private-label">NA · 3v3 — ELO ranking</div>
           <div id="private-list"></div>
-          <button class="top10-load-more" id="priv-load-more" onclick="loadMorePrivate()">Show all players</button>
+          <button class="top10-load-more" id="priv-load-more" onclick="loadMorePrivate()" data-i18n="show_all">Show all players</button>
           <div class="top10-count" id="priv-count"></div>
         </div>
         <div id="priv-placeholder" class="region-placeholder">
           <div class="region-placeholder-icon">🌎</div>
-          <div class="region-placeholder-title">Select a server above to continue</div>
-          <div class="region-placeholder-sub">Choose your region</div>
+          <div class="region-placeholder-title" data-i18n="placeholder_title">Select a server above to continue</div>
+          <div class="region-placeholder-sub" data-i18n="placeholder_sub">Choose your region</div>
         </div>
       </div>
 
@@ -1072,54 +1070,53 @@ body {
         </div>
         <div id="liga-placeholder" class="region-placeholder">
           <div class="region-placeholder-icon">🏟️</div>
-          <div class="region-placeholder-title" data-i18n="select_server">Select a server above to continue</div>
-          <div class="region-placeholder-sub" data-i18n="choose_region">Choose your region</div>
+          <div class="region-placeholder-title" data-i18n="placeholder_title">Select a server above to continue</div>
+          <div class="region-placeholder-sub" data-i18n="placeholder_sub">Choose your region</div>
         </div>
       </div>
 
       <!-- History -->
       <div id="gtab-content-history" class="game-tab-content">
         <div id="hist-mode-section" style="display:none">
-          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="section-group-label" style="margin-top:8px" data-i18n="game_mode">Game Mode</div>
           <div class="sub-tabs" id="hist-mode-tabs">
-            <div class="sub-tab" id="hist-m-all" onclick="setHistoryMode('all')">All</div>
-            <div class="sub-tab" id="hist-m-ranked" onclick="setHistoryMode('ranked')">Public 3v3</div>
-            <div class="sub-tab" id="hist-m-ranked5" onclick="setHistoryMode('ranked5')">Public 5v5</div>
-            <div class="sub-tab" id="hist-m-3v3" onclick="setHistoryMode('3v3')">Private 3v3</div>
-            <div class="sub-tab" id="hist-m-5v5" onclick="setHistoryMode('5v5')">Private 5v5</div>
+            <div class="sub-tab" id="hist-m-all" onclick="setHistoryMode('all')" data-i18n="hist_all">All</div>
+            <div class="sub-tab" id="hist-m-ranked" onclick="setHistoryMode('ranked')" data-i18n="hist_pub3">Public 3v3</div>
+            <div class="sub-tab" id="hist-m-ranked5" onclick="setHistoryMode('ranked5')" data-i18n="hist_pub5">Public 5v5</div>
+            <div class="sub-tab" id="hist-m-3v3" onclick="setHistoryMode('3v3')" data-i18n="hist_priv3">Private 3v3</div>
+            <div class="sub-tab" id="hist-m-5v5" onclick="setHistoryMode('5v5')" data-i18n="hist_priv5">Private 5v5</div>
           </div>
           <div class="search-container">
             <span class="search-icon">🔍</span>
-            <input type="text" class="search-input" id="search-history" placeholder="Search player in history..." autocomplete="off">
+            <input type="text" class="search-input" id="search-history" placeholder="Search player in history..." autocomplete="off" data-i18n-placeholder="search_history">
           </div>
-          <div class="section-label" id="history-label">Select a game mode above</div>
+          <div class="section-label" id="history-label" data-i18n="history_select_mode">Select a game mode above</div>
           <div id="history-list"></div>
-          <button class="match-history-load-more" id="history-load-more" style="display:none" onclick="loadMoreHistory()">Load more matches</button>
+          <button class="match-history-load-more" id="history-load-more" style="display:none" onclick="loadMoreHistory()" data-i18n="load_more">Load more matches</button>
           <div class="match-history-count" id="history-count"></div>
         </div>
         <div id="hist-placeholder" class="region-placeholder">
           <div class="region-placeholder-icon">🌎</div>
-          <div class="region-placeholder-title">Select a server above to continue</div>
-          <div class="region-placeholder-sub">Choose your region</div>
+          <div class="region-placeholder-title" data-i18n="placeholder_title">Select a server above to continue</div>
+          <div class="region-placeholder-sub" data-i18n="placeholder_sub">Choose your region</div>
         </div>
       </div>
 
       <!-- H2H -->
       <div id="gtab-content-h2h" class="game-tab-content">
         <div id="h2h-mode-section" style="display:none">
-          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="section-group-label" style="margin-top:8px" data-i18n="game_mode">Game Mode</div>
           <div class="sub-tabs" id="h2h-mode-tabs">
-            <div class="sub-tab" id="h2h-m-all"     onclick="setH2HMode('all')">All</div>
-            <div class="sub-tab" id="h2h-m-ranked"  onclick="setH2HMode('ranked')">Public 3v3</div>
-            <div class="sub-tab" id="h2h-m-ranked5" onclick="setH2HMode('ranked5')">Public 5v5</div>
-            <div class="sub-tab" id="h2h-m-3v3"     onclick="setH2HMode('3v3')">Private 3v3</div>
-            <div class="sub-tab" id="h2h-m-5v5"     onclick="setH2HMode('5v5')">Private 5v5</div>
-            <div class="sub-tab" id="h2h-m-liga3"   onclick="setH2HMode('liga3')">Liga 3v3</div>
-            <div class="sub-tab" id="h2h-m-liga5"   onclick="setH2HMode('liga5')">Liga 5v5</div>
+            <div class="sub-tab" id="h2h-m-all"     onclick="setH2HMode('all')"     data-i18n="hist_all">All</div>
+            <div class="sub-tab" id="h2h-m-ranked"  onclick="setH2HMode('ranked')"  data-i18n="hist_pub3">Public 3v3</div>
+            <div class="sub-tab" id="h2h-m-ranked5" onclick="setH2HMode('ranked5')" data-i18n="hist_pub5">Public 5v5</div>
+            <div class="sub-tab" id="h2h-m-3v3"     onclick="setH2HMode('3v3')"     data-i18n="hist_priv3">Private 3v3</div>
+            <div class="sub-tab" id="h2h-m-5v5"     onclick="setH2HMode('5v5')"     data-i18n="hist_priv5">Private 5v5</div>
+            <div class="sub-tab" id="h2h-m-liga3"   onclick="setH2HMode('liga3')"   data-i18n="tab_league_3v3">League 3v3</div>
+            <div class="sub-tab" id="h2h-m-liga5"   onclick="setH2HMode('liga5')"   data-i18n="tab_league_5v5">League 5v5</div>
           </div>
-          <!-- History popup trigger -->
           <div id="h2h-history-btn-wrap" style="display:none">
-            <button class="sec-btn" style="width:100%;margin:6px 0 8px;" onclick="openHistoryPopup()"><span>📋</span> History</button>
+            <button class="sec-btn" style="width:100%;margin:6px 0 8px;" onclick="openHistoryPopup()"><span>📋</span> <span data-i18n="history_btn">History</span></button>
           </div>
           <div class="h2h-card">
             <div class="h2h-inputs">
@@ -1127,14 +1124,14 @@ body {
               <div class="vs-badge">VS</div>
               <div class="autocomplete-wrap"><input type="text" id="h2h-p2" placeholder="Player 2" autocomplete="off"><div class="autocomplete-list" id="ac-list-2"></div></div>
             </div>
-            <button class="h2h-btn" onclick="searchH2H()">SEARCH</button>
+            <button class="h2h-btn" onclick="searchH2H()" data-i18n="h2h_search">SEARCH</button>
             <div id="h2h-result" class="h2h-result"></div>
           </div>
         </div>
         <div id="h2h-placeholder" class="region-placeholder">
           <div class="region-placeholder-icon">🌎</div>
-          <div class="region-placeholder-title">Select a server above to continue</div>
-          <div class="region-placeholder-sub">Choose your region</div>
+          <div class="region-placeholder-title" data-i18n="placeholder_title">Select a server above to continue</div>
+          <div class="region-placeholder-sub" data-i18n="placeholder_sub">Choose your region</div>
         </div>
       </div>
     </div>
@@ -1143,11 +1140,11 @@ body {
   <!-- ═══ TOURNEY SECTION ═══ -->
   <div id="main-tourney" class="main-section">
     <div id="tourney-next-container">
-      <div class="loading"><div class="spinner"></div>Loading tournament info...</div>
+      <div class="loading"><div class="spinner"></div><span data-i18n="loading_tourney">Loading tournament info...</span></div>
     </div>
-    <div class="tourney-section-divider"><span>Past Tournaments</span></div>
+    <div class="tourney-section-divider"><span data-i18n="past_tournaments">Past Tournaments</span></div>
     <div id="tourney-past-list" class="tourney-past-list">
-      <div class="tourney-past-loading"><div class="spinner"></div>Loading tournaments...</div>
+      <div class="tourney-past-loading"><div class="spinner"></div><span data-i18n="loading_tournaments">Loading tournaments...</span></div>
     </div>
   </div>
 
@@ -1164,7 +1161,7 @@ body {
     <div class="history-popup-card">
       <div class="history-popup-header">
         <div>
-          <div class="history-popup-title" id="history-popup-title">Match History</div>
+          <div class="history-popup-title" id="history-popup-title" data-i18n="match_history_title">Match History</div>
           <div class="history-popup-subtitle" id="history-popup-subtitle">Loading...</div>
         </div>
         <button class="history-popup-close" id="history-popup-close">&times;</button>
@@ -1176,7 +1173,7 @@ body {
     </div>
   </div>
 
-  <div class="footer">
+  <div class="footer" data-i18n="footer_text">
     Powered by Vainglory Community Members
   </div>
 </div>
@@ -2960,56 +2957,225 @@ function switchCollectCat(catId) {
 
 setInterval(() => { if (rankedRegion) loadRanked(); }, 60000);
 
-// ── i18n — EN/ES Language Toggle ─────────────────────────────────────────────
+// ── i18n — Full EN/ES Language Toggle ────────────────────────────────────────
 const I18N = {
   en: {
-    league_desc:          'Validated accounts only · Daily code required · Discord only',
-    game_mode:            'Game Mode',
-    league_3v3:           'League 3v3',
-    league_5v5:           'League 5v5',
-    search_league_player: 'Search league player...',
-    show_all:             'Show all players',
-    select_server:        'Select a server above to continue',
-    choose_region:        'Choose your region',
-    league_tab:           'League',
-    // liga labels used in JS
-    liga_label_3v3:       'League 3v3',
-    liga_label_5v5:       'League 5v5',
-    liga_label_region_na: 'League 3v3 — North America',
-    liga_label_region_eu: 'League 3v3 — Europe',
+    // Header
+    subtitle:            'community competitive rankings',
+    live_text:           'Live — auto-updates every 60s',
+    // Main menu
+    menu_game:           'GAME',
+    menu_tourney:        'TOURNEY',
+    disclaimer:          'Fan-made community tool · Not affiliated with Super Evil Megacorp · Vainglory and related assets are property of their respective owners.',
+    // Server
+    select_server_label: 'Select Server',
+    server_na:           'NORTH AMERICA',
+    server_eu:           'EUROPE',
+    // Season countdown
+    season_label:        'Season 2026',
+    cd_days:             'Days',
+    cd_hours:            'Hours',
+    cd_mins:             'Mins',
+    cd_secs:             'Secs',
+    discord_btn:         'Join our Discord to participate',
+    // Category tabs
+    tab_public:          'Public',
+    tab_private:         'Private',
+    tab_league:          'League',
+    tab_h2h:             'H2H',
+    // Game Mode label (reused across tabs)
+    game_mode:           'Game Mode',
+    // Public tab
+    ranked_3v3:          'Ranked 3v3',
+    ranked_5v5:          'Ranked 5v5',
+    history_btn:         'History',
+    search_profile:      'Search your profile...',
+    show_all:            'Show all players',
+    // Private tab — mode buttons are just 3v3 / 5v5, no translation needed
+    // League tab
+    league_desc:         'Validated accounts only · Daily code required · Discord only',
+    league_3v3:          'League 3v3',
+    league_5v5:          'League 5v5',
+    search_league_player:'Search league player...',
+    // History tab
+    hist_all:            'All',
+    hist_pub3:           'Public 3v3',
+    hist_pub5:           'Public 5v5',
+    hist_priv3:          'Private 3v3',
+    hist_priv5:          'Private 5v5',
+    search_history:      'Search player in history...',
+    history_select_mode: 'Select a game mode above',
+    load_more:           'Load more matches',
+    // H2H tab
+    tab_league_3v3:      'League 3v3',
+    tab_league_5v5:      'League 5v5',
+    h2h_search:          'SEARCH',
+    // Placeholders (reused)
+    placeholder_title:   'Select a server above to continue',
+    placeholder_sub:     'Choose your region',
+    // Tournaments
+    loading_tourney:     'Loading tournament info...',
+    past_tournaments:    'Past Tournaments',
+    loading_tournaments: 'Loading tournaments...',
+    // History popup
+    match_history_title: 'Match History',
+    // Footer
+    footer_text:         'Powered by Vainglory Community Members',
+    // Dynamic JS strings (used in loadRanked, setGameRegion, etc.)
+    _ranked_label_3v3_na: 'Public Ranked 3v3 — North America',
+    _ranked_label_5v5_na: 'Public Ranked 5v5 — North America',
+    _ranked_label_3v3_eu: 'Public Ranked 3v3 — Europe',
+    _ranked_label_5v5_eu: 'Public Ranked 5v5 — Europe',
+    _priv_label_3v3_na:   'NA · 3v3 — ELO ranking',
+    _priv_label_5v5_na:   'NA · 5v5 — ELO ranking',
+    _priv_label_3v3_eu:   'EU · 3v3 — ELO ranking',
+    _priv_label_5v5_eu:   'EU · 5v5 — ELO ranking',
+    _liga_label_3v3_na:   'League 3v3 — North America',
+    _liga_label_5v5_na:   'League 5v5 — North America',
+    _liga_label_3v3_eu:   'League 3v3 — Europe',
+    _liga_label_5v5_eu:   'League 5v5 — Europe',
+    _history_label:       'Select a game mode above',
+    _winner:              'WINNER',
+    _loser:               'LOSER',
+    _mvp:                 'MVP',
+    _afk:                 'AFK',
+    _wins:                'W',
+    _losses:              'L',
+    _winrate:             'Win Rate',
+    _kda:                 'KDA',
+    _streak:              'Streak',
+    _gold:                'Gold',
+    _no_players:          'No players yet.',
+    _loading:             'Loading...',
+    _no_matches:          'No matches found.',
+    _no_data:             'No data available.',
+    _upcoming_tourney:    'Upcoming Tournament',
+    _register_now:        'Register Now',
+    _register_before:     'Register before',
+    _see_details:         'See Details',
+    _days_left:           'days left',
+    _watch_vod:           'Watch VOD',
   },
   es: {
-    league_desc:          'Solo cuentas validadas · Código diario requerido · Solo en Discord',
-    game_mode:            'Modo de Juego',
-    league_3v3:           'Liga 3v3',
-    league_5v5:           'Liga 5v5',
-    search_league_player: 'Buscar jugador de liga...',
-    show_all:             'Ver todos los jugadores',
-    select_server:        'Selecciona un servidor arriba',
-    choose_region:        'Elige tu región',
-    league_tab:           'Liga',
-    liga_label_3v3:       'Liga 3v3',
-    liga_label_5v5:       'Liga 5v5',
-    liga_label_region_na: 'Liga 3v3 — Norte América',
-    liga_label_region_eu: 'Liga 3v3 — Europa',
+    // Header
+    subtitle:            'rankings competitivos de la comunidad',
+    live_text:           'En vivo — actualización cada 60s',
+    // Main menu
+    menu_game:           'JUEGO',
+    menu_tourney:        'TORNEO',
+    disclaimer:          'Herramienta fan-made · No afiliada a Super Evil Megacorp · Vainglory y sus activos son propiedad de sus respectivos dueños.',
+    // Server
+    select_server_label: 'Seleccionar Servidor',
+    server_na:           'NORTEAMÉRICA',
+    server_eu:           'EUROPA',
+    // Season countdown
+    season_label:        'Temporada 2026',
+    cd_days:             'Días',
+    cd_hours:            'Horas',
+    cd_mins:             'Mins',
+    cd_secs:             'Segs',
+    discord_btn:         'Únete a nuestro Discord para participar',
+    // Category tabs
+    tab_public:          'Público',
+    tab_private:         'Privado',
+    tab_league:          'Liga',
+    tab_h2h:             'H2H',
+    // Game Mode
+    game_mode:           'Modo de Juego',
+    // Public tab
+    ranked_3v3:          'Ranked 3v3',
+    ranked_5v5:          'Ranked 5v5',
+    history_btn:         'Historial',
+    search_profile:      'Busca tu perfil...',
+    show_all:            'Ver todos los jugadores',
+    // League tab
+    league_desc:         'Solo cuentas validadas · Código diario requerido · Solo en Discord',
+    league_3v3:          'Liga 3v3',
+    league_5v5:          'Liga 5v5',
+    search_league_player:'Buscar jugador de liga...',
+    // History tab
+    hist_all:            'Todos',
+    hist_pub3:           'Público 3v3',
+    hist_pub5:           'Público 5v5',
+    hist_priv3:          'Privado 3v3',
+    hist_priv5:          'Privado 5v5',
+    search_history:      'Buscar jugador en historial...',
+    history_select_mode: 'Selecciona un modo de juego',
+    load_more:           'Cargar más partidas',
+    // H2H
+    tab_league_3v3:      'Liga 3v3',
+    tab_league_5v5:      'Liga 5v5',
+    h2h_search:          'BUSCAR',
+    // Placeholders
+    placeholder_title:   'Selecciona un servidor arriba',
+    placeholder_sub:     'Elige tu región',
+    // Tournaments
+    loading_tourney:     'Cargando info del torneo...',
+    past_tournaments:    'Torneos Pasados',
+    loading_tournaments: 'Cargando torneos...',
+    // History popup
+    match_history_title: 'Historial de Partidas',
+    // Footer
+    footer_text:         'Hecho por miembros de la comunidad Vainglory',
+    // Dynamic JS strings
+    _ranked_label_3v3_na: 'Público Ranked 3v3 — Norteamérica',
+    _ranked_label_5v5_na: 'Público Ranked 5v5 — Norteamérica',
+    _ranked_label_3v3_eu: 'Público Ranked 3v3 — Europa',
+    _ranked_label_5v5_eu: 'Público Ranked 5v5 — Europa',
+    _priv_label_3v3_na:   'NA · 3v3 — Ranking ELO',
+    _priv_label_5v5_na:   'NA · 5v5 — Ranking ELO',
+    _priv_label_3v3_eu:   'EU · 3v3 — Ranking ELO',
+    _priv_label_5v5_eu:   'EU · 5v5 — Ranking ELO',
+    _liga_label_3v3_na:   'Liga 3v3 — Norteamérica',
+    _liga_label_5v5_na:   'Liga 5v5 — Norteamérica',
+    _liga_label_3v3_eu:   'Liga 3v3 — Europa',
+    _liga_label_5v5_eu:   'Liga 5v5 — Europa',
+    _history_label:       'Selecciona un modo de juego',
+    _winner:              'GANADOR',
+    _loser:               'PERDEDOR',
+    _mvp:                 'MVP',
+    _afk:                 'AFK',
+    _wins:                'V',
+    _losses:              'D',
+    _winrate:             'Victorias',
+    _kda:                 'KDA',
+    _streak:              'Racha',
+    _gold:                'Oro',
+    _no_players:          'Sin jugadores aún.',
+    _loading:             'Cargando...',
+    _no_matches:          'No se encontraron partidas.',
+    _no_data:             'Sin datos disponibles.',
+    _upcoming_tourney:    'Próximo Torneo',
+    _register_now:        'Inscríbete Ahora',
+    _register_before:     'Regístrate antes del',
+    _see_details:         'Ver Detalles',
+    _days_left:           'días restantes',
+    _watch_vod:           'Ver VOD',
   }
 };
 
 let currentLang = 'en';
 
+// Shorthand: get current translation
+function t(key) { return (I18N[currentLang] || I18N.en)[key] || key; }
+
 function applyLang(lang) {
-  const t = I18N[lang];
-  // Apply data-i18n text nodes
+  currentLang = lang;
+  const strings = I18N[lang];
+
+  // Static HTML nodes via data-i18n
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (t[key] !== undefined) el.textContent = t[key];
+    if (strings[key] !== undefined) el.textContent = strings[key];
   });
-  // Apply data-i18n-placeholder
+
+  // Placeholders
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
-    if (t[key] !== undefined) el.placeholder = t[key];
+    if (strings[key] !== undefined) el.placeholder = strings[key];
   });
-  // Update toggle button
+
+  // Toggle button
   const flag  = document.getElementById('lang-flag');
   const label = document.getElementById('lang-label');
   if (lang === 'en') {
@@ -3019,17 +3185,43 @@ function applyLang(lang) {
     if (flag)  flag.textContent  = '🇺🇸';
     if (label) label.textContent = 'English';
   }
-  // Update live liga label if visible
-  const ligaLbl = document.getElementById('liga-label');
-  if (ligaLbl && ligaLbl.textContent) {
-    const is5v5 = ligaLbl.textContent.includes('5v5');
-    ligaLbl.textContent = is5v5 ? t.liga_label_5v5 : t.liga_label_3v3;
+
+  // Refresh dynamic labels if region is already set
+  if (gameRegion) {
+    const reg = gameRegion;
+    const rl = document.getElementById('ranked-label');
+    const pl = document.getElementById('private-label');
+    const ll = document.getElementById('liga-label');
+    const hl = document.getElementById('history-label');
+    if (rl) {
+      const is5v5 = rankedMode === '5v5';
+      const key = `_ranked_label_${is5v5 ? '5v5' : '3v3'}_${reg.toLowerCase()}`;
+      rl.textContent = strings[key] || rl.textContent;
+    }
+    if (pl) {
+      const is5v5 = privateMode === '5v5';
+      const key = `_priv_label_${is5v5 ? '5v5' : '3v3'}_${reg.toLowerCase()}`;
+      pl.textContent = strings[key] || pl.textContent;
+    }
+    if (ll) {
+      const is5v5 = ligaMode === '5v5';
+      const key = `_liga_label_${is5v5 ? '5v5' : '3v3'}_${reg.toLowerCase()}`;
+      ll.textContent = strings[key] || ll.textContent;
+    }
+    if (hl && (!historyMode || historyMode === null)) {
+      hl.textContent = strings['_history_label'] || hl.textContent;
+    }
+  }
+
+  // History popup title
+  const hpt = document.getElementById('history-popup-title');
+  if (hpt && hpt.textContent && !hpt.textContent.includes('...')) {
+    hpt.textContent = strings['match_history_title'] || hpt.textContent;
   }
 }
 
 function toggleLang() {
-  currentLang = currentLang === 'en' ? 'es' : 'en';
-  applyLang(currentLang);
+  applyLang(currentLang === 'en' ? 'es' : 'en');
 }
 
 // ── Init ──────────────────────────────────────────────────
