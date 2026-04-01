@@ -1372,11 +1372,7 @@ function heroIconHtml(heroName, size) {
   return `<img src="${url}" alt="${heroName}" class="${cls}" onerror="this.style.display='none'">`;
 }
 
-function getPlayerHeroStr(scores, raw) {
-  const e = scores[raw] || scores[cleanName(raw)];
-  if (!e || typeof e !== 'object') return '';
-  return e.hero || '';
-}
+function getPlayerHeroStr_OLD_REMOVED() {}
 
 async function loadAccountsData() {
   try {
@@ -1438,7 +1434,7 @@ function parseSheet(text) {
   const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);/)[1]);
   const cols = json.table.cols.map(c => c.label || '');
   const hasRealLabels = cols.some(c => c && c.length > 0 && !c.startsWith('_'));
-  const rows = json.table.rows.map(r => {
+  let rows = json.table.rows.map(r => {
     const obj = {};
     r.c.forEach((cell, i) => {
       const key = cols[i] || `_col${i}`;
@@ -1453,13 +1449,27 @@ function parseSheet(text) {
     const headerRow = rows[0];
     const headerKeys = Object.keys(headerRow);
     const headerNames = headerKeys.map(k => String(headerRow[k] || '').trim());
-    return rows.slice(1).map(row => {
+    rows = rows.slice(1).map(row => {
       const obj = {};
       headerKeys.forEach((origKey, i) => { obj[headerNames[i] || `_col${i}`] = row[origKey] !== undefined ? row[origKey] : ''; });
       return obj;
     });
   }
-  return rows;
+  // Skip description/example rows: if a row's first meaningful value looks like a description
+  // (e.g. "In-game name", "YYYY-MM-DD", "Alphabetically first", etc.) skip it.
+  const DESCRIPTION_PATTERNS = [
+    /^in-game name$/i, /^yyyy-mm-dd/i, /^alphabetically/i, /^comma-separated/i,
+    /^elo points$/i, /^player name$/i, /^discord user id$/i, /^action key/i,
+    /^config key$/i, /^unique reward/i, /^e\.g\./i, /^computed/i, /^if banned/i,
+    /^display name$/i, /^w\+l$/i, /^season id$/i, /^hero name$/i
+  ];
+  return rows.filter(row => {
+    const vals = Object.values(row).map(v => String(v || '').trim()).filter(Boolean);
+    if (!vals.length) return false;
+    // If ALL non-empty values look like descriptions, skip this row
+    const looksLikeDesc = DESCRIPTION_PATTERNS.some(pat => pat.test(vals[0]));
+    return !looksLikeDesc;
+  });
 }
 
 async function fetchSheet(tab) {
@@ -1671,15 +1681,35 @@ function parseScore(s) {
 }
 
 function getPlayerScoreStr(scores, raw) {
-  const e = scores[raw] || scores[cleanName(raw)];
-  if (!e) return '';
-  return typeof e === 'object' ? (e.score || '') : String(e);
+  if (!scores) return '';
+  const clean = cleanName(raw);
+  // Try exact raw, then cleaned, then case-insensitive match
+  const e = scores[raw] || scores[clean];
+  if (e) return typeof e === 'object' ? (e.score || '') : String(e);
+  // Try case-insensitive
+  const lc = clean.toLowerCase();
+  for (const k of Object.keys(scores)) { if (cleanName(k).toLowerCase() === lc) { const v = scores[k]; return typeof v === 'object' ? (v.score || '') : String(v); } }
+  return '';
 }
 
 function getPlayerGoldStr(scores, raw) {
-  const e = scores[raw] || scores[cleanName(raw)];
-  if (!e || typeof e !== 'object') return '';
-  return e.gold || '';
+  if (!scores) return '';
+  const clean = cleanName(raw);
+  const e = scores[raw] || scores[clean];
+  if (e && typeof e === 'object') return e.gold || '';
+  const lc = clean.toLowerCase();
+  for (const k of Object.keys(scores)) { if (cleanName(k).toLowerCase() === lc) { const v = scores[k]; return (v && typeof v === 'object') ? (v.gold || '') : ''; } }
+  return '';
+}
+
+function getPlayerHeroStr(scores, raw) {
+  if (!scores) return '';
+  const clean = cleanName(raw);
+  const e = scores[raw] || scores[clean];
+  if (e && typeof e === 'object') return e.hero || '';
+  const lc = clean.toLowerCase();
+  for (const k of Object.keys(scores)) { if (cleanName(k).toLowerCase() === lc) { const v = scores[k]; return (v && typeof v === 'object') ? (v.hero || '') : ''; } }
+  return '';
 }
 
 function sumTeamKills(players, scores) {
