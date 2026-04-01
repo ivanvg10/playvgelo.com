@@ -49,13 +49,15 @@ body {
 .header-bg {
   position: relative; width: 120%; height: 220px;
   overflow: hidden; margin-top: -40px; margin-left: -10%; margin-bottom: 0;
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 75%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 75%, transparent 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 65%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 65%, transparent 100%);
   pointer-events: none; z-index: 0;
+  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.8));
 }
 .header-bg img {
-  width: 100%; height: 100%; object-fit: cover; object-position: center center;
-  opacity: 0.4;
+  width: 100%; height: 100%; object-fit: cover; object-position: center 30%;
+  opacity: 0.55;
+  transition: opacity 0.6s ease;
 }
 .header > *:not(.header-bg) { position: relative; z-index: 1; }
 
@@ -864,6 +866,17 @@ body {
 .tourney-vod-title { font-size: 0.72rem; color: var(--text); font-weight: 600; }
 .tourney-vod-arrow { font-size: 0.7rem; color: var(--text3); }
 
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 7px; padding: 4px 11px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px; color: var(--text2);
+  font-family: 'Outfit', sans-serif; font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s;
+  position: relative; z-index: 3;
+}
+.lang-toggle:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.22); color: var(--text); }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 480px) {
   .header-logo { width: 70px; margin-top: -68px; }
@@ -918,11 +931,13 @@ body {
   <!-- ═══ HEADER ═══ -->
   <div class="header">
     <div class="header-bg">
-      <img id="header-splash-img" src="" alt="Banner" onerror="this.src=''">
+      <img id="header-splash-img" src="" alt="Banner" onerror="this.style.opacity='0'">
     </div>
-    <img src="images/VAINGLORY__crossplatform_logo.png" alt="Vainglory" class="header-logo">
     <div class="header-subtitle">community competitive rankings</div>
     <div class="live-text"><span class="live-dot"></span>Live — auto-updates every 60s</div>
+    <button class="lang-toggle" id="lang-toggle" onclick="toggleLang()" title="Cambiar idioma / Change language">
+      <span id="lang-flag">🇲🇽</span><span id="lang-label">Español</span>
+    </button>
   </div>
 
   <!-- ═══ MAIN MENU ═══ -->
@@ -970,7 +985,7 @@ body {
       <div class="category-grid">
         <button class="cat-btn" id="catbtn-ranked" onclick="showGameTab('ranked')"><span class="cat-icon">🏆</span>Public</button>
         <button class="cat-btn" id="catbtn-private" onclick="showGameTab('private')"><span class="cat-icon">⚔️</span>Private</button>
-        <button class="cat-btn" id="catbtn-liga" onclick="showGameTab('liga')"><span class="cat-icon">🏟️</span>Liga</button>
+        <button class="cat-btn" id="catbtn-liga" onclick="showGameTab('liga')"><span class="cat-icon">🏟️</span><span data-i18n="league_tab">League</span></button>
         <button class="cat-btn" id="catbtn-h2h" onclick="showGameTab('h2h')"><span class="cat-icon">🤝</span>H2H</button>
       </div>
 
@@ -1037,28 +1052,28 @@ body {
       <div id="gtab-content-liga" class="game-tab-content">
         <div style="margin-bottom:10px;padding:10px 14px;background:rgba(248,113,113,0.07);border:1px solid rgba(248,113,113,0.25);border-radius:10px;text-align:center;">
           <div style="font-size:0.55rem;font-weight:800;color:#f87171;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;">🏟️ COMPETITIVE LEAGUE</div>
-          <div style="font-size:0.7rem;color:var(--text2);line-height:1.5;">Cuentas validadas &#x2022; Código de hoy requerido &#x2022; Solo en Discord</div>
+          <div style="font-size:0.7rem;color:var(--text2);line-height:1.5;" data-i18n="league_desc">Validated accounts only &bull; Daily code required &bull; Discord only</div>
         </div>
         <div id="liga-mode-section" style="display:none">
-          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="section-group-label" style="margin-top:8px" data-i18n="game_mode">Game Mode</div>
           <div class="sub-tabs" id="liga-mode-tabs">
-            <div class="sub-tab" style="color:#f87171;font-weight:600" id="liga-sub-3v3" onclick="setLigaMode('3v3')">Liga 3v3</div>
-            <div class="sub-tab" id="liga-sub-5v5" onclick="setLigaMode('5v5')">Liga 5v5</div>
+            <div class="sub-tab" style="color:#f87171;font-weight:600" id="liga-sub-3v3" onclick="setLigaMode('3v3')" data-i18n="league_3v3">League 3v3</div>
+            <div class="sub-tab" id="liga-sub-5v5" onclick="setLigaMode('5v5')" data-i18n="league_5v5">League 5v5</div>
           </div>
           <div class="search-container">
             <span class="search-icon">🔍</span>
-            <input type="text" class="search-input" id="search-liga" placeholder="Search liga player..." autocomplete="off">
+            <input type="text" class="search-input" id="search-liga" placeholder="Search league player..." autocomplete="off" data-i18n-placeholder="search_league_player">
             <div class="search-autocomplete" id="search-liga-list"></div>
           </div>
-          <div class="section-label" id="liga-label">Liga 3v3</div>
+          <div class="section-label" id="liga-label">League 3v3</div>
           <div id="liga-list"></div>
-          <button class="top10-load-more" id="liga-load-more" onclick="loadMoreLiga()">Show all players</button>
+          <button class="top10-load-more" id="liga-load-more" onclick="loadMoreLiga()" data-i18n="show_all">Show all players</button>
           <div class="top10-count" id="liga-count"></div>
         </div>
         <div id="liga-placeholder" class="region-placeholder">
           <div class="region-placeholder-icon">🏟️</div>
-          <div class="region-placeholder-title">Select a server above to continue</div>
-          <div class="region-placeholder-sub">Choose your region</div>
+          <div class="region-placeholder-title" data-i18n="select_server">Select a server above to continue</div>
+          <div class="region-placeholder-sub" data-i18n="choose_region">Choose your region</div>
         </div>
       </div>
 
@@ -1172,28 +1187,91 @@ const TOP10_LIMIT = 10;
 const ASSETS_BASE = 'https://raw.githubusercontent.com/ivanvg10/playvgelo.com/main/';
 let accountsData = {}; // {playerName.lower(): {level, xp, status, discordTag}}
 
-// ── Splashart pool (heroes from splash art 1 folder based on repo) ──
-const SPLASH_HEROES_FOLDER1 = ['Anka','Ardan','Baptiste','Baron','Blackfeather','Caine','Catherine','Celeste','Churnwalker','Flicker','Fortress','Glaive','Grace','Grumpjaw','Gwen','adagio'];
-const SPLASH_HEROES_FOLDER2 = ['Idris','Joule','Kensei','Kestrel','Koshka','Krul','Lance','Lorelai','Lyra','Malene','Ozo','Petal','Phinn','Reim','Reza','Ringo'];
-const SPLASH_HEROES_FOLDER3 = ['SAW','Samuel','Skaarf','Skye','Taka','Tony','Varya','Vox','Yates'];
-const ALL_SPLASH_HEROES = [...SPLASH_HEROES_FOLDER1, ...SPLASH_HEROES_FOLDER2, ...SPLASH_HEROES_FOLDER3];
+// ── Splashart pool — 4 folders, multiple skins per hero ──────────────────────
+// Structure: splash art N/HeroName/HeroName_SkinName de tamaño pequeño.webp
+// We pick a random hero from the known list, then try available skins in order.
+const SPLASH_POOL = [
+  // folder 1
+  { folder: 'splash%20art%201', hero: 'Anka' },
+  { folder: 'splash%20art%201', hero: 'Ardan' },
+  { folder: 'splash%20art%201', hero: 'Baptiste' },
+  { folder: 'splash%20art%201', hero: 'Baron' },
+  { folder: 'splash%20art%201', hero: 'Blackfeather' },
+  { folder: 'splash%20art%201', hero: 'Caine' },
+  { folder: 'splash%20art%201', hero: 'Catherine' },
+  { folder: 'splash%20art%201', hero: 'Celeste' },
+  { folder: 'splash%20art%201', hero: 'Churnwalker' },
+  { folder: 'splash%20art%201', hero: 'Flicker' },
+  { folder: 'splash%20art%201', hero: 'Fortress' },
+  { folder: 'splash%20art%201', hero: 'Glaive' },
+  { folder: 'splash%20art%201', hero: 'Grace' },
+  { folder: 'splash%20art%201', hero: 'Grumpjaw' },
+  { folder: 'splash%20art%201', hero: 'Gwen' },
+  { folder: 'splash%20art%201', hero: 'adagio' },
+  // folder 2
+  { folder: 'splash%20art%202', hero: 'Idris' },
+  { folder: 'splash%20art%202', hero: 'Joule' },
+  { folder: 'splash%20art%202', hero: 'Kensei' },
+  { folder: 'splash%20art%202', hero: 'Kestrel' },
+  { folder: 'splash%20art%202', hero: 'Koshka' },
+  { folder: 'splash%20art%202', hero: 'Krul' },
+  { folder: 'splash%20art%202', hero: 'Lance' },
+  { folder: 'splash%20art%202', hero: 'Lorelai' },
+  { folder: 'splash%20art%202', hero: 'Lyra' },
+  { folder: 'splash%20art%202', hero: 'Malene' },
+  { folder: 'splash%20art%202', hero: 'Ozo' },
+  { folder: 'splash%20art%202', hero: 'Petal' },
+  { folder: 'splash%20art%202', hero: 'Phinn' },
+  { folder: 'splash%20art%202', hero: 'Reim' },
+  { folder: 'splash%20art%202', hero: 'Reza' },
+  { folder: 'splash%20art%202', hero: 'Ringo' },
+  // folder 3
+  { folder: 'splash%20art%203', hero: 'SAW' },
+  { folder: 'splash%20art%203', hero: 'Samuel' },
+  { folder: 'splash%20art%203', hero: 'Skaarf' },
+  { folder: 'splash%20art%203', hero: 'Skye' },
+  { folder: 'splash%20art%203', hero: 'Taka' },
+  { folder: 'splash%20art%203', hero: 'Tony' },
+  { folder: 'splash%20art%203', hero: 'Varya' },
+  { folder: 'splash%20art%203', hero: 'Vox' },
+  { folder: 'splash%20art%203', hero: 'Yates' },
+  // folder 4 — add heroes as known
+  { folder: 'splash%20art%204', hero: 'Inara' },
+  { folder: 'splash%20art%204', hero: 'Ishtar' },
+  { folder: 'splash%20art%204', hero: 'Miho' },
+  { folder: 'splash%20art%204', hero: 'Rona' },
+  { folder: 'splash%20art%204', hero: 'San Feng' },
+  { folder: 'splash%20art%204', hero: 'Shin' },
+  { folder: 'splash%20art%204', hero: 'Silvernail' },
+  { folder: 'splash%20art%204', hero: 'Viola' },
+  { folder: 'splash%20art%204', hero: 'Warhawk' },
+  { folder: 'splash%20art%204', hero: 'Ylva' },
+];
 
 function pickRandomSplash() {
-  const hero = ALL_SPLASH_HEROES[Math.floor(Math.random() * ALL_SPLASH_HEROES.length)];
-  // Try splash art 1 first, fallback chain
-  const folder = SPLASH_HEROES_FOLDER3.includes(hero) ? 'splash%20art%203' : SPLASH_HEROES_FOLDER2.includes(hero) ? 'splash%20art%202' : 'splash%20art%201';
-  // Each hero folder has a main splash; use the base splash filename pattern
   const img = document.getElementById('header-splash-img');
   if (!img) return;
-  // Try hero splash (filename: HeroName_splash de tamaño pequeño.webp or hero name_splash.webp)
-  const heroLower = hero.toLowerCase();
-  const url = `${ASSETS_BASE}${folder}/${encodeURIComponent(hero)}/${encodeURIComponent(hero)}_splash%20de%20tama%C3%B1o%20peque%C3%B1o.webp`;
-  img.src = url;
-  img.onerror = function() {
-    // fallback: try splash art folder directly with a generic hero splash
-    this.onerror = null;
-    this.src = '';
-  };
+  // Shuffle and try each until one loads
+  const pool = [...SPLASH_POOL].sort(() => Math.random() - 0.5);
+  let idx = 0;
+  function tryNext() {
+    if (idx >= pool.length) { img.style.opacity = '0'; return; }
+    const { folder, hero } = pool[idx++];
+    // Primary: HeroName_splash de tamaño pequeño.webp
+    // Fallback: first skin alphabetically (we try _splash first then give up)
+    const heroEnc = encodeURIComponent(hero);
+    const url = `${ASSETS_BASE}${folder}/${heroEnc}/${heroEnc}_splash%20de%20tama%C3%B1o%20peque%C3%B1o.webp`;
+    img.onerror = () => {
+      // Try alternate: hero lowercase
+      const heroLower = encodeURIComponent(hero.toLowerCase());
+      const url2 = `${ASSETS_BASE}${folder}/${heroLower}/${heroLower}_splash%20de%20tama%C3%B1o%20peque%C3%B1o.webp`;
+      img.onerror = tryNext;
+      img.src = url2;
+    };
+    img.onload = () => { img.style.opacity = '0.55'; };
+    img.src = url;
+  }
+  tryNext();
 }
 
 // ── Global region for Game ──
@@ -2881,6 +2959,78 @@ function switchCollectCat(catId) {
 })();
 
 setInterval(() => { if (rankedRegion) loadRanked(); }, 60000);
+
+// ── i18n — EN/ES Language Toggle ─────────────────────────────────────────────
+const I18N = {
+  en: {
+    league_desc:          'Validated accounts only · Daily code required · Discord only',
+    game_mode:            'Game Mode',
+    league_3v3:           'League 3v3',
+    league_5v5:           'League 5v5',
+    search_league_player: 'Search league player...',
+    show_all:             'Show all players',
+    select_server:        'Select a server above to continue',
+    choose_region:        'Choose your region',
+    league_tab:           'League',
+    // liga labels used in JS
+    liga_label_3v3:       'League 3v3',
+    liga_label_5v5:       'League 5v5',
+    liga_label_region_na: 'League 3v3 — North America',
+    liga_label_region_eu: 'League 3v3 — Europe',
+  },
+  es: {
+    league_desc:          'Solo cuentas validadas · Código diario requerido · Solo en Discord',
+    game_mode:            'Modo de Juego',
+    league_3v3:           'Liga 3v3',
+    league_5v5:           'Liga 5v5',
+    search_league_player: 'Buscar jugador de liga...',
+    show_all:             'Ver todos los jugadores',
+    select_server:        'Selecciona un servidor arriba',
+    choose_region:        'Elige tu región',
+    league_tab:           'Liga',
+    liga_label_3v3:       'Liga 3v3',
+    liga_label_5v5:       'Liga 5v5',
+    liga_label_region_na: 'Liga 3v3 — Norte América',
+    liga_label_region_eu: 'Liga 3v3 — Europa',
+  }
+};
+
+let currentLang = 'en';
+
+function applyLang(lang) {
+  const t = I18N[lang];
+  // Apply data-i18n text nodes
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key] !== undefined) el.textContent = t[key];
+  });
+  // Apply data-i18n-placeholder
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key] !== undefined) el.placeholder = t[key];
+  });
+  // Update toggle button
+  const flag  = document.getElementById('lang-flag');
+  const label = document.getElementById('lang-label');
+  if (lang === 'en') {
+    if (flag)  flag.textContent  = '🇲🇽';
+    if (label) label.textContent = 'Español';
+  } else {
+    if (flag)  flag.textContent  = '🇺🇸';
+    if (label) label.textContent = 'English';
+  }
+  // Update live liga label if visible
+  const ligaLbl = document.getElementById('liga-label');
+  if (ligaLbl && ligaLbl.textContent) {
+    const is5v5 = ligaLbl.textContent.includes('5v5');
+    ligaLbl.textContent = is5v5 ? t.liga_label_5v5 : t.liga_label_3v3;
+  }
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'es' : 'en';
+  applyLang(currentLang);
+}
 
 // ── Init ──────────────────────────────────────────────────
 // Pick random splash art for header
