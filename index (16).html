@@ -1,0 +1,2863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vainglory Eternal — Rankings</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #12121a;
+  --bg3: #1a1a26;
+  --gold: #d4a843;
+  --gold-dim: #a8842f;
+  --silver: #9a9a9a;
+  --bronze: #b07340;
+  --green: #4ade80;
+  --red: #f87171;
+  --purple: #a78bfa;
+  --text: #e8e6df;
+  --text2: #989690;
+  --text3: #5c5b57;
+  --border: rgba(255,255,255,0.06);
+  --winner-blue: #5bc8c8;
+  --loser-red: #e8653a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.bg-glow {
+  position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(212,168,67,0.08) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+.container { max-width: 750px; margin: 0 auto; padding: 1.5rem 1.25rem; position: relative; z-index: 1; }
+
+/* ── HEADER ── */
+.header { text-align: center; position: relative; display: flex; flex-direction: column; align-items: center; padding-bottom: 0.8rem; }
+.header-bg {
+  position: relative; width: 120%; height: 220px;
+  overflow: hidden; margin-top: -40px; margin-left: -10%; margin-bottom: 0;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 75%, transparent 100%);
+  pointer-events: none; z-index: 0;
+}
+.header-bg img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center center;
+  opacity: 0.4;
+}
+.header > *:not(.header-bg) { position: relative; z-index: 1; }
+
+.header-logo { width: 85px; height: auto; margin-bottom: -2px; margin-top: -80px; z-index: 2; }
+
+.header-subtitle { font-size: 0.65rem; color: var(--text3); letter-spacing: 4px; text-transform: uppercase; margin-top: 4px; }
+
+.live-dot { display: inline-block; width: 6px; height: 6px; background: var(--green); border-radius: 50%; margin-right: 6px; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.visitor-counter {
+  font-size: 0.65rem;
+  color: var(--text3);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-top: 1px;
+  margin-bottom: 2px;
+  font-weight: 400;
+}
+.visitor-counter #visitor-count { font-weight: 400; font-size: 0.65rem; color: var(--text3); }
+.live-text { font-size: 0.55rem; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+
+.discord-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 8px; padding: 5px 12px;
+  background: rgba(122,173,255,0.1); border: 1px solid rgba(122,173,255,0.3);
+  border-radius: 20px; color: #7aadff;
+  font-family: 'Outfit', sans-serif; font-size: 0.6rem; font-weight: 600;
+  text-decoration: none; letter-spacing: 0.5px;
+  transition: all 0.2s; cursor: pointer;
+}
+.discord-btn:hover { background: rgba(122,173,255,0.2); border-color: rgba(122,173,255,0.5); color: #a8c8ff; }
+.discord-btn-icon { font-size: 0.75rem; }
+
+/* ── SEASON COUNTDOWN ── */
+.season-container {
+  margin-bottom: 12px; padding: 10px 16px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+  text-align: center;
+}
+.season-label { font-size: 0.6rem; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
+.countdown { display: flex; justify-content: center; gap: 12px; }
+.countdown-item { text-align: center; }
+.countdown-value { font-size: 1.4rem; font-weight: 800; color: var(--text); line-height: 1; }
+.countdown-label { font-size: 0.5rem; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+.countdown-separator { font-size: 1.2rem; color: var(--text3); font-weight: 300; align-self: flex-start; margin-top: 2px; }
+
+/* ── MAIN DISCLAIMER ── */
+.main-disclaimer {
+  font-size: 0.5rem; color: var(--text3); text-align: center;
+  line-height: 1.6; margin: 4px 0 10px; padding: 0 8px;
+  letter-spacing: 0.3px;
+}
+
+/* ── MAIN MENU (updated: no emojis, neutral by default) ── */
+.main-menu {
+  display: flex; gap: 8px; margin: 10px 0;
+}
+.main-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 16px 10px; border-radius: 14px;
+  border: 1px solid var(--border); background: var(--bg2);
+  color: var(--text3); font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 2px; cursor: pointer; transition: all 0.25s ease;
+}
+.main-btn .main-btn-icon { font-size: 1.5rem; }
+.main-btn.active {
+  background: var(--bg3); color: #ffffff;
+  border-color: rgba(212,168,67,0.4);
+  box-shadow: 0 0 20px rgba(212,168,67,0.1);
+}
+.main-btn:hover:not(.active) { color: var(--text2); border-color: rgba(255,255,255,0.12); }
+
+.main-section { display: none; }
+.main-section.active { display: block; }
+
+/* ── CATEGORY ROW (Level 3: 4 buttons single row) ── */
+.category-grid {
+  display: flex; gap: 0;
+  background: var(--bg2); border-radius: 14px;
+  padding: 5px; border: 1px solid var(--border);
+  margin: 10px 0;
+}
+.cat-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 5px; padding: 14px 4px; border-radius: 10px;
+  border: none; background: transparent;
+  color: var(--text3); font-family: 'Outfit', sans-serif;
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; cursor: pointer; transition: all 0.25s ease;
+  min-width: 0;
+}
+.cat-btn .cat-icon { font-size: 1.5rem; line-height: 1; }
+.cat-btn.active {
+  background: var(--bg3); color: #ffffff; font-weight: 800;
+}
+.cat-btn:hover:not(.active) { color: var(--text2); }
+
+/* ── HISTORY POPUP ── */
+.history-popup-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.88);
+  backdrop-filter: blur(10px); z-index: 9000;
+  display: none; align-items: flex-end; justify-content: center;
+  padding: 0; opacity: 0; transition: opacity 0.25s;
+}
+.history-popup-overlay.open { display: flex; opacity: 1; }
+.history-popup-card {
+  background: linear-gradient(180deg, #14141e 0%, #1a1a28 100%);
+  border: 1px solid rgba(212,168,67,0.2); border-radius: 20px 20px 0 0;
+  width: 100%; max-width: 750px; height: 80vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
+  animation: slideUpPopup 0.3s ease forwards;
+}
+@keyframes slideUpPopup {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.history-popup-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px 12px; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.history-popup-title {
+  font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700;
+  color: #ffffff; letter-spacing: 2px; text-transform: uppercase;
+}
+.history-popup-subtitle {
+  font-size: 0.55rem; color: var(--gold); letter-spacing: 2px;
+  text-transform: uppercase; margin-top: 2px;
+}
+.history-popup-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text3); font-size: 1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.history-popup-close:hover { border-color: var(--gold-dim); color: var(--gold); }
+.history-popup-body {
+  flex: 1; overflow-y: auto; padding: 12px 14px 20px;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.history-popup-body::-webkit-scrollbar { width: 4px; }
+.history-popup-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.history-popup-load-more {
+  display: block; width: calc(100% - 28px); margin: 8px 14px 0;
+  padding: 10px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--bg3); color: var(--text2); font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 1px;
+  cursor: pointer; transition: all 0.2s; text-transform: uppercase;
+  flex-shrink: 0;
+}
+.history-popup-load-more:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+/* ── GAME TAB CONTENT ── */
+.game-tab-content { display: none; }
+.game-tab-content.active { display: block; }
+
+/* ── ANALYTICS: KDA BLOCK ── */
+.kda-main-block {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 4px;
+}
+.kda-main-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.6rem; font-weight: 900;
+  line-height: 1; color: #ffffff;
+  letter-spacing: -1px;
+}
+.kda-main-sep { color: var(--text3); font-size: 1.2rem; font-weight: 300; }
+.kda-main-k { color: var(--winner-blue); }
+.kda-main-d { color: var(--loser-red); }
+.kda-main-a { color: var(--gold); }
+
+/* ── ANALYTICS: Dynamic Win Rate ── */
+.wr-value { font-weight: 800; font-size: 1.05rem; }
+.wr-positive { color: var(--winner-blue); }
+.wr-negative { color: var(--loser-red); }
+
+/* ── ANALYTICS: KDA Ratio Badge ── */
+.kda-badge {
+  display: inline-block; padding: 1px 7px; border-radius: 6px;
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px;
+  background: rgba(212,168,67,0.15); color: var(--gold);
+  border: 1px solid rgba(212,168,67,0.3);
+}
+
+/* ── ANALYTICS: Performance shadow on player card ── */
+.player-card.perf-positive {
+  box-shadow: 0 0 18px rgba(91,200,200,0.12), 0 2px 8px rgba(0,0,0,0.4);
+}
+.player-card.perf-negative {
+  box-shadow: 0 0 18px rgba(232,101,58,0.10), 0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* ── ANALYTICS: Hero icon in player card ── */
+.hero-icon-analytics {
+  width: 36px; height: 36px; border-radius: 50%;
+  object-fit: cover; border: 2px solid var(--winner-blue);
+  flex-shrink: 0;
+}
+.hero-icon-analytics.negative { border-color: var(--loser-red); }
+.hero-name-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  vertical-align: middle;
+}
+
+/* ── SECONDARY BUTTONS (History & H2H) ── */
+.secondary-btns {
+  display: flex; gap: 8px; margin: 6px 0 8px;
+}
+.sec-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 10px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text3); font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1px; cursor: pointer; transition: all 0.2s ease;
+}
+.sec-btn.active {
+  background: var(--bg3); color: var(--gold);
+  border-color: rgba(212,168,67,0.3);
+}
+.sec-btn:hover:not(.active) { color: var(--text2); border-color: rgba(255,255,255,0.1); }
+
+/* ── COLLECTED ITEMS POPUP ── */
+.bp-popup-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+  backdrop-filter: blur(10px); z-index: 9500;
+  display: none; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; transition: opacity 0.25s;
+}
+.bp-popup-overlay.open { display: flex; opacity: 1; }
+.bp-popup-card {
+  background: linear-gradient(180deg,#14141e 0%,#1a1a28 50%,#12121a 100%);
+  border: 1px solid rgba(212,168,67,0.25); border-radius: 18px;
+  width: 100%; max-width: 420px; max-height: 88vh; overflow-y: auto;
+  padding: 20px 18px 18px; position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(212,168,67,0.08);
+  animation: popupSlideIn 0.3s ease forwards;
+}
+.bp-popup-close {
+  position: absolute; top: 12px; right: 14px;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text3); font-size: 1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; z-index: 2;
+}
+.bp-popup-close:hover { border-color: var(--gold-dim); color: var(--gold); }
+.bp-title {
+  font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700;
+  color: #ffffff; letter-spacing: 2px; text-transform: uppercase;
+  text-align: center; margin-bottom: 4px; margin-top: 6px;
+}
+.bp-subtitle { font-size: 0.55rem; color: var(--text3); letter-spacing: 3px; text-transform: uppercase; text-align: center; margin-bottom: 14px; }
+
+/* Battle Pass progress bar */
+.bp-level-section {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 14px; margin-bottom: 14px;
+}
+.bp-level-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.bp-level-num { font-size: 1.8rem; font-weight: 900; color: var(--purple); line-height: 1; }
+.bp-level-max { font-size: 0.6rem; color: var(--text3); }
+.bp-xp-total { font-size: 1rem; font-weight: 700; color: var(--gold); }
+.bp-progress-wrap { position: relative; height: 24px; background: var(--bg3); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+.bp-progress-fill {
+  height: 100%; border-radius: 12px;
+  background: linear-gradient(90deg, var(--purple), #c084fc, var(--gold));
+  transition: width 0.6s ease;
+}
+.bp-progress-text {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; font-weight: 700; color: #fff; letter-spacing: 1px;
+}
+.bp-progress-labels { display: flex; justify-content: space-between; margin-top: 4px; font-size: 0.45rem; color: var(--text3); }
+
+/* Reward track */
+.bp-track { display: flex; gap: 4px; overflow-x: auto; padding: 6px 0 10px; margin-bottom: 10px; scrollbar-width: thin; }
+.bp-track::-webkit-scrollbar { height: 3px; }
+.bp-track::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.bp-reward-slot {
+  flex-shrink: 0; width: 52px; text-align: center;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 4px 4px;
+  position: relative; transition: border-color 0.2s;
+}
+.bp-reward-slot.unlocked { border-color: rgba(212,168,67,0.4); }
+.bp-reward-slot.current { border-color: var(--gold); box-shadow: 0 0 8px rgba(212,168,67,0.4); }
+.bp-reward-icon { font-size: 1.3rem; line-height: 1; margin-bottom: 3px; }
+.bp-reward-img { width: 36px; height: 36px; object-fit: contain; margin: 0 auto 3px; display: block; }
+.bp-reward-lv { font-size: 0.45rem; color: var(--text3); letter-spacing: 1px; }
+.bp-reward-slot.unlocked .bp-reward-lv { color: var(--gold); }
+.bp-reward-lock { position: absolute; top: 2px; right: 3px; font-size: 0.5rem; opacity: 0.4; }
+
+/* Category tabs for collected items */
+.collect-tabs {
+  display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap;
+}
+.collect-tab {
+  padding: 5px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 600;
+  color: var(--text3); cursor: pointer; background: var(--bg3); border: 1px solid var(--border);
+  letter-spacing: 0.5px; transition: all 0.2s;
+}
+.collect-tab.active { color: var(--gold); border-color: rgba(212,168,67,0.4); background: rgba(212,168,67,0.08); }
+
+/* Collected items grid */
+.collect-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+}
+.collect-card {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 8px 4px 6px; text-align: center; position: relative;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.collect-card.owned { border-color: rgba(212,168,67,0.3); }
+.collect-card.owned-epic { border-color: rgba(167,139,250,0.5); box-shadow: 0 0 8px rgba(167,139,250,0.2); }
+.collect-card.locked { opacity: 0.3; }
+.collect-card:not(.locked):active { transform: scale(0.95); }
+.collect-img { width: 40px; height: 40px; object-fit: contain; margin: 0 auto 4px; display: block; }
+.collect-img-icon { font-size: 1.6rem; line-height: 1; margin-bottom: 3px; }
+.collect-name { font-size: 0.42rem; color: var(--text2); letter-spacing: 0.3px; line-height: 1.2; }
+.collect-card.owned .collect-name { color: var(--text); }
+.collect-card.owned-epic .collect-name { color: var(--purple); }
+.collect-rarity { font-size: 0.38rem; color: var(--text3); letter-spacing: 0.5px; margin-top: 1px; }
+.collect-count { text-align: center; font-size: 0.55rem; color: var(--text3); margin-bottom: 6px; letter-spacing: 1px; }
+.collect-count span { color: var(--gold); font-weight: 700; }
+
+/* ── SEARCH ── */
+.search-container { margin-bottom: 12px; position: relative; }
+.search-input { width: 100%; padding: 11px 14px 11px 38px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg2); color: var(--text); font-family: 'Outfit', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+.search-input:focus { border-color: var(--gold-dim); }
+.search-input::placeholder { color: var(--text3); }
+.search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 0.85rem; }
+.search-autocomplete { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg3); border: 1px solid var(--gold-dim); border-radius: 8px; max-height: 160px; overflow-y: auto; z-index: 100; display: none; margin-top: 4px; }
+.search-autocomplete.open { display: block; }
+.search-item { padding: 9px 14px; font-size: 0.85rem; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.search-item:hover, .search-item.selected { background: rgba(212,168,67,0.15); color: var(--gold); }
+.search-item-rank { font-size: 0.75rem; color: var(--text3); }
+
+/* ── TABS ── */
+.tabs {
+  display: flex; gap: 0; margin: 0.8rem 0;
+  background: var(--bg2); border-radius: 14px;
+  padding: 5px; border: 1px solid var(--border);
+}
+.tab {
+  flex: 1; text-align: center; padding: 22px 4px;
+  font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 700;
+  color: var(--text3); cursor: pointer; border-radius: 10px;
+  transition: all 0.3s ease; letter-spacing: 0.3px; line-height: 1.2;
+  min-width: 0; white-space: nowrap; text-transform: uppercase;
+}
+.tab.active { background: var(--bg3); color: #ffffff; font-weight: 800; }
+.tab:hover:not(.active) { color: var(--text2); }
+.tab .tab-icon { display: block; font-size: 1.6rem; margin-bottom: 5px; }
+
+/* ── SECTION LABELS ── */
+.section-group-label {
+  font-size: 0.6rem; font-weight: 800; color: #ffffff; text-transform: uppercase;
+  letter-spacing: 3px; margin-bottom: 6px; padding-left: 4px; margin-top: 16px;
+  text-align: center;
+}
+.section-group-label:first-child { margin-top: 0; }
+
+/* ── SUB-TABS ── */
+.sub-tabs { display: flex; gap: 0; margin-bottom: 6px; background: var(--bg); border-radius: 8px; padding: 4px; border: 1px solid var(--border); }
+.sub-tab { flex: 1; text-align: center; padding: 8px 0; font-size: 0.75rem; font-weight: 500; color: var(--text3); cursor: pointer; border-radius: 6px; transition: all 0.3s ease; letter-spacing: 0.5px; }
+.sub-tab.active         { background: var(--bg3); color: var(--gold);   font-weight: 600; }
+.sub-tab.active-green   { background: var(--bg3); color: var(--green);  font-weight: 600; }
+.sub-tab.active-purple  { background: var(--bg3); color: var(--purple); font-weight: 600; }
+.sub-tab.active-white   { background: var(--bg3); color: #ffffff;       font-weight: 600; }
+.sub-tab.active-blue    { background: var(--bg3); color: #7aadff;       font-weight: 600; }
+.sub-tab:hover:not(.active):not(.active-purple):not(.active-green):not(.active-white):not(.active-blue) { color: var(--text2); }
+
+/* game server select tabs */
+#game-region-tabs .sub-tab { padding: 13px 0; font-size: 0.85rem; font-weight: 800; letter-spacing: 2px; }
+#ranked-region-tabs .sub-tab,
+#priv-region-tabs .sub-tab,
+#hist-region-tabs .sub-tab,
+#h2h-region-tabs .sub-tab { padding: 13px 0; font-size: 0.85rem; font-weight: 800; letter-spacing: 2px; }
+#ranked-region-tabs .sub-tab.active-green,
+#ranked-region-tabs .sub-tab.active-blue,
+#priv-region-tabs .sub-tab.active-green,
+#priv-region-tabs .sub-tab.active-blue,
+#hist-region-tabs .sub-tab.active-green,
+#hist-region-tabs .sub-tab.active-blue,
+#h2h-region-tabs .sub-tab.active-green,
+#h2h-region-tabs .sub-tab.active-blue  { background: var(--bg3); color: #ffffff; font-weight: 800; }
+
+.region-placeholder {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 48px 20px; text-align: center;
+  background: var(--bg2); border: 1px dashed rgba(255,255,255,0.08);
+  border-radius: 14px; margin-top: 8px;
+}
+.region-placeholder-icon { font-size: 2.8rem; margin-bottom: 14px; opacity: 0.5; }
+.region-placeholder-title { font-size: 1rem; font-weight: 700; color: var(--text2); margin-bottom: 6px; letter-spacing: 1px; }
+.region-placeholder-sub { font-size: 0.7rem; color: var(--text3); letter-spacing: 1px; }
+
+.section-label { font-size: 0.65rem; font-weight: 700; color: #ffffff; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; padding-left: 4px; }
+
+#h2h-mode-tabs,
+#hist-mode-tabs { flex-wrap: wrap; }
+#h2h-mode-tabs .sub-tab,
+#hist-mode-tabs .sub-tab { min-width: 0; flex: 0 0 auto; width: calc(50% - 2px); }
+#h2h-mode-tabs .sub-tab:first-child,
+#hist-mode-tabs .sub-tab:first-child { width: 100%; }
+
+#ranked-mode-tabs .sub-tab,
+#priv-mode-tabs .sub-tab,
+#hist-mode-tabs .sub-tab,
+#h2h-mode-tabs .sub-tab { padding: 11px 0; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; }
+
+/* ── PLAYER CARDS ── */
+.player-card { background: linear-gradient(180deg, var(--bg2) 0%, var(--bg3) 100%); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; margin-bottom: 8px; animation: fadeIn 0.4s ease forwards; opacity: 0; position: relative; overflow: hidden; -webkit-user-select: none; user-select: none; cursor: pointer; }
+.player-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold-dim), transparent); opacity: 0.5; }
+.player-card.top1::before { background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 1; }
+.player-card.top2::before { background: linear-gradient(90deg, transparent, var(--silver), transparent); opacity: 0.8; }
+.player-card.top3::before { background: linear-gradient(90deg, transparent, var(--bronze), transparent); opacity: 0.8; }
+.player-card.highlighted { border-color: var(--gold); box-shadow: 0 0 20px rgba(212,168,67,0.3); }
+.player-card:active { transform: scale(0.98); transition: transform 0.1s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.player-header { position: relative; text-align: center; margin-bottom: -35px; z-index: 2; }
+.rank-position { position: absolute; left: 0; top: 0; font-size: 1.5rem; font-weight: 700; color: var(--text); opacity: 0.9; }
+.player-name { font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 500; color: #EAEAEA; letter-spacing: 1px; text-transform: uppercase; }
+
+.tier-section { display: flex; flex-direction: column; align-items: center; margin: 0; position: relative; }
+.tier-image { width: 220px; height: 220px; object-fit: contain; filter: drop-shadow(0 0 25px rgba(212,168,67,0.3)); margin: -20px 0 -65px 0; }
+.tier-display { text-align: center; position: relative; z-index: 2; line-height: 1.1; }
+.tier-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.tier-badge.bronze { color: var(--bronze); }
+.tier-badge.silver { color: var(--silver); }
+.tier-badge.gold   { color: var(--gold); }
+.tier-number { font-size: 0.8rem; font-weight: 600; }
+.tier-name { font-size: 1rem; font-weight: 400; text-transform: uppercase; letter-spacing: 3px; color: var(--text); text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+.elo-bar-container { margin-top: 4px; position: relative; padding-top: 18px; }
+.elo-cursor { position: absolute; top: 0; transform: translateX(-50%); text-align: center; z-index: 2; }
+.elo-value { font-size: 0.75rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.elo-arrow { font-size: 0.55rem; color: var(--text2); line-height: 0.6; display: block; }
+.elo-bar { height: 20px; background: var(--bg); border-radius: 6px; overflow: hidden; border: 1px solid var(--border); box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
+.elo-bar-fill { height: 100%; transition: width 0.3s ease; border-radius: 5px; }
+.elo-bar-fill.bronze { background: linear-gradient(180deg,#d4956a 0%,#b07340 25%,#8b5a2b 50%,#b07340 75%,#d4956a 100%); box-shadow: 0 0 8px rgba(176,115,64,0.4); }
+.elo-bar-fill.silver { background: linear-gradient(180deg,#d0d0d0 0%,#a8a8a8 25%,#808080 50%,#a8a8a8 75%,#d0d0d0 100%); box-shadow: 0 0 8px rgba(160,160,160,0.4); }
+.elo-bar-fill.gold   { background: linear-gradient(180deg,#f5d998 0%,#d4a843 25%,#a8842f 50%,#d4a843 75%,#f5d998 100%); box-shadow: 0 0 10px rgba(212,168,67,0.5); }
+.elo-divisions { display: flex; justify-content: space-between; margin-top: 3px; }
+.elo-division-marker { width: 1px; height: 5px; background: var(--text3); }
+.elo-division-marker:first-child, .elo-division-marker:last-child { opacity: 0; }
+.elo-labels { display: flex; justify-content: space-between; margin-top: 1px; padding: 0 2px; }
+.elo-label { font-size: 0.5rem; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; flex: 1; text-align: center; }
+.elo-label.active-bronze { color: var(--bronze); font-weight: 700; }
+.elo-label.active-silver { color: var(--silver); font-weight: 700; }
+.elo-label.active-gold   { color: var(--gold);   font-weight: 700; }
+
+.stats-section { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.stat-item { font-size: 0.7rem; color: var(--text2); }
+.stat-item .win   { color: var(--green); }
+.stat-item .loss  { color: var(--red); }
+.stat-item .kills { color: var(--green); }
+.stat-item .deaths  { color: var(--red); }
+.stat-item .assists { color: var(--purple); }
+.stat-item .kd-ratio  { color: var(--gold);   font-weight: 600; }
+.stat-item .kda-ratio { color: var(--purple); font-weight: 600; }
+.stat-item .streak-win  { color: var(--green); }
+.stat-item .streak-loss { color: var(--red); }
+.stat-item .best-streak { color: var(--gold); }
+.stat-item .avg-gold    { color: #f0c040; font-weight: 600; }
+.stat-extra { font-size: 0.6rem; color: var(--text3); width: 100%; margin-top: 2px; }
+
+/* v32: Top hero in player card */
+.stat-hero{color:var(--purple);font-weight:600}
+
+/* load-more */
+.top10-load-more {
+  width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--bg2); color: var(--text3);
+  font-family: 'Outfit', sans-serif; font-size: 0.8rem; font-weight: 600;
+  letter-spacing: 1px; cursor: pointer; transition: all 0.2s; margin-top: 4px;
+  display: none;
+}
+.top10-load-more:hover { border-color: var(--gold-dim); color: var(--gold); background: rgba(212,168,67,0.05); }
+.top10-count { text-align:center; font-size:0.6rem; color:var(--text3); margin-top:6px; letter-spacing:1px; }
+
+/* ── H2H ── */
+.h2h-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-top: 8px; }
+.h2h-inputs { display: flex; gap: 8px; align-items: center; margin-bottom: 14px; }
+.h2h-inputs input { flex: 1; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg3); color: var(--text); font-family: 'Outfit', sans-serif; font-size: 0.85rem; outline: none; transition: border-color 0.2s; }
+.h2h-inputs input:focus { border-color: var(--gold-dim); }
+.h2h-inputs input::placeholder { color: var(--text3); }
+.vs-badge { font-size: 0.75rem; font-weight: 700; color: var(--text3); letter-spacing: 2px; }
+.h2h-btn { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--gold-dim); background: transparent; color: var(--gold); font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; margin-bottom: 14px; }
+.h2h-btn:hover { background: rgba(212,168,67,0.1); }
+.h2h-result { display: none; text-align: center; }
+.h2h-result.visible { display: block; }
+.h2h-matchup { display: flex; justify-content: center; align-items: center; gap: 24px; padding: 14px; background: var(--bg3); border-radius: 8px; }
+.h2h-player { text-align: center; }
+.h2h-player-name { font-size: 0.75rem; color: var(--text2); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; }
+.h2h-wins { font-size: 1.6rem; font-weight: 800; color: var(--text); }
+.h2h-vs { font-size: 0.7rem; font-weight: 600; color: var(--text3); letter-spacing: 2px; }
+.h2h-vs-total { font-size: 0.6rem; color: var(--text3); margin-top: 4px; }
+.h2h-no-data { font-size: 0.8rem; color: var(--text3); padding: 12px; }
+
+.autocomplete-wrap { position: relative; flex: 1; }
+.autocomplete-wrap input { width: 100%; }
+.autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg3); border: 1px solid var(--gold-dim); border-radius: 6px; max-height: 140px; overflow-y: auto; z-index: 100; display: none; }
+.autocomplete-list.open { display: block; }
+.autocomplete-item { padding: 8px 12px; font-size: 0.85rem; color: var(--text); cursor: pointer; }
+.autocomplete-item:hover, .autocomplete-item.selected { background: rgba(212,168,67,0.15); color: var(--gold); }
+
+.loading { text-align: center; padding: 25px; color: var(--text3); font-size: 0.7rem; letter-spacing: 2px; }
+.spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 8px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.footer { text-align: center; margin-top: 1.5rem; padding-top: 0.8rem; border-top: 1px solid var(--border); font-size: 0.5rem; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ── MATCH HISTORY ── */
+.match-card { background: linear-gradient(180deg, var(--bg2) 0%, var(--bg3) 100%); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; animation: fadeIn 0.4s ease forwards; opacity: 0; position: relative; overflow: hidden; -webkit-user-select: none; user-select: none; cursor: pointer; }
+.match-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; opacity: 0.6; }
+.match-card.mode-ranked::before { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+.match-card.mode-3v3::before   { background: linear-gradient(90deg, transparent, var(--gold),   transparent); }
+.match-card.mode-5v5::before   { background: linear-gradient(90deg, transparent, var(--purple), transparent); }
+.match-card:active { transform: scale(0.98); transition: transform 0.1s ease; }
+.match-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.match-meta { display: flex; align-items: center; gap: 8px; }
+.match-number { font-size: 0.65rem; font-weight: 700; color: var(--text3); letter-spacing: 1px; }
+.match-mode-badge { font-size: 0.6rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; }
+.match-mode-badge.ranked { color: var(--green);  background: rgba(74,222,128,0.1);  border: 1px solid rgba(74,222,128,0.2); }
+.match-mode-badge.ranked5 { color: #7aadff; background: rgba(122,173,255,0.1); border: 1px solid rgba(122,173,255,0.2); }
+.match-mode-badge.scrim3 { color: var(--gold);   background: rgba(212,168,67,0.1);  border: 1px solid rgba(212,168,67,0.2); }
+.match-mode-badge.scrim5 { color: var(--purple); background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); }
+.match-date { font-size: 0.65rem; color: var(--text3); }
+.match-teams { display: flex; align-items: stretch; }
+.match-team { flex: 1; padding: 8px 10px; border-radius: 8px; }
+.match-team.winner { background: rgba(91,200,200,0.06); }
+.match-team.loser  { background: rgba(232,101,58,0.06); }
+.match-team-label { font-size: 0.55rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+.match-team.winner .match-team-label { color: var(--winner-blue); }
+.match-team.loser  .match-team-label { color: var(--loser-red); }
+.match-team-kills { font-size: 0.65rem; font-weight: 600; opacity: 0.7; }
+.match-player { display: flex; justify-content: space-between; align-items: center; padding: 2px 0; }
+.match-player-name { font-size: 0.7rem; color: var(--text); font-weight: 500; }
+.match-player-name.afk { color: var(--text3); text-decoration: line-through; opacity: 0.5; }
+.match-player-name.mvp { color: var(--gold); font-weight: 700; }
+.match-player-score { font-size: 0.62rem; color: var(--text2); font-variant-numeric: tabular-nums; font-weight: 500; }
+.match-player-gold  { font-size: 0.55rem; color: #f0c040; font-weight: 500; }
+.match-vs-divider { display: flex; align-items: center; justify-content: center; padding: 0 6px; flex-shrink: 0; }
+.match-vs-text { font-size: 0.55rem; font-weight: 700; color: var(--text3); letter-spacing: 2px; }
+.match-mvp-bar { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--border); font-size: 0.6rem; color: var(--text3); text-align: center; }
+.match-mvp-bar .mvp-name { color: var(--gold);   font-weight: 700; }
+.match-mvp-bar .mvp-kda  { color: var(--purple); font-weight: 600; }
+.match-history-load-more { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg2); color: var(--text3); font-family: 'Outfit', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; margin-top: 4px; }
+.match-history-load-more:hover { border-color: var(--gold-dim); color: var(--gold); background: rgba(212,168,67,0.05); }
+.match-history-count { text-align: center; font-size: 0.6rem; color: var(--text3); margin-top: 8px; letter-spacing: 1px; }
+.match-player-stats { display: flex; align-items: center; gap: 6px; }
+.match-card.mode-ranked5::before { background: linear-gradient(90deg, transparent, #7aadff, transparent); }
+
+/* v32: Hero icon in match cards */
+.hero-icon{width:18px;height:18px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:3px;border:1px solid var(--border)}
+.hero-icon-lg{width:24px;height:24px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:5px;border:1px solid var(--border)}
+/* v32: Validated badge */
+.validated-badge{display:inline-flex;align-items:center;gap:3px;font-size:0.5rem;font-weight:700;color:var(--green);letter-spacing:1px;text-transform:uppercase;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:10px;padding:2px 8px;margin-top:4px}
+/* v32: XP/Level in popup */
+.popup-level-bar{margin-top:8px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;text-align:center}
+.popup-level-label{font-size:0.5rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.popup-level-value{font-size:1.1rem;font-weight:800;color:var(--purple)}
+.popup-xp-bar{height:6px;background:var(--bg3);border-radius:3px;margin-top:4px;overflow:hidden}
+.popup-xp-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:3px}
+.popup-xp-text{font-size:0.5rem;color:var(--text3);margin-top:2px}
+
+/* ── POPUP ── */
+.popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9000; display: none; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.25s ease; }
+.popup-overlay.open { display: flex; opacity: 1; }
+.popup-card { background: linear-gradient(180deg,#14141e 0%,#1a1a28 50%,#12121a 100%); border: 1px solid rgba(212,168,67,0.25); border-radius: 18px; width: 100%; max-width: 420px; max-height: 85vh; overflow-y: auto; padding: 24px 22px 20px; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(212,168,67,0.08); animation: popupSlideIn 0.3s ease forwards; }
+@keyframes popupSlideIn { from { opacity: 0; transform: translateY(20px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.popup-close { position: absolute; top: 12px; right: 14px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--text3); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 2; }
+.popup-close:hover { border-color: var(--gold-dim); color: var(--gold); }
+.popup-hint { position: absolute; top: 14px; left: 18px; font-size: 0.5rem; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; opacity: 0.6; }
+.popup-player-header { text-align: center; margin-top: 8px; }
+.popup-rank { font-size: 0.7rem; font-weight: 600; color: var(--gold-dim); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px; }
+.popup-player-name { font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 600; color: #EAEAEA; letter-spacing: 2px; text-transform: uppercase; line-height: 1.05; }
+.popup-tier-section { display: flex; flex-direction: column; align-items: center; margin: 0; }
+.popup-tier-image {
+  width: 340px; height: 340px; object-fit: contain;
+  filter: drop-shadow(0 0 40px rgba(212,168,67,0.45));
+  margin: -10px 0 -90px 0;
+}
+.popup-tier-display { text-align: center; position: relative; z-index: 2; line-height: 1.1; }
+.popup-tier-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; }
+.popup-tier-badge .tier-number { font-size: 0.8rem; font-weight: 600; }
+.popup-tier-name { font-size: 1rem; font-weight: 400; text-transform: uppercase; letter-spacing: 3px; color: var(--text); }
+.popup-elo-bar-container { margin-top: 4px; position: relative; padding-top: 18px; }
+.popup-elo-cursor { position: absolute; top: 0; transform: translateX(-50%); text-align: center; z-index: 2; }
+.popup-elo-value { font-size: 0.75rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.popup-elo-arrow { font-size: 0.55rem; color: var(--text2); line-height: 0.6; display: block; }
+.popup-elo-bar { height: 20px; background: var(--bg); border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+.popup-elo-bar-fill { height: 100%; border-radius: 5px; }
+.popup-elo-labels { display: flex; justify-content: space-between; margin-top: 1px; padding: 0 2px; }
+.popup-elo-label { font-size: 0.5rem; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; flex: 1; text-align: center; }
+.popup-elo-label.active-bronze { color: var(--bronze); font-weight: 700; }
+.popup-elo-label.active-silver { color: var(--silver); font-weight: 700; }
+.popup-elo-label.active-gold   { color: var(--gold);   font-weight: 700; }
+.popup-stats {
+  margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--border);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5px;
+}
+.popup-stat-block { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; text-align: center; }
+.popup-stat-label { font-size: 0.5rem; color: var(--text3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1px; }
+.popup-stat-value { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+.popup-stat-value.green  { color: var(--green); }
+.popup-stat-value.red    { color: var(--red); }
+.popup-stat-value.gold   { color: var(--gold); }
+.popup-stat-value.purple { color: var(--purple); }
+.popup-stat-block.full-width { grid-column: 1 / -1; }
+.popup-stat-row { display: flex; justify-content: center; gap: 14px; font-size: 0.8rem; font-weight: 600; }
+.popup-match-header { text-align: center; margin-top: 8px; margin-bottom: 14px; }
+.popup-match-number { font-size: 0.65rem; font-weight: 700; color: var(--text3); letter-spacing: 2px; margin-bottom: 4px; }
+.popup-match-mode { font-size: 0.8rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; }
+.popup-match-mode.ranked { color: var(--green); }
+.popup-match-mode.ranked5 { color: #7aadff; }
+.popup-match-mode.scrim3 { color: var(--gold); }
+.popup-match-mode.scrim5 { color: var(--purple); }
+.popup-match-date { font-size: 0.65rem; color: var(--text3); margin-top: 4px; }
+.popup-match-teams { display: flex; flex-direction: column; gap: 10px; }
+.popup-match-team { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.popup-match-team.winner { border-color: rgba(91,200,200,0.25); }
+.popup-match-team.loser  { border-color: rgba(232,101,58,0.2); }
+.popup-match-team-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.popup-match-team.winner .popup-match-team-label { color: var(--winner-blue); }
+.popup-match-team.loser  .popup-match-team-label { color: var(--loser-red); }
+.popup-match-player { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.popup-match-player:last-child { border-bottom: none; }
+.popup-match-player-name { font-size: 0.85rem; color: var(--text); font-weight: 500; }
+.popup-match-player-name.afk { color: var(--text3); text-decoration: line-through; opacity: 0.5; }
+.popup-match-player-name.mvp { color: var(--gold); font-weight: 700; }
+.popup-match-player-details { display: flex; align-items: center; gap: 10px; }
+.popup-match-player-score { font-size: 0.8rem; color: var(--text2); font-variant-numeric: tabular-nums; font-weight: 600; }
+.popup-match-player-gold  { font-size: 0.7rem; color: #f0c040; font-weight: 500; }
+.popup-match-mvp { margin-top: 12px; padding: 10px; background: rgba(212,168,67,0.06); border: 1px solid rgba(212,168,67,0.15); border-radius: 8px; text-align: center; font-size: 0.75rem; color: var(--text2); }
+.popup-match-mvp .mvp-name { color: var(--gold);   font-weight: 700; }
+.popup-match-mvp .mvp-kda  { color: var(--purple); font-weight: 600; }
+
+/* ── TOURNAMENT — UPCOMING ── */
+.tourney-next-card {
+  background: linear-gradient(135deg,#0e0e1a 0%,#16121f 50%,#0e1218 100%);
+  border: 1px solid rgba(212,168,67,0.3); border-radius: 14px;
+  padding: 20px 18px 18px; margin-bottom: 20px;
+  position: relative; overflow: hidden;
+  text-align: center;
+}
+.tourney-next-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.tourney-next-glow { position: absolute; top: -80px; right: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(212,168,67,0.1) 0%, transparent 70%); pointer-events: none; }
+
+.tourney-next-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.55rem; font-weight: 700; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; background: rgba(212,168,67,0.1); border: 1px solid rgba(212,168,67,0.25); border-radius: 20px; padding: 4px 12px; margin-bottom: 16px; }
+.badge-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+
+.tourney-next-name { font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700; color: #fff; letter-spacing: 2px; text-transform: uppercase; line-height: 1.2; margin-bottom: 8px; }
+
+.tourney-next-tier-img { width: 260px; height: 260px; object-fit: contain; filter: drop-shadow(0 0 30px rgba(212,168,67,0.5)); margin: -10px auto -60px; display: block; }
+
+.tourney-prize-highlight { margin-bottom: 12px; position: relative; z-index: 2; text-align: center; }
+.tourney-prize-label {
+  font-size: 0.5rem; color: var(--text3); letter-spacing: 3px;
+  text-transform: uppercase; display: block; margin-bottom: 4px;
+}
+.tourney-prize-row { display: flex; align-items: baseline; justify-content: center; gap: 6px; }
+.tourney-prize-value { font-size: 2.2rem; font-weight: 900; color: var(--green); text-shadow: 0 0 20px rgba(74,222,128,0.3); line-height: 1.1; }
+.tourney-prize-currency { font-size: 0.9rem; font-weight: 700; color: var(--green); opacity: 0.75; align-self: flex-end; padding-bottom: 4px; }
+.tourney-prize-sub { font-size: 0.75rem; font-weight: 500; color: #ffffff; margin-top: 2px; letter-spacing: 1px; line-height: 1.1; }
+
+.tourney-register-now { font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700; color: #ffffff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; position: relative; z-index: 2; }
+
+.tourney-countdown { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 10px; margin-bottom: 20px; text-align: center; }
+.tourney-countdown-label { font-size: 0.5rem; color: var(--text3); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+.tourney-countdown-values { display: flex; justify-content: center; gap: 8px; align-items: flex-start; }
+.tourney-cd-item { text-align: center; }
+.tourney-cd-num { font-size: 1.8rem; font-weight: 800; color: var(--text); line-height: 1; font-variant-numeric: tabular-nums; }
+.tourney-cd-lbl { font-size: 0.45rem; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+.tourney-cd-sep { font-size: 1.4rem; color: var(--text3); font-weight: 300; margin-top: 2px; }
+
+.tourney-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; text-align: left; }
+.tourney-detail-item { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+.tourney-detail-item.full-col { grid-column: 1 / -1; }
+.tourney-detail-label { font-size: 0.5rem; color: var(--text3); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 3px; }
+.tourney-detail-value { font-size: 0.75rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+.tourney-detail-value a { color: #7aadff; text-decoration: none; }
+.tourney-detail-value a:hover { text-decoration: underline; }
+.tourney-prize { font-size: 1.1rem; font-weight: 800; color: var(--gold); }
+.tourney-banned { font-size: 0.7rem; color: var(--red); font-weight: 600; }
+
+.tourney-join-btn { display: block; width: 100%; padding: 13px; border-radius: 10px; border: none; background: linear-gradient(135deg,#d4a843 0%,#a8842f 100%); color: #0a0a0f; font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(212,168,67,0.3); }
+.tourney-join-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(212,168,67,0.45); }
+.tourney-register-info { margin-top: 12px; padding: 10px 14px; background: rgba(122,173,255,0.05); border: 1px solid rgba(122,173,255,0.15); border-radius: 8px; font-size: 0.68rem; color: var(--text2); line-height: 1.6; text-align: left; }
+.tourney-register-info strong { color: var(--text); }
+.tourney-register-info .free-agent { margin-top: 6px; color: var(--purple); font-weight: 600; }
+
+.tourney-section-divider { display: flex; align-items: center; gap: 10px; margin: 24px 0 16px; }
+.tourney-section-divider::before, .tourney-section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.tourney-section-divider span { font-size: 0.55rem; font-weight: 700; color: var(--text3); letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; }
+.tourney-past-loading { text-align: center; padding: 20px; color: var(--text3); font-size: 0.7rem; letter-spacing: 2px; }
+.tourney-past-list { display: flex; flex-direction: column; gap: 8px; }
+.tourney-accordion { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
+.tourney-accordion:hover { border-color: rgba(212,168,67,0.2); }
+.tourney-accordion.open  { border-color: rgba(212,168,67,0.3); }
+.tourney-accordion-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; user-select: none; }
+.tourney-accordion-left { display: flex; align-items: center; gap: 12px; }
+.tourney-accordion-name { font-size: 0.85rem; font-weight: 700; color: var(--text); font-family: 'Cinzel', serif; letter-spacing: 0.5px; }
+.tourney-accordion-date { font-size: 0.6rem; color: var(--text3); margin-top: 2px; letter-spacing: 1px; }
+.tourney-accordion-arrow { font-size: 0.65rem; color: var(--text3); transition: transform 0.25s; }
+.tourney-accordion.open .tourney-accordion-arrow { transform: rotate(180deg); }
+.tourney-accordion-body { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
+.tourney-accordion.open .tourney-accordion-body { display: block; }
+
+/* ── TOURNAMENT PODIUM ── */
+.tourney-podium { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+
+.tourney-place-card {
+  border-radius: 14px; padding: 16px; position: relative; overflow: hidden;
+  -webkit-user-select: none; user-select: none; cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.tourney-place-card:active { transform: scale(0.98); }
+.tourney-place-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.tourney-place-card.place-1 {
+  background: linear-gradient(180deg, rgba(212,168,67,0.1) 0%, rgba(212,168,67,0.04) 100%);
+  border: 1px solid rgba(212,168,67,0.35);
+}
+.tourney-place-card.place-1::before { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.tourney-place-card.place-2 {
+  background: linear-gradient(180deg, rgba(154,154,154,0.07) 0%, rgba(154,154,154,0.02) 100%);
+  border: 1px solid rgba(154,154,154,0.25);
+}
+.tourney-place-card.place-2::before { background: linear-gradient(90deg, transparent, var(--silver), transparent); }
+.tourney-place-card.place-3 {
+  background: linear-gradient(180deg, rgba(176,115,64,0.08) 0%, rgba(176,115,64,0.02) 100%);
+  border: 1px solid rgba(176,115,64,0.25);
+}
+.tourney-place-card.place-3::before { background: linear-gradient(90deg, transparent, var(--bronze), transparent); }
+
+.tourney-place-corner-label {
+  position: absolute; top: 12px; left: 14px;
+  font-size: 0.55rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px;
+}
+.tourney-place-card.place-1 .tourney-place-corner-label { color: var(--gold);   background: rgba(212,168,67,0.15); border: 1px solid rgba(212,168,67,0.3); }
+.tourney-place-card.place-2 .tourney-place-corner-label { color: var(--silver); background: rgba(154,154,154,0.1);  border: 1px solid rgba(154,154,154,0.25); }
+.tourney-place-card.place-3 .tourney-place-corner-label { color: var(--bronze); background: rgba(176,115,64,0.1);  border: 1px solid rgba(176,115,64,0.25); }
+
+.tourney-place-teamname-wrap { text-align: center; margin-top: 4px; margin-bottom: 8px; }
+.tourney-place-teamname {
+  font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase; line-height: 1.1;
+  color: #ffffff;
+}
+
+.tourney-place-tier-img {
+  width: 140px; height: 140px; object-fit: contain;
+  filter: drop-shadow(0 0 15px rgba(212,168,67,0.25));
+  display: block; margin: 20px auto -10px;
+}
+
+.tourney-place-players-row {
+  display: flex; flex-wrap: wrap; gap: 6px 16px;
+  justify-content: center; margin-bottom: 0;
+}
+.tourney-place-player-item {
+  font-size: 0.8rem; font-weight: 500; color: #ffffff;
+  white-space: nowrap;
+}
+.tourney-place-player-item.is-mvp { color: var(--gold); font-weight: 700; }
+
+.tourney-place-click-hint {
+  text-align: center; margin-top: 10px;
+  font-size: 0.5rem; color: var(--text3); letter-spacing: 2px; text-transform: uppercase;
+}
+
+/* ── TOURNAMENT POPUP ── */
+.popup-tourney-header { text-align: center; margin-bottom: 8px; }
+.popup-tourney-place-label { font-size: 0.65rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; }
+.popup-tourney-teamname { font-family: 'Cinzel', serif; font-size: 2.2rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1.1; color: #ffffff; }
+.popup-tourney-tier-img { width: 280px; height: 280px; object-fit: contain; display: block; margin: -10px auto -50px; }
+.popup-tourney-players { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.popup-tourney-players-title { font-size: 0.55rem; color: var(--text3); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; text-align: center; }
+.popup-tourney-player-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.popup-tourney-player-row:last-child { border-bottom: none; }
+.popup-tourney-player-name { font-size: 0.95rem; font-weight: 600; color: #ffffff; }
+.popup-tourney-player-name.is-mvp { color: var(--gold); font-weight: 700; }
+.popup-tourney-player-score { font-size: 0.8rem; color: var(--text2); font-variant-numeric: tabular-nums; }
+.popup-tourney-mvp-badge { font-size: 0.45rem; font-weight: 800; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; text-transform: uppercase; background: var(--gold); color: #0a0a0f; }
+
+/* VOD link */
+.tourney-vod { margin-top: 12px; padding: 10px 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; gap: 10px; text-decoration: none; transition: all 0.2s; }
+.tourney-vod:hover { border-color: var(--red); background: rgba(248,113,113,0.05); }
+.tourney-vod-icon { font-size: 1.2rem; flex-shrink: 0; }
+.tourney-vod-text { flex: 1; }
+.tourney-vod-label { font-size: 0.55rem; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2px; }
+.tourney-vod-title { font-size: 0.72rem; color: var(--text); font-weight: 600; }
+.tourney-vod-arrow { font-size: 0.7rem; color: var(--text3); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .header-logo { width: 70px; margin-top: -68px; }
+  .player-card { padding: 10px 12px; }
+  .player-name { font-size: 1.3rem; }
+  .rank-position { font-size: 1.2rem; }
+  .player-header { margin-bottom: -30px; }
+  .tier-image { width: 190px; height: 190px; margin: -15px 0 -55px 0; }
+  .stats-section { gap: 3px 10px; }
+  .stat-item { font-size: 0.65rem; }
+  .h2h-matchup { gap: 16px; padding: 10px; }
+  .h2h-wins { font-size: 1.3rem; }
+  .countdown-value { font-size: 1.1rem; }
+  .match-card { padding: 10px 10px; }
+  .match-team { padding: 6px 8px; }
+  .match-player-name  { font-size: 0.65rem; }
+  .match-player-score { font-size: 0.58rem; }
+  .match-player-gold  { font-size: 0.5rem; }
+  .main-btn { font-size: 0.85rem; padding: 14px 6px; letter-spacing: 1px; }
+  .main-btn .main-btn-icon { font-size: 1.2rem; }
+  .tab { font-size: 0.72rem; padding: 16px 2px; }
+  .tab .tab-icon { font-size: 1.2rem; }
+  .sec-btn { font-size: 0.65rem; padding: 8px 6px; }
+  .collect-grid { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .popup-card { padding: 20px 16px 16px; }
+  .popup-player-name { font-size: 1.3rem; }
+  .popup-tier-image { width: 280px; height: 280px; margin: -5px 0 -75px 0; }
+  .tourney-next-tier-img { width: 200px; height: 200px; }
+  .tourney-details-grid { grid-template-columns: 1fr; }
+  .tourney-next-name { font-size: 1.3rem; }
+  .tourney-cd-num { font-size: 1.4rem; }
+  .tourney-place-players-row { gap: 4px 10px; }
+  .tourney-place-tier-img { width: 110px; height: 110px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<!-- ═══ POPUP ═══ -->
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup-card" id="popup-card">
+    <span class="popup-hint">DETAIL VIEW</span>
+    <button class="popup-close" id="popup-close">&times;</button>
+    <div id="popup-content"></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="header">
+    <div class="header-bg">
+      <img id="header-splash-img" src="" alt="Banner" onerror="this.src=''">
+    </div>
+    <img src="images/VAINGLORY__crossplatform_logo.png" alt="Vainglory" class="header-logo">
+    <div class="header-subtitle">community competitive rankings</div>
+    <div class="live-text"><span class="live-dot"></span>Live — auto-updates every 60s</div>
+  </div>
+
+  <!-- ═══ MAIN MENU ═══ -->
+  <div class="main-menu">
+    <button class="main-btn" id="main-btn-game" onclick="showMainMenu('game')">GAME</button>
+    <button class="main-btn" id="main-btn-tourney" onclick="showMainMenu('tourney')">TOURNEY</button>
+  </div>
+
+  <!-- ═══ DISCLAIMER ═══ -->
+  <div class="main-disclaimer" id="main-disclaimer">
+    Fan-made community tool · Not affiliated with Super Evil Megacorp · Vainglory and related assets are property of their respective owners.
+  </div>
+
+  <!-- ═══ GAME SECTION ═══ -->
+  <div id="main-game" class="main-section">
+    <!-- Level 2: Server select -->
+    <div id="game-server-select">
+      <div class="section-group-label" style="margin-top:8px">Select Server</div>
+      <div class="sub-tabs" id="game-region-tabs">
+        <div class="sub-tab" id="game-reg-na" onclick="setGameRegion('NA')">NORTH AMERICA</div>
+        <div class="sub-tab" id="game-reg-eu" onclick="setGameRegion('EU')">EUROPE</div>
+      </div>
+    </div>
+
+    <!-- Level 3: Season countdown + category row -->
+    <div id="game-content" style="display:none">
+      <!-- Season Countdown -->
+      <div class="season-container" style="margin-top:10px">
+        <div class="season-label">Season 2026</div>
+        <div class="countdown" id="countdown">
+          <div class="countdown-item"><div class="countdown-value" id="cd-days">000</div><div class="countdown-label">Days</div></div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-item"><div class="countdown-value" id="cd-hours">00</div><div class="countdown-label">Hours</div></div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-item"><div class="countdown-value" id="cd-mins">00</div><div class="countdown-label">Mins</div></div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-item"><div class="countdown-value" id="cd-secs">00</div><div class="countdown-label">Secs</div></div>
+        </div>
+        <a href="https://discord.gg/K5Thqmayys" target="_blank" class="discord-btn">
+          <span class="discord-btn-icon">💬</span>Join our Discord to participate
+        </a>
+      </div>
+
+      <!-- Category row: single row with emoji + label -->
+      <div class="category-grid">
+        <button class="cat-btn" id="catbtn-ranked" onclick="showGameTab('ranked')"><span class="cat-icon">🏆</span>Public</button>
+        <button class="cat-btn" id="catbtn-private" onclick="showGameTab('private')"><span class="cat-icon">⚔️</span>Private</button>
+        <button class="cat-btn" id="catbtn-liga" onclick="showGameTab('liga')"><span class="cat-icon">🏟️</span>Liga</button>
+        <button class="cat-btn" id="catbtn-h2h" onclick="showGameTab('h2h')"><span class="cat-icon">🤝</span>H2H</button>
+      </div>
+
+      <!-- ── TAB CONTENTS ── -->
+      <!-- Public -->
+      <div id="gtab-content-ranked" class="game-tab-content active">
+        <div id="ranked-mode-section" style="display:none">
+          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="sub-tabs" id="ranked-mode-tabs">
+            <div class="sub-tab active-green" id="ranked-sub-3v3" onclick="setRankedMode('3v3')">Ranked 3v3</div>
+            <div class="sub-tab" id="ranked-sub-5v5" onclick="setRankedMode('5v5')">Ranked 5v5</div>
+          </div>
+          <!-- History popup trigger — appears after mode is selected -->
+          <div id="ranked-history-btn-wrap" style="display:none">
+            <button class="sec-btn" style="width:100%;margin:6px 0 8px;" onclick="openHistoryPopup()"><span>📋</span> History</button>
+          </div>
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="search-ranked" placeholder="Search your profile..." autocomplete="off">
+            <div class="search-autocomplete" id="search-ranked-list"></div>
+          </div>
+          <div class="section-label" id="ranked-label">Public Ranked 3v3</div>
+          <div id="ranked-list"></div>
+          <button class="top10-load-more" id="ranked-load-more" onclick="loadMoreRanked()">Show all players</button>
+          <div class="top10-count" id="ranked-count"></div>
+        </div>
+        <div id="ranked-placeholder" class="region-placeholder">
+          <div class="region-placeholder-icon">🌎</div>
+          <div class="region-placeholder-title">Select a server above to continue</div>
+          <div class="region-placeholder-sub">Choose your region</div>
+        </div>
+      </div>
+
+      <!-- Private -->
+      <div id="gtab-content-private" class="game-tab-content">
+        <div id="priv-mode-section" style="display:none">
+          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="sub-tabs" id="priv-mode-tabs">
+            <div class="sub-tab active-green" id="priv-sub-3v3" onclick="setPrivateMode('3v3')">3v3</div>
+            <div class="sub-tab" id="priv-sub-5v5" onclick="setPrivateMode('5v5')">5v5</div>
+          </div>
+          <!-- History popup trigger -->
+          <div id="priv-history-btn-wrap" style="display:none">
+            <button class="sec-btn" style="width:100%;margin:6px 0 8px;" onclick="openHistoryPopup()"><span>📋</span> History</button>
+          </div>
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="search-private" placeholder="Search your profile..." autocomplete="off">
+            <div class="search-autocomplete" id="search-private-list"></div>
+          </div>
+          <div class="section-label" id="private-label">NA · 3v3 — ELO ranking</div>
+          <div id="private-list"></div>
+          <button class="top10-load-more" id="priv-load-more" onclick="loadMorePrivate()">Show all players</button>
+          <div class="top10-count" id="priv-count"></div>
+        </div>
+        <div id="priv-placeholder" class="region-placeholder">
+          <div class="region-placeholder-icon">🌎</div>
+          <div class="region-placeholder-title">Select a server above to continue</div>
+          <div class="region-placeholder-sub">Choose your region</div>
+        </div>
+      </div>
+
+      <!-- Liga -->
+      <div id="gtab-content-liga" class="game-tab-content">
+        <div style="margin-bottom:10px;padding:10px 14px;background:rgba(248,113,113,0.07);border:1px solid rgba(248,113,113,0.25);border-radius:10px;text-align:center;">
+          <div style="font-size:0.55rem;font-weight:800;color:#f87171;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;">🏟️ COMPETITIVE LEAGUE</div>
+          <div style="font-size:0.7rem;color:var(--text2);line-height:1.5;">Cuentas validadas &#x2022; Código de hoy requerido &#x2022; Solo en Discord</div>
+        </div>
+        <div id="liga-mode-section" style="display:none">
+          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="sub-tabs" id="liga-mode-tabs">
+            <div class="sub-tab" style="color:#f87171;font-weight:600" id="liga-sub-3v3" onclick="setLigaMode('3v3')">Liga 3v3</div>
+            <div class="sub-tab" id="liga-sub-5v5" onclick="setLigaMode('5v5')">Liga 5v5</div>
+          </div>
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="search-liga" placeholder="Search liga player..." autocomplete="off">
+            <div class="search-autocomplete" id="search-liga-list"></div>
+          </div>
+          <div class="section-label" id="liga-label">Liga 3v3</div>
+          <div id="liga-list"></div>
+          <button class="top10-load-more" id="liga-load-more" onclick="loadMoreLiga()">Show all players</button>
+          <div class="top10-count" id="liga-count"></div>
+        </div>
+        <div id="liga-placeholder" class="region-placeholder">
+          <div class="region-placeholder-icon">🏟️</div>
+          <div class="region-placeholder-title">Select a server above to continue</div>
+          <div class="region-placeholder-sub">Choose your region</div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div id="gtab-content-history" class="game-tab-content">
+        <div id="hist-mode-section" style="display:none">
+          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="sub-tabs" id="hist-mode-tabs">
+            <div class="sub-tab" id="hist-m-all" onclick="setHistoryMode('all')">All</div>
+            <div class="sub-tab" id="hist-m-ranked" onclick="setHistoryMode('ranked')">Public 3v3</div>
+            <div class="sub-tab" id="hist-m-ranked5" onclick="setHistoryMode('ranked5')">Public 5v5</div>
+            <div class="sub-tab" id="hist-m-3v3" onclick="setHistoryMode('3v3')">Private 3v3</div>
+            <div class="sub-tab" id="hist-m-5v5" onclick="setHistoryMode('5v5')">Private 5v5</div>
+          </div>
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="search-history" placeholder="Search player in history..." autocomplete="off">
+          </div>
+          <div class="section-label" id="history-label">Select a game mode above</div>
+          <div id="history-list"></div>
+          <button class="match-history-load-more" id="history-load-more" style="display:none" onclick="loadMoreHistory()">Load more matches</button>
+          <div class="match-history-count" id="history-count"></div>
+        </div>
+        <div id="hist-placeholder" class="region-placeholder">
+          <div class="region-placeholder-icon">🌎</div>
+          <div class="region-placeholder-title">Select a server above to continue</div>
+          <div class="region-placeholder-sub">Choose your region</div>
+        </div>
+      </div>
+
+      <!-- H2H -->
+      <div id="gtab-content-h2h" class="game-tab-content">
+        <div id="h2h-mode-section" style="display:none">
+          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="sub-tabs" id="h2h-mode-tabs">
+            <div class="sub-tab" id="h2h-m-all"     onclick="setH2HMode('all')">All</div>
+            <div class="sub-tab" id="h2h-m-ranked"  onclick="setH2HMode('ranked')">Public 3v3</div>
+            <div class="sub-tab" id="h2h-m-ranked5" onclick="setH2HMode('ranked5')">Public 5v5</div>
+            <div class="sub-tab" id="h2h-m-3v3"     onclick="setH2HMode('3v3')">Private 3v3</div>
+            <div class="sub-tab" id="h2h-m-5v5"     onclick="setH2HMode('5v5')">Private 5v5</div>
+            <div class="sub-tab" id="h2h-m-liga3"   onclick="setH2HMode('liga3')">Liga 3v3</div>
+            <div class="sub-tab" id="h2h-m-liga5"   onclick="setH2HMode('liga5')">Liga 5v5</div>
+          </div>
+          <!-- History popup trigger -->
+          <div id="h2h-history-btn-wrap" style="display:none">
+            <button class="sec-btn" style="width:100%;margin:6px 0 8px;" onclick="openHistoryPopup()"><span>📋</span> History</button>
+          </div>
+          <div class="h2h-card">
+            <div class="h2h-inputs">
+              <div class="autocomplete-wrap"><input type="text" id="h2h-p1" placeholder="Player 1" autocomplete="off"><div class="autocomplete-list" id="ac-list-1"></div></div>
+              <div class="vs-badge">VS</div>
+              <div class="autocomplete-wrap"><input type="text" id="h2h-p2" placeholder="Player 2" autocomplete="off"><div class="autocomplete-list" id="ac-list-2"></div></div>
+            </div>
+            <button class="h2h-btn" onclick="searchH2H()">SEARCH</button>
+            <div id="h2h-result" class="h2h-result"></div>
+          </div>
+        </div>
+        <div id="h2h-placeholder" class="region-placeholder">
+          <div class="region-placeholder-icon">🌎</div>
+          <div class="region-placeholder-title">Select a server above to continue</div>
+          <div class="region-placeholder-sub">Choose your region</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TOURNEY SECTION ═══ -->
+  <div id="main-tourney" class="main-section">
+    <div id="tourney-next-container">
+      <div class="loading"><div class="spinner"></div>Loading tournament info...</div>
+    </div>
+    <div class="tourney-section-divider"><span>Past Tournaments</span></div>
+    <div id="tourney-past-list" class="tourney-past-list">
+      <div class="tourney-past-loading"><div class="spinner"></div>Loading tournaments...</div>
+    </div>
+  </div>
+
+  <!-- ═══ BATTLE PASS POPUP ═══ -->
+  <div class="bp-popup-overlay" id="bp-popup-overlay">
+    <div class="bp-popup-card" id="bp-popup-card">
+      <button class="bp-popup-close" id="bp-popup-close">&times;</button>
+      <div id="bp-popup-content"></div>
+    </div>
+  </div>
+
+  <!-- ═══ HISTORY POPUP ═══ -->
+  <div class="history-popup-overlay" id="history-popup-overlay">
+    <div class="history-popup-card">
+      <div class="history-popup-header">
+        <div>
+          <div class="history-popup-title" id="history-popup-title">Match History</div>
+          <div class="history-popup-subtitle" id="history-popup-subtitle">Loading...</div>
+        </div>
+        <button class="history-popup-close" id="history-popup-close">&times;</button>
+      </div>
+      <div class="history-popup-body" id="history-popup-body">
+        <div class="loading"><div class="spinner"></div>Loading...</div>
+      </div>
+      <button class="history-popup-load-more" id="history-popup-load-more" style="display:none" onclick="loadMoreHistoryPopup()">Load more matches</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    Powered by Vainglory Community Members
+  </div>
+</div>
+
+<script>
+const SHEET_ID = '1ayb5WWXXtLs8dUPFBHBxvGxs2qsloAmcuMMRfFiejbA';
+const TOP10_LIMIT = 10;
+const ASSETS_BASE = 'https://raw.githubusercontent.com/ivanvg10/playvgelo.com/main/';
+let accountsData = {}; // {playerName.lower(): {level, xp, status, discordTag}}
+
+// ── Splashart pool (heroes from splash art 1 folder based on repo) ──
+const SPLASH_HEROES_FOLDER1 = ['Anka','Ardan','Baptiste','Baron','Blackfeather','Caine','Catherine','Celeste','Churnwalker','Flicker','Fortress','Glaive','Grace','Grumpjaw','Gwen','adagio'];
+const SPLASH_HEROES_FOLDER2 = ['Idris','Joule','Kensei','Kestrel','Koshka','Krul','Lance','Lorelai','Lyra','Malene','Ozo','Petal','Phinn','Reim','Reza','Ringo'];
+const SPLASH_HEROES_FOLDER3 = ['SAW','Samuel','Skaarf','Skye','Taka','Tony','Varya','Vox','Yates'];
+const ALL_SPLASH_HEROES = [...SPLASH_HEROES_FOLDER1, ...SPLASH_HEROES_FOLDER2, ...SPLASH_HEROES_FOLDER3];
+
+function pickRandomSplash() {
+  const hero = ALL_SPLASH_HEROES[Math.floor(Math.random() * ALL_SPLASH_HEROES.length)];
+  // Try splash art 1 first, fallback chain
+  const folder = SPLASH_HEROES_FOLDER3.includes(hero) ? 'splash%20art%203' : SPLASH_HEROES_FOLDER2.includes(hero) ? 'splash%20art%202' : 'splash%20art%201';
+  // Each hero folder has a main splash; use the base splash filename pattern
+  const img = document.getElementById('header-splash-img');
+  if (!img) return;
+  // Try hero splash (filename: HeroName_splash de tamaño pequeño.webp or hero name_splash.webp)
+  const heroLower = hero.toLowerCase();
+  const url = `${ASSETS_BASE}${folder}/${encodeURIComponent(hero)}/${encodeURIComponent(hero)}_splash%20de%20tama%C3%B1o%20peque%C3%B1o.webp`;
+  img.src = url;
+  img.onerror = function() {
+    // fallback: try splash art folder directly with a generic hero splash
+    this.onerror = null;
+    this.src = '';
+  };
+}
+
+// ── Global region for Game ──
+let gameRegion = null;
+let currentGameTab = 'ranked';
+
+function showMainMenu(section) {
+  document.querySelectorAll('.main-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.main-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`main-${section}`).classList.add('active');
+  document.getElementById(`main-btn-${section}`).classList.add('active');
+  if (section === 'tourney') loadTournaments();
+}
+
+function setGameRegion(region) {
+  gameRegion = region;
+  rankedRegion = region;
+  privateRegion = region;
+  ligaRegion = region;
+  historyRegion = region;
+  h2hRegion = region;
+
+  // Update server buttons
+  ['na','eu'].forEach(r => {
+    const el = document.getElementById(`game-reg-${r}`);
+    if (el) el.classList.remove('active-green','active-blue','active');
+  });
+  if (region === 'NA') document.getElementById('game-reg-na').classList.add('active-green');
+  else document.getElementById('game-reg-eu').classList.add('active-blue');
+
+  // Show game content
+  document.getElementById('game-content').style.display = 'block';
+
+  // Reset category: hide all tab contents, clear cat btn actives
+  document.querySelectorAll('.game-tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  // Hide history buttons until mode is selected
+  ['ranked','priv','h2h'].forEach(p => {
+    const el = document.getElementById(`${p}-history-btn-wrap`);
+    if (el) el.style.display = 'none';
+  });
+
+  // Pre-show mode sections for all tabs (hidden by placeholder logic)
+  document.getElementById('ranked-mode-section').style.display = 'block';
+  document.getElementById('ranked-placeholder').style.display = 'none';
+  document.getElementById('priv-mode-section').style.display = 'block';
+  document.getElementById('priv-placeholder').style.display = 'none';
+  document.getElementById('liga-mode-section').style.display = 'block';
+  document.getElementById('liga-placeholder').style.display = 'none';
+  document.getElementById('hist-mode-section').style.display = 'block';
+  document.getElementById('hist-placeholder').style.display = 'none';
+  document.getElementById('h2h-mode-section').style.display = 'block';
+  document.getElementById('h2h-placeholder').style.display = 'none';
+
+  // Auto-set modes
+  rankedMode = '3v3';
+  privateMode = '3v3';
+  ligaMode = '3v3';
+  h2hMode = 'all';
+
+  document.getElementById('ranked-label').textContent = `Public Ranked 3v3 — ${region === 'EU' ? 'Europe' : 'North America'}`;
+  document.getElementById('private-label').textContent = `${region} · 3v3 — ELO ranking`;
+  document.getElementById('liga-label').textContent = `Liga 3v3 — ${region === 'EU' ? 'Europe' : 'North America'}`;
+
+  // Set H2H all mode active
+  document.querySelectorAll('#h2h-mode-tabs .sub-tab').forEach(t => t.classList.remove('active','active-white','active-green','active-purple','active-blue'));
+  document.getElementById('h2h-m-all').classList.add('active-white');
+
+  // Load history in background
+  if (!historyLoaded) loadMatchHistory();
+}
+
+function showGameTab(tab) {
+  currentGameTab = tab;
+  // Update category buttons
+  ['ranked','private','liga','h2h'].forEach(t => {
+    const el = document.getElementById(`catbtn-${t}`);
+    if (el) el.classList.toggle('active', t === tab);
+  });
+  // Show content
+  document.querySelectorAll('.game-tab-content').forEach(c => c.classList.remove('active'));
+  const content = document.getElementById(`gtab-content-${tab}`);
+  if (content) content.classList.add('active');
+
+  // Show history wrap when entering PUBLIC or PRIVATE (after mode already set)
+  // H2H history shown immediately since mode defaults to 'all'
+  if (tab === 'h2h') {
+    const hw = document.getElementById('h2h-history-btn-wrap');
+    if (hw) hw.style.display = 'block';
+  }
+
+  // Load data
+  if (!gameRegion) return;
+  if (tab === 'ranked') { rankedShowAll = false; loadRanked(); }
+  if (tab === 'private') { privShowAll = false; loadPrivate(gameRegion, privateMode); }
+  if (tab === 'liga') { ligaShowAll = false; loadLiga(); }
+}
+
+let h2hMode       = 'all';
+let h2hRegion     = null;
+let privateMode   = '3v3';
+let privateRegion = null;
+let rankedMode    = '3v3';
+let rankedRegion  = null;
+let historyMode   = null;
+let historyRegion = null;
+let historyLoaded = false;
+let historyModeSelected = false;
+
+let allPlayerNames     = [];
+let rankedPlayersData  = [];
+let privatePlayersData = [];
+let rankedShowAll      = false;
+let privShowAll        = false;
+let allMatchHistory    = [];
+let filteredHistory    = [];
+let historyPage        = 0;
+const HISTORY_PAGE_SIZE = 15;
+
+let tournamentsLoaded = false;
+
+const TIERS = [
+  { min:    0, max:  299, num:  1, name: 'Ask Again Later' },
+  { min:  300, max:  599, num:  2, name: 'Working On It' },
+  { min:  600, max:  899, num:  3, name: 'Getting There' },
+  { min:  900, max: 1199, num:  4, name: 'Not Bad' },
+  { min: 1200, max: 1499, num:  5, name: 'Decent-ish' },
+  { min: 1500, max: 1799, num:  6, name: 'Pretty Good' },
+  { min: 1800, max: 2099, num:  7, name: 'Hotness' },
+  { min: 2100, max: 2399, num:  8, name: 'Simply Amazing' },
+  { min: 2400, max: 2699, num:  9, name: 'Pinnacle of Awesome' },
+  { min: 2700, max: 3200, num: 10, name: 'Vainglorious' }
+];
+const TIER_IMAGES = {
+  '1_bronze':`${ASSETS_BASE}skill%20tiers/1a_AskAgainLater_BRONZE.webp`,'1_silver':`${ASSETS_BASE}skill%20tiers/1b_AskAgainLater_SILVER.webp`,'1_gold':`${ASSETS_BASE}skill%20tiers/1c_AskAgainLater_GOLD.webp`,
+  '2_bronze':`${ASSETS_BASE}skill%20tiers/2a_WorkingOnIt_BRONZE.webp`,'2_silver':`${ASSETS_BASE}skill%20tiers/2b_WorkingOnIt_SILVER.webp`,'2_gold':`${ASSETS_BASE}skill%20tiers/2c_WorkingOnIt_GOLD.webp`,
+  '3_bronze':`${ASSETS_BASE}skill%20tiers/3a_GettingThere_BRONZE.webp`,'3_silver':`${ASSETS_BASE}skill%20tiers/3b_GettingThere_SILVER.webp`,'3_gold':`${ASSETS_BASE}skill%20tiers/3c_GettingThere_GOLD.webp`,
+  '4_bronze':`${ASSETS_BASE}skill%20tiers/4a_NotBad_BRONZE.webp`,'4_silver':`${ASSETS_BASE}skill%20tiers/4b_NotBad_SILVER.webp`,'4_gold':`${ASSETS_BASE}skill%20tiers/4c_NotBad_GOLD.webp`,
+  '5_bronze':`${ASSETS_BASE}skill%20tiers/5a_Decentish_BRONZE.webp`,'5_silver':`${ASSETS_BASE}skill%20tiers/5b_Decentish_SILVER.webp`,'5_gold':`${ASSETS_BASE}skill%20tiers/5c_Decentish_GOLD.webp`,
+  '6_bronze':`${ASSETS_BASE}skill%20tiers/6a_PrettyGood_BRONZE.webp`,'6_silver':`${ASSETS_BASE}skill%20tiers/6b_PrettyGood_SILVER.webp`,'6_gold':`${ASSETS_BASE}skill%20tiers/6C_PrettyGood_GOLD.webp`,
+  '7_bronze':`${ASSETS_BASE}skill%20tiers/7a_Hotness_BRONZE.webp`,'7_silver':`${ASSETS_BASE}skill%20tiers/7b_Hotness_SILVER.webp`,'7_gold':`${ASSETS_BASE}skill%20tiers/7c_Hotness_GOLD.webp`,
+  '8_bronze':`${ASSETS_BASE}skill%20tiers/8a_SimplyAmazing_BRONZE.webp`,'8_silver':`${ASSETS_BASE}skill%20tiers/8b_SimplyAmazing_SILVER.webp`,'8_gold':`${ASSETS_BASE}skill%20tiers/8c_SimplyAmazing_GOLD.webp`,
+  '9_bronze':`${ASSETS_BASE}skill%20tiers/9a_PinnacleOfAwesome_BRONZE.webp`,'9_silver':`${ASSETS_BASE}skill%20tiers/9b_PinnacleOfAwesome_SILVER.webp`,'9_gold':`${ASSETS_BASE}skill%20tiers/9c_PinnacleOfAwesome_GOLD.webp`,
+  '10_bronze':`${ASSETS_BASE}skill%20tiers/10a_Vainglorious_BRONZE.webp`,'10_silver':`${ASSETS_BASE}skill%20tiers/10b_Vainglorious_SILVER.webp`,'10_gold':`${ASSETS_BASE}skill%20tiers/10c_Vainglorious_GOLD.webp`
+};
+
+function getTierInfo(elo) {
+  elo = Math.max(0, Math.min(3200, elo));
+  const tier = TIERS.find(t => elo >= t.min && elo <= t.max) || TIERS[0];
+  const range = tier.max - tier.min + 1;
+  const offset = elo - tier.min;
+  const third = range / 3;
+  const subtier = offset < third ? 'bronze' : offset < third*2 ? 'silver' : 'gold';
+  const progress = (offset / range) * 100;
+  const image = TIER_IMAGES[`${tier.num}_${subtier}`] || TIER_IMAGES['1_bronze'];
+  return { ...tier, subtier, progress, elo, image };
+}
+
+function formatGold(val) {
+  if (!val || val === 0) return '0';
+  if (val >= 1000) { const k = val/1000; return k === Math.floor(k) ? `${Math.floor(k)}k` : `${k.toFixed(1)}k`; }
+  return String(val);
+}
+
+// v32: Hero icon helpers
+function getHeroIconUrl(heroName) {
+  if (!heroName || heroName === 'unknown') return '';
+  const name = heroName.toLowerCase().replace(/\s+/g, '');
+  return `${ASSETS_BASE}foto%20perfil/${encodeURIComponent(name)}.webp`;
+}
+
+function heroIconHtml(heroName, size) {
+  const url = getHeroIconUrl(heroName);
+  if (!url) return '';
+  const cls = size === 'lg' ? 'hero-icon-lg' : 'hero-icon';
+  return `<img src="${url}" alt="${heroName}" class="${cls}" onerror="this.style.display='none'">`;
+}
+
+function getPlayerHeroStr(scores, raw) {
+  const e = scores[raw] || scores[cleanName(raw)];
+  if (!e || typeof e !== 'object') return '';
+  return e.hero || '';
+}
+
+async function loadAccountsData() {
+  try {
+    const rows = await fetchSheet('Accounts');
+    accountsData = {};
+    rows.forEach(row => {
+      const name = col(row, 'PlayerName', 'Name', 'player') || '';
+      if (!name) return;
+      accountsData[name.toLowerCase()] = {
+        level: Number(col(row, 'AccountLevel', 'Level') || 1),
+        xp: Number(col(row, 'TotalXP', 'XP') || 0),
+        status: col(row, 'Status', 'status') || 'active',
+        discordTag: col(row, 'DiscordTag', 'Discord') || '',
+        discordId: col(row, 'DiscordID') || ''
+      };
+    });
+  } catch(e) { console.log('Could not load accounts:', e); }
+}
+
+function updateSeasonCountdown() {
+  const end = new Date('2026-12-31T23:59:59');
+  const diff = end - new Date();
+  const setEl = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  if (diff <= 0) { ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => setEl(id,'00')); return; }
+  const days  = String(Math.floor(diff / 86400000)).padStart(3,'0');
+  const hours = String(Math.floor((diff % 86400000) / 3600000)).padStart(2,'0');
+  const mins  = String(Math.floor((diff % 3600000)  / 60000)).padStart(2,'0');
+  const secs  = String(Math.floor((diff % 60000)    / 1000)).padStart(2,'0');
+  setEl('cd-days', days); setEl('cd-hours', hours); setEl('cd-mins', mins); setEl('cd-secs', secs);
+}
+
+let TOURNEY_DATE = null;
+let tourneyCountdownInterval = null;
+
+function startTourneyCountdown(dateObj) {
+  TOURNEY_DATE = dateObj;
+  if (tourneyCountdownInterval) clearInterval(tourneyCountdownInterval);
+  updateTourneyCountdown();
+  tourneyCountdownInterval = setInterval(updateTourneyCountdown, 1000);
+}
+
+function updateTourneyCountdown() {
+  if (!TOURNEY_DATE) return;
+  const diff = TOURNEY_DATE - new Date();
+  const el = id => document.getElementById(id);
+  if (diff <= 0) { ['tcd-days','tcd-hours','tcd-mins','tcd-secs'].forEach(id => { const e = el(id); if (e) e.textContent = '00'; }); return; }
+  if (el('tcd-days'))  el('tcd-days').textContent  = String(Math.floor(diff / 86400000)).padStart(2,'0');
+  if (el('tcd-hours')) el('tcd-hours').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2,'0');
+  if (el('tcd-mins'))  el('tcd-mins').textContent  = String(Math.floor((diff % 3600000)  / 60000)).padStart(2,'0');
+  if (el('tcd-secs'))  el('tcd-secs').textContent  = String(Math.floor((diff % 60000)    / 1000)).padStart(2,'0');
+}
+
+updateSeasonCountdown();
+setInterval(updateSeasonCountdown, 1000);
+
+function sheetURL(tab) { return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(tab)}`; }
+
+function parseSheet(text) {
+  const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);/)[1]);
+  const cols = json.table.cols.map(c => c.label || '');
+  const hasRealLabels = cols.some(c => c && c.length > 0 && !c.startsWith('_'));
+  const rows = json.table.rows.map(r => {
+    const obj = {};
+    r.c.forEach((cell, i) => {
+      const key = cols[i] || `_col${i}`;
+      if (!cell) { obj[key] = ''; return; }
+      let val = cell.v;
+      if (val !== null && val !== undefined && typeof val === 'string' && val.startsWith('Date(')) val = cell.f || val;
+      obj[key] = (val !== null && val !== undefined) ? val : '';
+    });
+    return obj;
+  });
+  if (!hasRealLabels && rows.length > 0) {
+    const headerRow = rows[0];
+    const headerKeys = Object.keys(headerRow);
+    const headerNames = headerKeys.map(k => String(headerRow[k] || '').trim());
+    return rows.slice(1).map(row => {
+      const obj = {};
+      headerKeys.forEach((origKey, i) => { obj[headerNames[i] || `_col${i}`] = row[origKey] !== undefined ? row[origKey] : ''; });
+      return obj;
+    });
+  }
+  return rows;
+}
+
+async function fetchSheet(tab) {
+  try { const res = await fetch(sheetURL(tab)); return parseSheet(await res.text()); }
+  catch (e) { return []; }
+}
+
+function calcKD(k, d)    { return d === 0 ? (k > 0 ? k.toFixed(2) : '0.00') : (k/d).toFixed(2); }
+function calcKDA(k, d, a){ return d === 0 ? ((k+a) > 0 ? (k+a).toFixed(2) : '0.00') : ((k+a)/d).toFixed(2); }
+
+function col(row, ...names) {
+  for (const n of names) { if (row[n] !== undefined && row[n] !== '') return row[n]; }
+  const keys = Object.keys(row);
+  for (const n of names) { const f = keys.find(k => k.toLowerCase() === n.toLowerCase()); if (f && row[f] !== undefined && row[f] !== '') return row[f]; }
+  return '';
+}
+
+function renderPlayerCard(p, index, mode, highlight) {
+  const elo = Number(col(p,'ELO','elo','Elo') || 0);
+  const ti  = getTierInfo(elo);
+  const w   = Number(col(p,'Wins','wins') || 0);
+  const l   = Number(col(p,'Losses','losses') || 0);
+  const tot = w + l;
+  const wr  = tot > 0 ? ((w/tot)*100).toFixed(1) : '0.0';
+  const wrNum = parseFloat(wr);
+  const streak  = Number(col(p,'Streak','streak') || 0);
+  const kills   = Number(col(p,'total_kills','TotalKills','Total Kills') || 0);
+  const deaths  = Number(col(p,'total_deaths','TotalDeaths','Total Deaths') || 0);
+  const assists = Number(col(p,'total_assists','TotalAssists','Total Assists') || 0);
+  const best    = Number(col(p,'best_streak','BestStreak','Best Streak') || 0);
+  const tGold   = Number(col(p,'total_gold','TotalGold','Total Gold') || 0);
+  const kd  = calcKD(kills, deaths);
+  const kda = calcKDA(kills, deaths, assists);
+  const kdaNum = parseFloat(kda);
+  const avgGold = tot > 0 ? Math.round(tGold / tot) : 0;
+  const name      = col(p,'Player','player','Name','name');
+  const lastRival = col(p,'Last Rival','LastRival','last_rival');
+  const lastMatch = col(p,'Last Match','LastMatch','last_match');
+  const topClass  = index === 0 ? 'top1' : index === 1 ? 'top2' : index === 2 ? 'top3' : '';
+  const hlClass   = highlight ? 'highlighted' : '';
+  const streakHTML = streak > 0 ? `<span class="streak-win">🔥${streak}W</span>` : streak < 0 ? `<span class="streak-loss">❄️${Math.abs(streak)}L</span>` : '—';
+  const bestHTML   = best > 0 ? ` · <span class="best-streak">🏅Best: ${best}W</span>` : '';
+  const extraParts = [lastRival ? `vs ${lastRival}` : '', lastMatch].filter(Boolean);
+  const goldHTML   = tGold > 0 ? `<div class="stat-item">💰 Avg: <span class="avg-gold">${formatGold(avgGold)}</span>/game · Total: ${formatGold(tGold)}</div>` : '';
+  const hasStats   = kills > 0 || deaths > 0;
+
+  // Top Hero with analytics icon
+  const topHero = col(p,'TopHero','top_hero','Top Hero') || '';
+  const isPositive = wrNum >= 50;
+  const heroIconEl = topHero ? (() => {
+    const url = getHeroIconUrl(topHero);
+    return url ? `<img src="${url}" alt="${topHero}" class="hero-icon-analytics${isPositive ? '' : ' negative'}" onerror="this.style.display='none'">` : '';
+  })() : '';
+  const topHeroHTML = topHero ? `<div class="stat-item"><span class="hero-name-badge">${heroIconEl}<span>Main: <strong>${topHero}</strong></span></span></div>` : '';
+
+  // Dynamic win rate color
+  const wrClass = wrNum >= 50 ? 'wr-positive' : 'wr-negative';
+
+  // KDA badge (gold highlight for KDA > 4.0)
+  const kdaBadgeHTML = kdaNum >= 4.0 ? `<span class="kda-badge">⭐ ${kda}</span>` : `<span class="kda-ratio">${kda}</span>`;
+
+  // Performance shadow class
+  const perfClass = hasStats && tot > 0 ? (isPositive ? 'perf-positive' : 'perf-negative') : '';
+
+  // KDA main block (only if stats exist)
+  const kdaMainHTML = hasStats ? `
+    <div class="kda-main-block">
+      <span class="kda-main-val kda-main-k">${kills}</span>
+      <span class="kda-main-sep">/</span>
+      <span class="kda-main-val kda-main-d">${deaths}</span>
+      <span class="kda-main-sep">/</span>
+      <span class="kda-main-val kda-main-a">${assists}</span>
+    </div>` : '';
+
+  return `<div class="player-card ${topClass} ${hlClass} ${perfClass}" style="animation-delay:${index*0.02}s" data-player="${name.toLowerCase()}" data-player-index="${index}" data-player-mode="${mode}">
+    <div class="player-header"><div class="rank-position">#${index+1}</div><div class="player-name">${name}</div></div>
+    <div class="tier-section">
+      <img src="${ti.image}" alt="Tier ${ti.num}" class="tier-image">
+      <div class="tier-display">
+        <div class="tier-badge ${ti.subtier}"><span class="tier-number">${ti.num}</span><span>SKILL TIER</span></div>
+        <div class="tier-name">${ti.name}</div>
+      </div>
+    </div>
+    <div class="elo-bar-container">
+      <div class="elo-cursor" style="left:${ti.progress}%"><div class="elo-value">${elo}</div><div class="elo-arrow">▼</div></div>
+      <div class="elo-bar"><div class="elo-bar-fill ${ti.subtier}" style="width:${ti.progress}%"></div></div>
+      <div class="elo-divisions"><div class="elo-division-marker"></div><div class="elo-division-marker"></div><div class="elo-division-marker"></div><div class="elo-division-marker"></div></div>
+      <div class="elo-labels">
+        <div class="elo-label ${ti.subtier==='bronze'?'active-bronze':''}">Bronze</div>
+        <div class="elo-label ${ti.subtier==='silver'?'active-silver':''}">Silver</div>
+        <div class="elo-label ${ti.subtier==='gold'?'active-gold':''}">Gold</div>
+      </div>
+    </div>
+    <div class="stats-section">
+      <div class="stat-item"><span class="win">${w}W</span> - <span class="loss">${l}L</span> · <span class="wr-value ${wrClass}">${wr}%</span> · ${tot} games</div>
+      ${kdaMainHTML}
+      ${hasStats ? `<div class="stat-item">K/D <span class="kd-ratio">${kd}</span> · KDA ${kdaBadgeHTML}</div>` : ''}
+      ${goldHTML}
+      ${topHeroHTML}
+      <div class="stat-item">${streakHTML}${bestHTML}</div>
+      ${extraParts.length ? `<div class="stat-extra">${extraParts.join(' · ')}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+function renderTop10(containerEl, loadMoreBtn, countEl, data, mode, highlightPlayer, showAll) {
+  if (!data.length) { containerEl.innerHTML = '<div class="loading">No players yet</div>'; loadMoreBtn.style.display='none'; countEl.textContent=''; return; }
+  const limit = showAll ? data.length : Math.min(TOP10_LIMIT, data.length);
+  const cardMode = mode === '5v5' ? 'ranked5' : mode;
+  containerEl.innerHTML = data.slice(0, limit).map((p,i) => renderPlayerCard(p, i, cardMode, highlightPlayer && p.Player.toLowerCase() === highlightPlayer.toLowerCase())).join('');
+  if (data.length > TOP10_LIMIT) {
+    loadMoreBtn.style.display = showAll ? 'none' : 'block';
+    loadMoreBtn.textContent = `Show all ${data.length} players`;
+    countEl.textContent = showAll ? `Showing all ${data.length} players` : `Showing top ${limit} of ${data.length} players`;
+  } else {
+    loadMoreBtn.style.display = 'none';
+    countEl.textContent = `${data.length} players`;
+  }
+  if (highlightPlayer) { const c = containerEl.querySelector(`.player-card[data-player="${highlightPlayer.toLowerCase()}"]`); if (c) c.scrollIntoView({ behavior:'smooth', block:'center' }); }
+}
+
+function rankedSheetName(region, mode) {
+  if (region === 'EU') return mode === '5v5' ? 'Players5v5EU' : 'PlayersEU';
+  return mode === '5v5' ? 'Players5v5' : 'Players';
+}
+
+async function loadRanked(highlightPlayer = null) {
+  if (!rankedRegion) return;
+  const sheetName = rankedSheetName(rankedRegion, rankedMode);
+  const rows = await fetchSheet(sheetName);
+  document.getElementById('ranked-label').textContent = `Public ${rankedMode === '5v5' ? 'Ranked 5v5' : 'Ranked 3v3'} — ${rankedRegion === 'EU' ? 'Europe' : 'North America'}`;
+  const pKey = r => col(r,'Player','player','Name','name');
+  const sorted = rows.filter(r => pKey(r)).sort((a,b) => Number(col(b,'ELO','elo')||0) - Number(col(a,'ELO','elo')||0));
+  rankedPlayersData = sorted.map(r => ({ ...r, Player: pKey(r) }));
+  if (highlightPlayer) rankedShowAll = true;
+  renderTop10(
+    document.getElementById('ranked-list'),
+    document.getElementById('ranked-load-more'),
+    document.getElementById('ranked-count'),
+    rankedPlayersData, rankedMode, highlightPlayer, rankedShowAll
+  );
+}
+
+function loadMoreRanked() { rankedShowAll = true; renderTop10(document.getElementById('ranked-list'), document.getElementById('ranked-load-more'), document.getElementById('ranked-count'), rankedPlayersData, rankedMode, null, true); }
+
+function setRankedRegion(region) { /* handled by setGameRegion */ }
+
+function setRankedMode(mode) {
+  rankedMode = mode; rankedShowAll = false;
+  document.getElementById('ranked-sub-3v3').classList.remove('active','active-green','active-purple','active-blue');
+  document.getElementById('ranked-sub-5v5').classList.remove('active','active-green','active-purple','active-blue');
+  if (mode === '3v3') document.getElementById('ranked-sub-3v3').classList.add('active-green');
+  else                document.getElementById('ranked-sub-5v5').classList.add('active-blue');
+  document.getElementById('ranked-label').textContent = `Public ${mode === '5v5' ? 'Ranked 5v5' : 'Ranked 3v3'} — ${rankedRegion === 'EU' ? 'Europe' : 'North America'}`;
+  document.getElementById('ranked-list').innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+  // Show history button
+  const hw = document.getElementById('ranked-history-btn-wrap');
+  if (hw) hw.style.display = 'block';
+  loadRanked();
+}
+
+function privateSheetName(region, mode) {
+  if (region === 'EU') return mode === '5v5' ? 'ScrimPlayers5v5EU' : 'ScrimPlayersEU';
+  return mode === '5v5' ? 'ScrimPlayers5v5' : 'ScrimPlayers';
+}
+
+async function loadPrivate(region, mode, highlightPlayer = null) {
+  if (!region) return;
+  const sheetName = privateSheetName(region, mode);
+  const rows = await fetchSheet(sheetName);
+  document.getElementById('private-label').textContent = `${region} · ${mode} — ELO ranking`;
+  const pKey = r => col(r,'Player','player','Name','name');
+  const sorted = rows.filter(r => pKey(r)).sort((a,b) => Number(col(b,'ELO','elo')||0) - Number(col(a,'ELO','elo')||0));
+  privatePlayersData = sorted.map(r => ({ ...r, Player: pKey(r) }));
+  if (highlightPlayer) privShowAll = true;
+  renderTop10(
+    document.getElementById('private-list'),
+    document.getElementById('priv-load-more'),
+    document.getElementById('priv-count'),
+    privatePlayersData, mode, highlightPlayer, privShowAll
+  );
+}
+
+function loadMorePrivate() { privShowAll = true; renderTop10(document.getElementById('private-list'), document.getElementById('priv-load-more'), document.getElementById('priv-count'), privatePlayersData, privateMode, null, true); }
+
+async function loadAllPlayerNames() {
+  const sheets = ['Players','Players5v5','PlayersEU','Players5v5EU','ScrimPlayers','ScrimPlayers5v5','ScrimPlayersEU','ScrimPlayers5v5EU','LeaguePlayers','LeaguePlayers5v5','LeaguePlayersEU','LeaguePlayers5v5EU'];
+  const results = await Promise.all(sheets.map(s => fetchSheet(s)));
+  const names = new Set();
+  const pKey = r => col(r,'Player','player','Name','name');
+  results.forEach(rows => rows.forEach(r => { const n = pKey(r); if (n) names.add(n); }));
+  allPlayerNames = [...names].sort((a,b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+}
+
+// ── Match History ──────────────────────────────────────────
+function cleanName(raw) { if (!raw) return ''; return String(raw).replace(/^\d+(-\d+)?_/, '') || raw; }
+
+function parseScores(s) {
+  if (!s) return {};
+  try { const p = JSON.parse(String(s).trim()); if (typeof p === 'object' && p !== null) return p; } catch(e) {}
+  return {};
+}
+
+function parseScore(s) {
+  if (!s) return null;
+  const p = String(s).trim().split('/');
+  if (p.length !== 3) return null;
+  return { k: parseInt(p[0])||0, d: parseInt(p[1])||0, a: parseInt(p[2])||0 };
+}
+
+function getPlayerScoreStr(scores, raw) {
+  const e = scores[raw] || scores[cleanName(raw)];
+  if (!e) return '';
+  return typeof e === 'object' ? (e.score || '') : String(e);
+}
+
+function getPlayerGoldStr(scores, raw) {
+  const e = scores[raw] || scores[cleanName(raw)];
+  if (!e || typeof e !== 'object') return '';
+  return e.gold || '';
+}
+
+function sumTeamKills(players, scores) {
+  return players.reduce((t, p) => { const s = parseScore(getPlayerScoreStr(scores, p)); return t + (s ? s.k : 0); }, 0);
+}
+
+function getMatchMVP(winners, losers, scores) {
+  if (!scores || !Object.keys(scores).length) return null;
+  let bestName = null, bestKDA = -1, bestScore = '';
+  for (const raw of [...winners, ...losers]) {
+    if (raw.toLowerCase().includes('guest')) continue;
+    const s = parseScore(getPlayerScoreStr(scores, raw));
+    if (!s) continue;
+    const kda = s.d === 0 ? (s.k + s.a) : (s.k + s.a) / s.d;
+    if (kda > bestKDA) { bestKDA = kda; bestName = cleanName(raw); bestScore = getPlayerScoreStr(scores, raw); }
+  }
+  return (bestName && bestKDA > 0) ? { name: bestName, kda: bestKDA.toFixed(2), score: bestScore } : null;
+}
+
+async function loadMatchHistory() {
+  document.getElementById('history-list').innerHTML = '<div class="loading"><div class="spinner"></div>Loading match history...</div>';
+  const [rLog, r5Log, rLogEU, r5LogEU, sLog, s5Log, sLogEU, s5LogEU, lLog, l5Log, lLogEU, l5LogEU] = await Promise.all([
+    fetchSheet('RankedLog'), fetchSheet('RankedLog5v5'),
+    fetchSheet('RankedLogEU'), fetchSheet('RankedLog5v5EU'),
+    fetchSheet('ScrimLog'), fetchSheet('ScrimLog5v5'),
+    fetchSheet('ScrimLogEU'), fetchSheet('ScrimLog5v5EU'),
+    fetchSheet('LeagueLog'), fetchSheet('LeagueLog5v5'),
+    fetchSheet('LeagueLogEU'), fetchSheet('LeagueLog5v5EU')
+  ]);
+  allMatchHistory = [];
+
+  function extractScores(row) {
+    const keys = Object.keys(row);
+    for (const n of ['player_scores','PlayerScores','Scores','scores']) { const v = row[n]; if (v) { const p = parseScores(v); if (Object.keys(p).length) return p; } }
+    for (const k of keys) { if (k.startsWith('_col')) { const p = parseScores(row[k]); if (Object.keys(p).length) return p; } }
+    for (let i = keys.length-1; i >= 0; i--) { const v = row[keys[i]]; if (v && typeof v === 'string' && v.includes('/') && v.includes('{')) { const p = parseScores(v); if (Object.keys(p).length) return p; } }
+    return {};
+  }
+
+  function processLog(rows, mode, region) {
+    rows.forEach(row => {
+      const date   = String(col(row,'Date','date','Fecha') || '');
+      const wStr   = String(col(row,'Winners','winners','Ganadores') || '');
+      const lStr   = String(col(row,'Losers','losers','Perdedores') || '');
+      const afk    = String(col(row,'AFK','afk','Afk') || '');
+      const scores = extractScores(row);
+      const winners = wStr ? wStr.split(',').map(s=>s.trim()).filter(Boolean) : [];
+      const losers  = lStr ? lStr.split(',').map(s=>s.trim()).filter(Boolean) : [];
+      if (!winners.length && !losers.length) return;
+      // v32: filter deleted matches
+      const status = String(col(row,'Status','status') || 'active');
+      if (status === 'DELETED') return;
+      // v32: read hero data
+      const wHeroes = String(col(row,'WinnerHeroes','Winner Heroes') || '');
+      const lHeroes = String(col(row,'LoserHeroes','Loser Heroes') || '');
+      const matchId = String(col(row,'MatchID','match_id','matchid') || '');
+      allMatchHistory.push({ date, winners, losers, scores, afk, mode, region, wHeroes, lHeroes, matchId });
+    });
+  }
+
+  processLog(rLog,     'ranked',  'NA');
+  processLog(r5Log,    'ranked5', 'NA');
+  processLog(rLogEU,   'ranked',  'EU');
+  processLog(r5LogEU,  'ranked5', 'EU');
+  processLog(sLog,     '3v3',     'NA');
+  processLog(s5Log,    '5v5',     'NA');
+  processLog(sLogEU,   '3v3',     'EU');
+  processLog(s5LogEU,  '5v5',     'EU');
+  processLog(lLog,     'liga3',   'NA');
+  processLog(l5Log,    'liga5',   'NA');
+  processLog(lLogEU,   'liga3',   'EU');
+  processLog(l5LogEU,  'liga5',   'EU');
+
+  allMatchHistory.sort((a,b) => { if (!a.date&&!b.date) return 0; if (!a.date) return 1; if (!b.date) return -1; return b.date.localeCompare(a.date); });
+  const total = allMatchHistory.length;
+  allMatchHistory.forEach((m,i) => { m.matchNum = total - i; });
+  historyLoaded = true;
+
+  if (historyModeSelected) {
+    applyHistoryFilters();
+  } else {
+    document.getElementById('history-list').innerHTML = '';
+    document.getElementById('history-count').textContent = '';
+  }
+}
+
+function applyHistoryFilters() {
+  if (!historyRegion || !historyModeSelected) return;
+  const q = (document.getElementById('search-history').value || '').toLowerCase().trim();
+  filteredHistory = allMatchHistory.filter(m => {
+    if (m.region !== historyRegion) return false;
+    if (historyMode !== 'all' && m.mode !== historyMode) return false;
+    if (q) { const all = [...m.winners,...m.losers].map(p => cleanName(p).toLowerCase()); if (!all.some(p => p.includes(q))) return false; }
+    return true;
+  });
+  historyPage = 0;
+  renderHistory();
+}
+
+function renderHistory() {
+  const el     = document.getElementById('history-list');
+  const btnMore = document.getElementById('history-load-more');
+  const countEl = document.getElementById('history-count');
+  if (!filteredHistory.length) { el.innerHTML = '<div class="loading">No matches found</div>'; btnMore.style.display='none'; countEl.textContent=''; return; }
+  const end = Math.min((historyPage+1)*HISTORY_PAGE_SIZE, filteredHistory.length);
+  el.innerHTML = filteredHistory.slice(0, end).map((m,i) => renderMatchCard(m,i)).join('');
+  btnMore.style.display = end < filteredHistory.length ? 'block' : 'none';
+  countEl.textContent = `Showing ${end} of ${filteredHistory.length} matches`;
+}
+
+function loadMoreHistory() { historyPage++; renderHistory(); }
+
+function renderMatchCard(match, animIndex) {
+  const modeClass  = match.mode==='ranked' ? 'mode-ranked' : match.mode==='ranked5' ? 'mode-ranked5' : match.mode==='liga3' ? 'mode-ranked' : match.mode==='liga5' ? 'mode-ranked5' : match.mode==='3v3' ? 'mode-3v3' : 'mode-5v5';
+  const badgeClass = match.mode==='ranked' ? 'ranked' : match.mode==='ranked5' ? 'ranked5' : match.mode==='liga3' ? 'ranked' : match.mode==='liga5' ? 'ranked5' : match.mode==='3v3' ? 'scrim3' : 'scrim5';
+  const modeLabel  = match.mode==='ranked' ? 'Public 3v3' : match.mode==='ranked5' ? 'Public 5v5' : match.mode==='liga3' ? 'Liga 3v3' : match.mode==='liga5' ? 'Liga 5v5' : match.mode==='3v3' ? 'Private 3v3' : 'Private 5v5';
+  const afkList = (match.afk && match.afk!=='No' && match.afk!=='') ? match.afk.split(',').map(s=>cleanName(s.trim()).toLowerCase()) : [];
+  const wKills = sumTeamKills(match.winners, match.scores);
+  const lKills = sumTeamKills(match.losers,  match.scores);
+  const mvp    = getMatchMVP(match.winners, match.losers, match.scores);
+  const mvpName = mvp ? mvp.name.toLowerCase() : null;
+
+  function playerLine(raw) {
+    const name  = cleanName(raw);
+    const score = getPlayerScoreStr(match.scores, raw);
+    const gold  = getPlayerGoldStr(match.scores, raw);
+    const isAfk = afkList.includes(name.toLowerCase());
+    const isMVP = mvpName && name.toLowerCase() === mvpName;
+    let cls = 'match-player-name' + (isAfk?' afk':isMVP?' mvp':'');
+    const scoreDisp = score && score!=='0/0/0' ? score : '';
+    const goldDisp  = gold  && gold!=='0'      ? `<span class="match-player-gold">💰${gold}</span>` : '';
+    // v32: hero icon in match cards
+    const hero = getPlayerHeroStr(match.scores, raw);
+    const heroImg = heroIconHtml(hero, 'sm');
+    return `<div class="match-player"><span class="${cls}">${heroImg}${name}${isAfk?' 💤':''}${isMVP?' ⭐':''}</span><div class="match-player-stats"><span class="match-player-score">${scoreDisp}</span>${goldDisp}</div></div>`;
+  }
+
+  let dateDisplay = match.date || '';
+  if (dateDisplay) { const p = dateDisplay.split(' '); dateDisplay = p[0] + (p[1] ? ' · '+p[1] : ''); }
+  const mvpHTML = mvp ? `<div class="match-mvp-bar">⭐ MVP: <span class="mvp-name">${mvp.name}</span> — KDA: <span class="mvp-kda">${mvp.kda}</span> (${mvp.score})</div>` : '';
+
+  const winnersLeft = match.matchNum % 2 !== 0;
+  const teamLeft  = winnersLeft ? 'winner' : 'loser';
+  const teamRight = winnersLeft ? 'loser'  : 'winner';
+  const playersLeft  = winnersLeft ? match.winners : match.losers;
+  const playersRight = winnersLeft ? match.losers  : match.winners;
+  const labelLeft  = winnersLeft ? `🏅 Winners ${wKills>0?`<span class="match-team-kills">⚔️ ${wKills}</span>`:''}` : `💀 Losers ${lKills>0?`<span class="match-team-kills">⚔️ ${lKills}</span>`:''}`;
+  const labelRight = winnersLeft ? `💀 Losers ${lKills>0?`<span class="match-team-kills">⚔️ ${lKills}</span>`:''}` : `🏅 Winners ${wKills>0?`<span class="match-team-kills">⚔️ ${wKills}</span>`:''}`;
+
+  return `<div class="match-card ${modeClass}" style="animation-delay:${animIndex*0.02}s" data-match-index="${filteredHistory.indexOf(match)}">
+    <div class="match-header"><div class="match-meta"><span class="match-number">#${match.matchNum}</span><span class="match-mode-badge ${badgeClass}">${modeLabel}</span>${match.matchId ? `<span style="font-size:0.52rem;color:var(--text3);letter-spacing:0.5px;opacity:0.6">${match.matchId}</span>` : ''}</div><span class="match-date">${dateDisplay}</span></div>
+    <div class="match-teams">
+      <div class="match-team ${teamLeft}"><div class="match-team-label">${labelLeft}</div>${playersLeft.map(p=>playerLine(p)).join('')}</div>
+      <div class="match-vs-divider"><span class="match-vs-text">VS</span></div>
+      <div class="match-team ${teamRight}"><div class="match-team-label">${labelRight}</div>${playersRight.map(p=>playerLine(p)).join('')}</div>
+    </div>${mvpHTML}
+  </div>`;
+}
+
+// ── Tab switching (legacy, kept for compatibility) ──────────
+function showTab(tab) { showGameTab(tab); }
+
+function setPrivateRegion(region) { /* handled by setGameRegion */ }
+
+function setPrivateMode(mode) {
+  privateMode = mode; privShowAll = false;
+  document.getElementById('priv-sub-3v3').classList.remove('active','active-green','active-purple');
+  document.getElementById('priv-sub-5v5').classList.remove('active','active-green','active-purple');
+  if (mode === '3v3') document.getElementById('priv-sub-3v3').classList.add('active-green');
+  else                document.getElementById('priv-sub-5v5').classList.add('active-purple');
+  document.getElementById('private-list').innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+  // Show history button
+  const hw = document.getElementById('priv-history-btn-wrap');
+  if (hw) hw.style.display = 'block';
+  loadPrivate(privateRegion, privateMode);
+}
+
+function setHistoryRegion(region) { /* handled by setGameRegion */ }
+
+function setHistoryMode(mode) {
+  historyMode = mode;
+  historyModeSelected = true;
+  const modeTabs = document.querySelectorAll('#hist-mode-tabs .sub-tab');
+  modeTabs.forEach(t => t.classList.remove('active','active-white','active-green','active-purple','active-blue'));
+  const modeMap = { all:0, ranked:1, ranked5:2, '3v3':3, '5v5':4 };
+  const colorMap = { all:'active-white', ranked:'active-green', ranked5:'active-blue', '3v3':'active-green', '5v5':'active-purple' };
+  const idx2 = modeMap[mode];
+  if (idx2 !== undefined && modeTabs[idx2]) modeTabs[idx2].classList.add(colorMap[mode] || 'active');
+  const labels = { all:'All matches', ranked:'Public 3v3 matches', ranked5:'Public 5v5 matches', '3v3':'Private 3v3 matches', '5v5':'Private 5v5 matches' };
+  document.getElementById('history-label').textContent = labels[mode] || 'All matches';
+  if (!historyLoaded) loadMatchHistory(); else applyHistoryFilters();
+}
+
+// ── H2H ───────────────────────────────────────────────────
+function setH2HRegion(region) { /* handled by setGameRegion */ }
+
+// ── HISTORY POPUP ─────────────────────────────────────────
+let historyPopupPage = 0;
+let historyPopupFiltered = [];
+const HISTORY_POPUP_PAGE_SIZE = 15;
+
+const CATEGORY_LABEL_MAP = {
+  ranked: 'Public',
+  private: 'Private',
+  liga: 'Liga',
+  h2h: 'H2H'
+};
+
+const MODE_LABEL_MAP = {
+  '3v3': '3v3', '5v5': '5v5',
+  'ranked': '3v3', 'ranked5': '5v5',
+  'all': 'All Modes',
+  'liga3': 'Liga 3v3', 'liga5': 'Liga 5v5'
+};
+
+// Map category + mode → history match.mode filter values
+function getHistoryModeFilter(cat, mode) {
+  if (cat === 'ranked') {
+    if (mode === '3v3' || mode === 'ranked') return ['ranked'];
+    if (mode === '5v5' || mode === 'ranked5') return ['ranked5'];
+  }
+  if (cat === 'private') {
+    if (mode === '3v3') return ['3v3'];
+    if (mode === '5v5') return ['5v5'];
+  }
+  if (cat === 'liga') {
+    if (mode === '3v3') return ['liga3'];
+    if (mode === '5v5') return ['liga5'];
+    return ['liga3','liga5'];
+  }
+  if (cat === 'h2h') {
+    const map = {
+      ranked: ['ranked'], ranked5: ['ranked5'],
+      '3v3': ['3v3'], '5v5': ['5v5'],
+      liga3: ['liga3'], liga5: ['liga5'],
+      all: null
+    };
+    return map[mode] || null;
+  }
+  return null; // null = all modes
+}
+
+function openHistoryPopup() {
+  const overlay = document.getElementById('history-popup-overlay');
+  const titleEl = document.getElementById('history-popup-title');
+  const subtitleEl = document.getElementById('history-popup-subtitle');
+  const bodyEl = document.getElementById('history-popup-body');
+  const loadMoreBtn = document.getElementById('history-popup-load-more');
+
+  const cat = currentGameTab; // ranked | private | liga | h2h
+  const mode = cat === 'ranked' ? rankedMode
+             : cat === 'private' ? privateMode
+             : cat === 'liga'    ? ligaMode
+             : h2hMode;
+  const region = gameRegion;
+  const regionLabel = region === 'EU' ? 'Europe' : 'North America';
+  const catLabel = CATEGORY_LABEL_MAP[cat] || cat;
+  const modeLabel = MODE_LABEL_MAP[mode] || mode;
+
+  titleEl.textContent = `${catLabel} · ${modeLabel}`;
+  subtitleEl.textContent = `${regionLabel} · Match History`;
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Filter history
+  const modeFilter = getHistoryModeFilter(cat, mode);
+  historyPopupFiltered = allMatchHistory.filter(m => {
+    if (m.region !== region) return false;
+    if (modeFilter && !modeFilter.includes(m.mode)) return false;
+    return true;
+  });
+
+  historyPopupPage = 0;
+
+  if (!historyLoaded) {
+    bodyEl.innerHTML = '<div class="loading"><div class="spinner"></div>Loading match history...</div>';
+    loadMoreBtn.style.display = 'none';
+    loadMatchHistory().then(() => {
+      historyPopupFiltered = allMatchHistory.filter(m => {
+        if (m.region !== region) return false;
+        if (modeFilter && !modeFilter.includes(m.mode)) return false;
+        return true;
+      });
+      renderHistoryPopup();
+    });
+  } else {
+    renderHistoryPopup();
+  }
+}
+
+function renderHistoryPopup() {
+  const bodyEl = document.getElementById('history-popup-body');
+  const loadMoreBtn = document.getElementById('history-popup-load-more');
+
+  if (!historyPopupFiltered.length) {
+    bodyEl.innerHTML = '<div class="loading" style="padding:40px 0;color:var(--text3)">No matches found</div>';
+    loadMoreBtn.style.display = 'none';
+    return;
+  }
+
+  const end = Math.min((historyPopupPage + 1) * HISTORY_POPUP_PAGE_SIZE, historyPopupFiltered.length);
+  const cards = historyPopupFiltered.slice(0, end).map((m, i) => renderMatchCard(m, i)).join('');
+  bodyEl.innerHTML = cards + `<div style="text-align:center;font-size:0.55rem;color:var(--text3);margin-top:10px;letter-spacing:1px">Showing ${end} of ${historyPopupFiltered.length} matches</div>`;
+
+  if (end < historyPopupFiltered.length) {
+    loadMoreBtn.style.display = 'block';
+    loadMoreBtn.textContent = `Load more (${historyPopupFiltered.length - end} remaining)`;
+  } else {
+    loadMoreBtn.style.display = 'none';
+  }
+}
+
+function loadMoreHistoryPopup() {
+  historyPopupPage++;
+  renderHistoryPopup();
+}
+
+// History popup close
+(function() {
+  function closeHistoryPopup() {
+    const overlay = document.getElementById('history-popup-overlay');
+    if (overlay) { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('history-popup-close');
+    const overlay  = document.getElementById('history-popup-overlay');
+    if (closeBtn) closeBtn.addEventListener('click', closeHistoryPopup);
+    if (overlay)  overlay.addEventListener('click', e => { if (e.target === overlay) closeHistoryPopup(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHistoryPopup(); });
+  });
+})();
+
+function setH2HMode(mode) {
+  h2hMode = mode;
+  const colorMap = { ranked:'active-green', ranked5:'active-blue', '3v3':'active-green', '5v5':'active-purple', all:'active-white', liga3:'active', liga5:'active' };
+  ['all','ranked','ranked5','3v3','5v5','liga3','liga5'].forEach(m => {
+    const btn = document.getElementById(`h2h-m-${m}`);
+    if (!btn) return;
+    btn.classList.remove('active','active-green','active-purple','active-white','active-blue');
+    if (m === h2hMode) btn.classList.add(colorMap[m] || 'active');
+  });
+  const rd = document.getElementById('h2h-result');
+  if (rd) rd.classList.remove('visible');
+}
+
+async function searchH2H() {
+  const p1 = document.getElementById('h2h-p1').value.trim().toLowerCase();
+  const p2 = document.getElementById('h2h-p2').value.trim().toLowerCase();
+  const rd = document.getElementById('h2h-result');
+  if (!p1 || !p2) { rd.innerHTML = '<div class="h2h-no-data">Enter both player names</div>'; rd.classList.add('visible'); return; }
+  if (!h2hRegion) { rd.innerHTML = '<div class="h2h-no-data">Select a region first</div>'; rd.classList.add('visible'); return; }
+  const [s1, s2] = [p1, p2].sort();
+  const isEU = h2hRegion === 'EU';
+  let rw1=0, rw2=0, r5w1=0, r5w2=0, sw1=0, sw2=0, s5w1=0, s5w2=0;
+
+  async function queryH2H(sheetName) {
+    const rows = await fetchSheet(sheetName);
+    for (const row of rows) {
+      const r1 = String(col(row,'Player1','player1')||'').toLowerCase();
+      const r2 = String(col(row,'Player2','player2')||'').toLowerCase();
+      if (r1===s1 && r2===s2) return [Number(col(row,'Wins1','wins1')||0), Number(col(row,'Wins2','wins2')||0)];
+    }
+    return [0, 0];
+  }
+
+  if (h2hMode==='ranked'  || h2hMode==='all') { const sheet = isEU ? 'H2HEU' : 'H2H'; [rw1, rw2]  = await queryH2H(sheet); }
+  if (h2hMode==='ranked5' || h2hMode==='all') { const sheet = isEU ? 'H2H5v5EU' : 'H2H5v5'; [r5w1, r5w2] = await queryH2H(sheet); }
+  if (h2hMode==='3v3' || h2hMode==='all') { const sheet = isEU ? 'ScrimH2HEU' : 'ScrimH2H'; [sw1, sw2] = await queryH2H(sheet); }
+  if (h2hMode==='5v5' || h2hMode==='all') { const sheet = isEU ? 'ScrimH2H5v5EU' : 'ScrimH2H5v5'; [s5w1, s5w2] = await queryH2H(sheet); }
+
+  let w1, w2, label;
+  if (h2hMode==='ranked')  { w1=rw1;  w2=rw2;  label=`Public 3v3 · ${h2hRegion}`; }
+  else if (h2hMode==='ranked5') { w1=r5w1; w2=r5w2; label=`Public 5v5 · ${h2hRegion}`; }
+  else if (h2hMode==='3v3')     { w1=sw1;  w2=sw2;  label=`Private 3v3 · ${h2hRegion}`; }
+  else if (h2hMode==='5v5')     { w1=s5w1; w2=s5w2; label=`Private 5v5 · ${h2hRegion}`; }
+  else { w1=rw1+r5w1+sw1+s5w1; w2=rw2+r5w2+sw2+s5w2; label=`All modes · ${h2hRegion}`; }
+
+  const total = w1+w2;
+  if (!total) { rd.innerHTML='<div class="h2h-no-data">No matches found</div>'; rd.classList.add('visible'); return; }
+
+  let breakdown = '';
+  if (h2hMode==='all') {
+    const parts = [];
+    if (rw1+rw2>0)     parts.push(`Public 3v3: ${rw1}-${rw2}`);
+    if (r5w1+r5w2>0)   parts.push(`Public 5v5: ${r5w1}-${r5w2}`);
+    if (sw1+sw2>0)     parts.push(`Priv 3v3: ${sw1}-${sw2}`);
+    if (s5w1+s5w2>0)   parts.push(`Priv 5v5: ${s5w1}-${s5w2}`);
+    breakdown = `<div style="display:flex;justify-content:center;gap:18px;margin-top:8px;font-size:0.65rem;color:var(--text3);flex-wrap:wrap">${parts.map(p=>`<span>${p}</span>`).join('')}</div>`;
+  }
+
+  rd.innerHTML = `<div style="font-size:0.6rem;color:var(--gold-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">${label}</div>
+    <div class="h2h-matchup">
+      <div class="h2h-player"><div class="h2h-player-name">${s1}</div><div class="h2h-wins">${w1}</div></div>
+      <div><div class="h2h-vs">VS</div><div class="h2h-vs-total">${total} matches</div></div>
+      <div class="h2h-player"><div class="h2h-player-name">${s2}</div><div class="h2h-wins">${w2}</div></div>
+    </div>${breakdown}`;
+  rd.classList.add('visible');
+}
+
+document.getElementById('search-history').addEventListener('input', () => {
+  if (historyModeSelected) applyHistoryFilters();
+});
+
+// ── TOURNAMENTS ───────────────────────────────────────────
+async function loadTournaments() {
+  const nextEl = document.getElementById('tourney-next-container');
+  const pastEl = document.getElementById('tourney-past-list');
+  const nextStillLoading = nextEl.querySelector('.spinner');
+  const pastStillLoading = pastEl.querySelector('.spinner');
+  if (!nextStillLoading && !pastStillLoading) return;
+
+  const [nextRows, pastRows] = await Promise.all([
+    fetchSheet('ProximoTorneo'),
+    fetchSheet('Torneos')
+  ]);
+
+  if (nextStillLoading) {
+    const nt = nextRows && nextRows.length ? nextRows[0] : null;
+    if (nt) {
+      nextEl.innerHTML = renderNextTourney(nt);
+      let rawDate = col(nt,'tourney_date','Tourney Date','Date','date');
+      if (rawDate) {
+        const parsed = new Date(rawDate);
+        if (!isNaN(parsed)) startTourneyCountdown(parsed);
+      }
+    } else {
+      nextEl.innerHTML = '<div style="padding:16px;color:var(--text3);font-size:0.7rem;text-align:center;">No upcoming tournament set.</div>';
+    }
+  }
+
+  if (pastStillLoading) {
+    if (!pastRows.length) {
+      pastEl.innerHTML = '<div class="tourney-past-loading" style="color:var(--text3)">No past tournaments yet.</div>';
+    } else {
+      const valid = pastRows.filter(r => col(r,'tournament_name','Tournament Name','Torneo'));
+      if (!valid.length) {
+        pastEl.innerHTML = '<div class="tourney-past-loading" style="color:var(--text3)">No past tournaments yet.</div>';
+      } else {
+        pastEl.innerHTML = [...valid].reverse().map((t,i) => renderTournamentAccordion(t,i)).join('');
+      }
+    }
+  }
+}
+
+function renderNextTourney(nt) {
+  const tourneyName = col(nt,'tourney_name','Tourney Name','tournament_name') || '';
+  const format   = col(nt,'format','Format') || '';
+  const region   = col(nt,'region','Region') || '';
+  const prize    = col(nt,'prize_pool','Prize Pool','Prize') || '';
+  const teamSize = col(nt,'team_size','Team Size') || '';
+  const rawDate  = col(nt,'tourney_date','Tourney Date','Date','date') || '';
+  const deadline = col(nt,'deadline','Deadline','Submissions Due') || '';
+  const stream   = col(nt,'stream_url','Stream URL','Stream') || '';
+  const banned   = col(nt,'soft_banned','Soft Banned','Banned Heroes') || '';
+
+  let dateDisplay = '';
+  if (rawDate) {
+    try { dateDisplay = new Date(rawDate).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); }
+    catch(e) { dateDisplay = rawDate; }
+  }
+  const streamDisplay = stream
+    ? `<a href="${stream.startsWith('http')?stream:'https://'+stream}" target="_blank">${stream.replace(/^https?:\/\//,'')}</a>`
+    : '—';
+
+  let prizeAmount = prize;
+  let prizeSub = '';
+  if (prize) {
+    const match = prize.match(/^([^+]+)(\+.*)$/);
+    if (match) {
+      prizeAmount = match[1].trim();
+      prizeSub = match[2].trim();
+    }
+    prizeAmount = prizeAmount.replace(/^\$/, '').trim();
+  }
+
+  return `<div class="tourney-next-card">
+    <div class="tourney-next-glow"></div>
+    <div class="tourney-next-badge"><span class="badge-dot"></span>Upcoming Tournament</div>
+    ${tourneyName ? `<div class="tourney-next-name">${tourneyName}</div>` : ''}
+    <img src="${ASSETS_BASE}skill%20tiers/10c_Vainglorious_GOLD.webp" alt="Tier 10 Gold" class="tourney-next-tier-img" onerror="this.style.display='none'">
+    ${prize ? `<div class="tourney-prize-highlight">
+      <div class="tourney-prize-row">
+        <div class="tourney-prize-value">$${prizeAmount}</div>
+        <div class="tourney-prize-currency">USD</div>
+      </div>
+      ${prizeSub ? `<div class="tourney-prize-sub">${prizeSub}</div>` : ''}
+    </div>` : ''}
+    <div class="tourney-register-now">Register Now!</div>
+    <div class="tourney-countdown">
+      <div class="tourney-countdown-label">Starts in</div>
+      <div class="tourney-countdown-values">
+        <div class="tourney-cd-item"><div class="tourney-cd-num" id="tcd-days">--</div><div class="tourney-cd-lbl">Days</div></div>
+        <div class="tourney-cd-sep">:</div>
+        <div class="tourney-cd-item"><div class="tourney-cd-num" id="tcd-hours">--</div><div class="tourney-cd-lbl">Hours</div></div>
+        <div class="tourney-cd-sep">:</div>
+        <div class="tourney-cd-item"><div class="tourney-cd-num" id="tcd-mins">--</div><div class="tourney-cd-lbl">Mins</div></div>
+        <div class="tourney-cd-sep">:</div>
+        <div class="tourney-cd-item"><div class="tourney-cd-num" id="tcd-secs">--</div><div class="tourney-cd-lbl">Secs</div></div>
+      </div>
+    </div>
+    <div class="tourney-details-grid">
+      ${format    ? `<div class="tourney-detail-item"><div class="tourney-detail-label">Format</div><div class="tourney-detail-value">${format}</div></div>` : ''}
+      ${region    ? `<div class="tourney-detail-item"><div class="tourney-detail-label">Region</div><div class="tourney-detail-value">${region}</div></div>` : ''}
+      ${teamSize  ? `<div class="tourney-detail-item"><div class="tourney-detail-label">Team Size</div><div class="tourney-detail-value">${teamSize}</div></div>` : ''}
+      ${dateDisplay ? `<div class="tourney-detail-item full-col"><div class="tourney-detail-label">📅 Date · 📍 Stream</div><div class="tourney-detail-value">${dateDisplay} — Live at ${streamDisplay}</div></div>` : ''}
+      ${deadline  ? `<div class="tourney-detail-item full-col"><div class="tourney-detail-label">⏰ Team Submissions Due</div><div class="tourney-detail-value">${deadline}</div></div>` : ''}
+      ${banned    ? `<div class="tourney-detail-item full-col"><div class="tourney-detail-label">🚫 Soft Banned Heroes</div><div class="tourney-detail-value"><span class="tourney-banned">${banned}</span> — soft banned for this tournament</div></div>` : ''}
+    </div>
+    <a href="https://discord.gg/K5Thqmayys" target="_blank" class="tourney-join-btn">🎮 Join the Tournament</a>
+    <div class="tourney-register-info">
+      <strong>How do I register my team?</strong> Join the Discord and type in <strong>#general</strong> — <strong>Chadge</strong> will help you register your team (5 players max).
+      <div class="free-agent">🔵 FREE AGENT? Type in #general and you'll be grouped with other solo players.</div>
+    </div>
+  </div>`;
+}
+
+const TOURNEY_TIER_IMAGES = {
+  1: `${ASSETS_BASE}skill%20tiers/10c_Vainglorious_GOLD.webp`,
+  2: `${ASSETS_BASE}skill%20tiers/9b_PinnacleOfAwesome_SILVER.webp`,
+  3: `${ASSETS_BASE}skill%20tiers/8a_SimplyAmazing_BRONZE.webp`
+};
+
+function renderTournamentAccordion(t, idx) {
+  const name  = col(t,'tournament_name','Tournament Name','Torneo') || 'Tournament';
+  const date  = col(t,'date','Date','Fecha') || '';
+  const prize = col(t,'prize_pool','Prize Pool','Prize') || '';
+  let dateDisplay = '';
+  if (date) { try { dateDisplay = new Date(date).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); } catch(e) { dateDisplay = date; } }
+  let dateAndPrize = dateDisplay;
+  if (dateDisplay && prize) dateAndPrize = `${dateDisplay} · $${prize.replace(/^\$/, '')} prize pool`;
+  else if (prize) dateAndPrize = `$${prize.replace(/^\$/, '')} prize pool`;
+
+  const top1Team    = col(t,'top1_team','Top1 Team') || '';
+  const top1MVP     = (col(t,'top1_mvp','Top1 MVP') || '').toLowerCase();
+  const top1Players = [1,2,3,4,5].map(n => col(t,`top1_p${n}`,`Top1 P${n}`)).filter(Boolean);
+  const top1Scores  = { p1: col(t,'top1_p1_score','Top1 P1 Score')||'', p2: col(t,'top1_p2_score','Top1 P2 Score')||'', p3: col(t,'top1_p3_score','Top1 P3 Score')||'', p4: col(t,'top1_p4_score','Top1 P4 Score')||'', p5: col(t,'top1_p5_score','Top1 P5 Score')||'' };
+  const top2Team    = col(t,'top2_team','Top2 Team') || '';
+  const top2MVP     = (col(t,'top2_mvp','Top2 MVP') || '').toLowerCase();
+  const top2Players = [1,2,3,4,5].map(n => col(t,`top2_p${n}`,`Top2 P${n}`)).filter(Boolean);
+  const top2Scores  = { p1: col(t,'top2_p1_score','Top2 P1 Score')||'', p2: col(t,'top2_p2_score','Top2 P2 Score')||'', p3: col(t,'top2_p3_score','Top2 P3 Score')||'', p4: col(t,'top2_p4_score','Top2 P4 Score')||'', p5: col(t,'top2_p5_score','Top2 P5 Score')||'' };
+  const top3Team    = col(t,'top3_team','Top3 Team') || '';
+  const top3MVP     = (col(t,'top3_mvp','Top3 MVP') || '').toLowerCase();
+  const top3Players = [1,2,3,4,5].map(n => col(t,`top3_p${n}`,`Top3 P${n}`)).filter(Boolean);
+  const top3Scores  = { p1: col(t,'top3_p1_score','Top3 P1 Score')||'', p2: col(t,'top3_p2_score','Top3 P2 Score')||'', p3: col(t,'top3_p3_score','Top3 P3 Score')||'', p4: col(t,'top3_p4_score','Top3 P4 Score')||'', p5: col(t,'top3_p5_score','Top3 P5 Score')||'' };
+
+  const vodUrl = col(t,'vod_url','VOD URL','VOD') || '';
+  const vodHTML = vodUrl ? `<a href="${vodUrl}" target="_blank" class="tourney-vod"><span class="tourney-vod-icon">▶️</span><div class="tourney-vod-text"><div class="tourney-vod-label">Deciding Match — Replay</div><div class="tourney-vod-title">Watch the VOD</div></div><span class="tourney-vod-arrow">→</span></a>` : '';
+
+  function buildPlaceCard(place, teamName, players, scoresObj, mvpName) {
+    if (!teamName) return '';
+    const posLabel = place === 1 ? '1st Place' : place === 2 ? '2nd Place' : '3rd Place';
+    const tierImg = TOURNEY_TIER_IMAGES[place] || '';
+    const playerItems = players.map((pName, i) => {
+      const isMVP = mvpName && pName.toLowerCase().includes(mvpName);
+      const cls = isMVP ? 'tourney-place-player-item is-mvp' : 'tourney-place-player-item';
+      return `<span class="${cls}">${pName}</span>`;
+    }).join('');
+    return `<div class="tourney-place-card place-${place}" data-tourney-place="${place}" data-tourney-idx="${idx}">
+      <span class="tourney-place-corner-label">${posLabel}</span>
+      <img src="${tierImg}" alt="Tier" class="tourney-place-tier-img" onerror="this.style.display='none'">
+      <div class="tourney-place-teamname-wrap"><div class="tourney-place-teamname">${teamName}</div></div>
+      <div class="tourney-place-players-row">${playerItems}</div>
+      <div class="tourney-place-click-hint">TAP FOR DETAILS</div>
+    </div>`;
+  }
+
+  const podiumHTML = [
+    buildPlaceCard(1, top1Team, top1Players, top1Scores, top1MVP),
+    buildPlaceCard(2, top2Team, top2Players, top2Scores, top2MVP),
+    buildPlaceCard(3, top3Team, top3Players, top3Scores, top3MVP)
+  ].filter(Boolean).join('');
+
+  window._tournamentData = window._tournamentData || {};
+  window._tournamentData[idx] = { name, date: dateDisplay, top1Team, top1Players, top1Scores, top1MVP, top2Team, top2Players, top2Scores, top2MVP, top3Team, top3Players, top3Scores, top3MVP };
+
+  return `<div class="tourney-accordion" id="tourney-acc-${idx}">
+    <div class="tourney-accordion-header" onclick="toggleTourneyAccordion(${idx})">
+      <div class="tourney-accordion-left">
+        <div><div class="tourney-accordion-name">${name}</div>${dateAndPrize?`<div class="tourney-accordion-date">${dateAndPrize}</div>`:''}</div>
+      </div>
+      <span class="tourney-accordion-arrow">▼</span>
+    </div>
+    <div class="tourney-accordion-body">
+      <div class="tourney-podium">${podiumHTML}${vodHTML}</div>
+    </div>
+  </div>`;
+}
+
+function toggleTourneyAccordion(idx) {
+  const acc = document.getElementById(`tourney-acc-${idx}`);
+  if (acc) acc.classList.toggle('open');
+}
+
+// ── POPUP ─────────────────────────────────────────────────
+(function() {
+  const overlay      = document.getElementById('popup-overlay');
+  const popupCard    = document.getElementById('popup-card');
+  const popupContent = document.getElementById('popup-content');
+  const popupClose   = document.getElementById('popup-close');
+
+  function closePopup() { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+  function openPopup(html) { popupContent.innerHTML = html; popupCard.scrollTop = 0; overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+
+  popupClose.addEventListener('click', closePopup);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+
+  function buildPlayerPopup(playerName, cardMode) {
+    let playerData = null, rank = -1, source = '';
+    if (cardMode === 'ranked' || cardMode === 'ranked5') {
+      playerData = rankedPlayersData.find(p => p.Player.toLowerCase() === playerName.toLowerCase());
+      rank = playerData ? rankedPlayersData.indexOf(playerData)+1 : -1;
+      source = cardMode === 'ranked5' ? 'Public 5v5' : 'Public 3v3';
+    } else {
+      playerData = privatePlayersData.find(p => p.Player.toLowerCase() === playerName.toLowerCase());
+      rank = playerData ? privatePlayersData.indexOf(playerData)+1 : -1;
+      source = `Private ${cardMode} · ${privateRegion}`;
+    }
+    if (!playerData) { playerData = rankedPlayersData.find(p => p.Player.toLowerCase()===playerName.toLowerCase()); if (playerData) { rank=rankedPlayersData.indexOf(playerData)+1; source='Public 3v3'; } }
+    if (!playerData) { playerData = privatePlayersData.find(p => p.Player.toLowerCase()===playerName.toLowerCase()); if (playerData) { rank=privatePlayersData.indexOf(playerData)+1; source=`Private · ${privateRegion}`; } }
+    if (!playerData) return null;
+
+    const p  = playerData;
+    const elo = Number(col(p,'ELO','elo','Elo')||0);
+    const ti  = getTierInfo(elo);
+    const w   = Number(col(p,'Wins','wins')||0);
+    const l   = Number(col(p,'Losses','losses')||0);
+    const tot = w+l;
+    const wr  = tot>0 ? ((w/tot)*100).toFixed(1) : '0.0';
+    const streak  = Number(col(p,'Streak','streak')||0);
+    const kills   = Number(col(p,'total_kills','TotalKills','Total Kills')||0);
+    const deaths  = Number(col(p,'total_deaths','TotalDeaths','Total Deaths')||0);
+    const assists = Number(col(p,'total_assists','TotalAssists','Total Assists')||0);
+    const best    = Number(col(p,'best_streak','BestStreak','Best Streak')||0);
+    const tGold   = Number(col(p,'total_gold','TotalGold','Total Gold')||0);
+    const kd  = calcKD(kills,deaths);
+    const kda = calcKDA(kills,deaths,assists);
+    const avgGold = tot>0 ? Math.round(tGold/tot) : 0;
+    const name      = col(p,'Player','player','Name','name');
+    const lastRival = col(p,'Last Rival','LastRival','last_rival');
+    const lastMatch = col(p,'Last Match','LastMatch','last_match');
+    const hasStats  = kills>0||deaths>0;
+    const streakDisplay = streak>0 ? `🔥 ${streak}W` : streak<0 ? `❄️ ${Math.abs(streak)}L` : '—';
+    const streakClass   = streak>0 ? 'green' : streak<0 ? 'red' : '';
+
+    let html = `<div class="popup-player-header">
+        <div class="popup-rank">#${rank} · ${source}</div>
+        <div class="popup-player-name">${name}</div>
+      </div>
+      <div class="popup-tier-section">
+        <img src="${ti.image}" alt="Tier ${ti.num}" class="popup-tier-image">
+        <div class="popup-tier-display">
+          <div class="popup-tier-badge ${ti.subtier}"><span class="tier-number">${ti.num}</span><span>SKILL TIER</span></div>
+          <div class="popup-tier-name">${ti.name}</div>
+        </div>
+      </div>
+      <div class="popup-elo-bar-container">
+        <div class="popup-elo-cursor" style="left:${ti.progress}%">
+          <div class="popup-elo-value">${elo}</div>
+          <div class="popup-elo-arrow">▼</div>
+        </div>
+        <div class="popup-elo-bar">
+          <div class="elo-bar-fill ${ti.subtier}" style="width:${ti.progress}%;height:100%;border-radius:5px;"></div>
+        </div>
+        <div class="popup-elo-labels">
+          <div class="popup-elo-label ${ti.subtier==='bronze'?'active-bronze':''}">Bronze</div>
+          <div class="popup-elo-label ${ti.subtier==='silver'?'active-silver':''}">Silver</div>
+          <div class="popup-elo-label ${ti.subtier==='gold'?'active-gold':''}">Gold</div>
+        </div>
+      </div>
+      <div class="popup-stats">
+        <div class="popup-stat-block"><div class="popup-stat-label">Wins</div><div class="popup-stat-value green">${w}</div></div>
+        <div class="popup-stat-block"><div class="popup-stat-label">Losses</div><div class="popup-stat-value red">${l}</div></div>
+        <div class="popup-stat-block"><div class="popup-stat-label">Win Rate</div><div class="popup-stat-value">${wr}%</div></div>
+        <div class="popup-stat-block"><div class="popup-stat-label">Streak</div><div class="popup-stat-value ${streakClass}">${streakDisplay}</div></div>`;
+
+    if (hasStats) html += `
+        <div class="popup-stat-block full-width"><div class="popup-stat-label">Combat Stats</div><div class="popup-stat-row"><span style="color:var(--green)">⚔️ ${kills}</span><span style="color:var(--red)">💀 ${deaths}</span><span style="color:var(--purple)">🤝 ${assists}</span></div></div>
+        <div class="popup-stat-block"><div class="popup-stat-label">K/D Ratio</div><div class="popup-stat-value gold">${kd}</div></div>
+        <div class="popup-stat-block"><div class="popup-stat-label">KDA Ratio</div><div class="popup-stat-value purple">${kda}</div></div>`;
+    if (best>0)   html += `<div class="popup-stat-block"><div class="popup-stat-label">Best Streak</div><div class="popup-stat-value gold">🏅 ${best}W</div></div>`;
+    if (tGold>0)  html += `<div class="popup-stat-block"><div class="popup-stat-label">Gold</div><div class="popup-stat-value" style="color:#f0c040">💰 ${formatGold(avgGold)}/g</div></div>`;
+
+    // v32: Top Hero + HeroStats section
+    const topHero = col(p,'TopHero','top_hero','Top Hero') || '';
+    if (topHero) html += `<div class="popup-stat-block full-width"><div class="popup-stat-label">Main Hero</div><div class="popup-stat-value purple">${heroIconHtml(topHero,'lg')} ${topHero}</div></div>`;
+    html += `</div>`; // close popup-stats
+
+    // Hero stats table from HeroStats sheet
+    const heroStatsForPlayer = (allHeroStats || []).filter(r => {
+      const rn = String(col(r,'PlayerName','player_name','Player') || '').toLowerCase();
+      return rn === name.toLowerCase();
+    });
+    if (heroStatsForPlayer.length > 0) {
+      const sorted = heroStatsForPlayer.sort((a,b) => Number(col(b,'Games','games')||0) - Number(col(a,'Games','games')||0)).slice(0,6);
+      html += `<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border)">
+        <div style="font-size:0.5rem;color:var(--text3);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;text-align:center">Hero Performance</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">`;
+      sorted.forEach(r => {
+        const hName  = col(r,'HeroName','hero_name','Hero') || '';
+        const games  = Number(col(r,'Games','games') || 0);
+        const wins   = Number(col(r,'Wins','wins') || 0);
+        const wr     = games > 0 ? Math.round(wins/games*100) : 0;
+        const tk     = Number(col(r,'TotalKills','total_kills') || 0);
+        const td     = Number(col(r,'TotalDeaths','total_deaths') || 0);
+        const ta     = Number(col(r,'TotalAssists','total_assists') || 0);
+        const kda    = td === 0 ? (tk+ta).toFixed(1) : ((tk+ta)/td).toFixed(2);
+        const wrColor= wr >= 60 ? 'var(--green)' : wr >= 40 ? 'var(--text)' : 'var(--red)';
+        html += `<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 8px">
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">${heroIconHtml(hName,'sm')}<span style="font-size:0.75rem;font-weight:600;color:var(--text)">${hName}</span></div>
+          <div style="font-size:0.62rem;color:var(--text3)">${games}G · <span style="color:${wrColor};font-weight:700">${wr}%</span> WR · KDA <span style="color:var(--purple);font-weight:600">${kda}</span></div>
+        </div>`;
+      });
+      html += `</div></div>`;
+    }
+
+    // Account Level / XP — BP aesthetic (validated accounts only)
+    const accInfo = accountsData[name.toLowerCase()];
+    if (accInfo && accInfo.status !== 'banned') {
+      const xpPerLevel = 100;
+      const xpInLevel  = accInfo.xp % xpPerLevel;
+      const xpProgress = Math.min((xpInLevel / xpPerLevel) * 100, 100);
+      const maxLevel   = 100;
+      const pctToMax   = Math.min((accInfo.level / maxLevel) * 100, 100);
+
+      // Tier images for reward track (every 10 levels a tier reward)
+      const trackRewards = [
+        { lv: 10,  icon: '🎭', label: 'Hat' },
+        { lv: 20,  icon: '🎨', label: 'Skin' },
+        { lv: 30,  tierKey: '3_gold' },
+        { lv: 40,  icon: '🎭', label: 'Hat' },
+        { lv: 50,  tierKey: '5_gold' },
+        { lv: 60,  icon: '🎨', label: 'Skin' },
+        { lv: 70,  tierKey: '7_gold' },
+        { lv: 80,  icon: '🎭', label: 'Hat' },
+        { lv: 90,  tierKey: '9_gold' },
+        { lv: 100, tierKey: '10_gold' },
+      ];
+
+      const trackHTML = trackRewards.map(r => {
+        const unlocked = accInfo.level >= r.lv;
+        const current  = accInfo.level >= r.lv - 9 && accInfo.level < r.lv;
+        const cls = unlocked ? 'bp-reward-slot unlocked' : current ? 'bp-reward-slot current' : 'bp-reward-slot';
+        const innerImg = r.tierKey
+          ? `<img src="${TIER_IMAGES[r.tierKey]}" class="bp-reward-img" onerror="this.style.display='none'">`
+          : `<div class="bp-reward-icon">${r.icon}</div>`;
+        return `<div class="${cls}">
+          ${innerImg}
+          <div class="bp-reward-lv">Lv.${r.lv}</div>
+          ${!unlocked ? '<div class="bp-reward-lock">🔒</div>' : ''}
+        </div>`;
+      }).join('');
+
+      html += `<div class="validated-badge">✓ Verified Account · Lv.${accInfo.level}</div>`;
+      html += `
+      <div class="bp-level-section" style="margin-top:10px">
+        <div class="bp-level-row">
+          <div>
+            <div style="font-size:0.45rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Account Level</div>
+            <div class="bp-level-num">${accInfo.level} <span class="bp-level-max">/ ${maxLevel}</span></div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:0.45rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Total XP</div>
+            <div class="bp-xp-total">${accInfo.xp.toLocaleString()}</div>
+          </div>
+        </div>
+        <div class="bp-progress-wrap" style="margin-bottom:4px">
+          <div class="bp-progress-fill" style="width:${pctToMax}%"></div>
+          <div class="bp-progress-text">${pctToMax.toFixed(1)}% to MAX</div>
+        </div>
+        <div class="bp-progress-labels"><span>Lv.1</span><span>Lv.${maxLevel} MAX</span></div>
+        <div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--border)">
+          <div style="font-size:0.45rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Next Level</div>
+          <div class="popup-xp-bar"><div class="popup-xp-fill" style="width:${xpProgress}%"></div></div>
+          <div class="popup-xp-text">${xpInLevel} / ${xpPerLevel} XP</div>
+        </div>
+        <div style="margin-top:10px">
+          <div style="font-size:0.45rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Season Rewards Track</div>
+          <div class="bp-track">${trackHTML}</div>
+        </div>
+      </div>
+      <button onclick="openCollectedItems('${name}')" style="width:100%;margin-top:8px;padding:10px;border-radius:10px;border:1px solid rgba(167,139,250,0.4);background:rgba(167,139,250,0.07);color:var(--purple);font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='rgba(167,139,250,0.14)'" onmouseout="this.style.background='rgba(167,139,250,0.07)'">🃏 View Collected Items</button>`;
+    }
+
+    if (lastRival||lastMatch) {
+      const parts = [lastRival?`Last rival: ${lastRival}`:'', lastMatch||''].filter(Boolean);
+      html += `<div style="text-align:center;margin-top:6px;font-size:0.6rem;color:var(--text3)">${parts.join(' · ')}</div>`;
+    }
+    return html;
+  }
+
+  function buildMatchPopup(match) {
+    if (!match) return null;
+    const badgeClass = match.mode==='ranked'?'ranked':match.mode==='ranked5'?'ranked5':match.mode==='3v3'?'scrim3':'scrim5';
+    const modeLabel  = match.mode==='ranked'?'Public 3v3':match.mode==='ranked5'?'Public 5v5':match.mode==='3v3'?'Private 3v3':'Private 5v5';
+    const afkList    = (match.afk&&match.afk!=='No'&&match.afk!=='') ? match.afk.split(',').map(s=>cleanName(s.trim()).toLowerCase()) : [];
+    const wKills = sumTeamKills(match.winners, match.scores);
+    const lKills = sumTeamKills(match.losers,  match.scores);
+    const mvp    = getMatchMVP(match.winners, match.losers, match.scores);
+    const mvpName = mvp ? mvp.name.toLowerCase() : null;
+    let dateDisplay = match.date||'';
+    if (dateDisplay) { const p=dateDisplay.split(' '); dateDisplay=p[0]+(p[1]?' · '+p[1]:''); }
+
+    function pLine(raw) {
+      const name  = cleanName(raw);
+      const score = getPlayerScoreStr(match.scores, raw);
+      const gold  = getPlayerGoldStr(match.scores, raw);
+      const isAfk = afkList.includes(name.toLowerCase());
+      const isMVP = mvpName && name.toLowerCase()===mvpName;
+      let cls = 'popup-match-player-name'+(isAfk?' afk':isMVP?' mvp':'');
+      const scoreDisp = score&&score!=='0/0/0'?score:'';
+      const goldDisp  = gold&&gold!=='0'?`<span class="popup-match-player-gold">💰${gold}</span>`:'';
+      // v32: hero icon in match popup
+      const hero = getPlayerHeroStr(match.scores, raw);
+      const heroImg = heroIconHtml(hero, 'lg');
+      return `<div class="popup-match-player"><span class="${cls}">${heroImg}${name}${isAfk?' 💤':''}${isMVP?' ⭐':''}</span><div class="popup-match-player-details"><span class="popup-match-player-score">${scoreDisp}</span>${goldDisp}</div></div>`;
+    }
+
+    let html = `<div class="popup-match-header"><div class="popup-match-number">MATCH #${match.matchNum}${match.matchId ? ` <span style="font-size:0.55rem;color:var(--text3);font-weight:400;letter-spacing:1px">${match.matchId}</span>` : ''}</div><div class="popup-match-mode ${badgeClass}">${modeLabel}</div><div class="popup-match-date">${dateDisplay}</div></div>
+      <div class="popup-match-teams">
+        <div class="popup-match-team winner"><div class="popup-match-team-label">🏅 Winners ${wKills>0?`<span style="font-size:0.7rem;opacity:0.7">⚔️ ${wKills} kills</span>`:''}</div>${match.winners.map(p=>pLine(p)).join('')}</div>
+        <div class="popup-match-team loser"><div class="popup-match-team-label">💀 Losers ${lKills>0?`<span style="font-size:0.7rem;opacity:0.7">⚔️ ${lKills} kills</span>`:''}</div>${match.losers.map(p=>pLine(p)).join('')}</div>
+      </div>`;
+    if (mvp) html += `<div class="popup-match-mvp">⭐ MVP: <span class="mvp-name">${mvp.name}</span> — KDA: <span class="mvp-kda">${mvp.kda}</span> (${mvp.score})</div>`;
+    return html;
+  }
+
+  function buildTourneyPlacePopup(place, tourneyIdx) {
+    const td = window._tournamentData && window._tournamentData[tourneyIdx];
+    if (!td) return null;
+    const placeKey = `top${place}`;
+    const teamName = td[`${placeKey}Team`];
+    const players  = td[`${placeKey}Players`] || [];
+    const scores   = td[`${placeKey}Scores`] || {};
+    const mvpName  = (td[`${placeKey}MVP`] || '').toLowerCase();
+    if (!teamName) return null;
+    const posLabel  = place === 1 ? '1st Place' : place === 2 ? '2nd Place' : '3rd Place';
+    const posColor  = place === 1 ? 'var(--gold)' : place === 2 ? 'var(--silver)' : 'var(--bronze)';
+    const tierImg   = TOURNEY_TIER_IMAGES[place] || '';
+    const playerRows = players.map((pName, i) => {
+      const scoreKey = `p${i+1}`;
+      const score = scores[scoreKey] || '';
+      const isMVP = mvpName && pName.toLowerCase().includes(mvpName);
+      const nameCls = isMVP ? 'popup-tourney-player-name is-mvp' : 'popup-tourney-player-name';
+      const nameWithBadge = isMVP
+        ? `<span style="display:flex;align-items:center;gap:6px"><span class="${nameCls}">${pName}</span><span class="popup-tourney-mvp-badge">MVP</span></span>`
+        : `<span class="${nameCls}">${pName}</span>`;
+      return `<div class="popup-tourney-player-row">${nameWithBadge}${score ? `<span class="popup-tourney-player-score">${score}</span>` : ''}</div>`;
+    }).join('');
+    return `<div class="popup-tourney-header">
+      <div class="popup-tourney-place-label" style="color:${posColor}">${posLabel} · ${td.name}</div>
+      <img src="${tierImg}" alt="Tier" class="popup-tourney-tier-img" onerror="this.style.display='none'">
+      <div class="popup-tourney-teamname" style="color:#ffffff">${teamName}</div>
+    </div>
+    <div class="popup-tourney-players">
+      <div class="popup-tourney-players-title">Team Roster</div>
+      ${playerRows}
+    </div>`;
+  }
+
+  function getCard(el, cls) {
+    let node = el;
+    while (node && node !== document) { if (node.classList && node.classList.contains(cls)) return node; node = node.parentElement; }
+    return null;
+  }
+
+  document.addEventListener('click', e => {
+    if (e.target.closest('a, input, button, .search-autocomplete, .autocomplete-list, .tourney-accordion-header')) return;
+    const tpc = getCard(e.target, 'tourney-place-card');
+    if (tpc) {
+      const place = parseInt(tpc.dataset.tourneyPlace);
+      const idx   = parseInt(tpc.dataset.tourneyIdx);
+      if (!isNaN(place) && !isNaN(idx)) { const html = buildTourneyPlacePopup(place, idx); if (html) openPopup(html); }
+      return;
+    }
+    const pc = getCard(e.target, 'player-card');
+    if (pc) { const html = buildPlayerPopup(pc.dataset.player, pc.dataset.playerMode || 'ranked'); if (html) openPopup(html); return; }
+    const mc = getCard(e.target, 'match-card');
+    if (mc) { const idx = parseInt(mc.dataset.matchIndex); if (!isNaN(idx) && idx>=0 && idx<filteredHistory.length) { const html = buildMatchPopup(filteredHistory[idx]); if (html) openPopup(html); } }
+  });
+})();
+
+// ── Init ──────────────────────────────────────────────────
+Promise.all([loadAllPlayerNames(), loadAccountsData(), loadHeroStats()]).then(() => {
+  setupAutocomplete('h2h-p1', 'ac-list-1');
+  setupAutocomplete('h2h-p2', 'ac-list-2');
+  setupSearch('search-ranked',  'search-ranked-list',  () => rankedPlayersData,  name => loadRanked(name));
+  setupSearch('search-private', 'search-private-list', () => privatePlayersData, name => loadPrivate(privateRegion, privateMode, name));
+  setupSearch('search-liga', 'search-liga-list', () => ligaPlayersData, name => loadLiga(name));
+});
+
+function setupSearch(inputId, listId, dataFn, loadFn) {
+  const input = document.getElementById(inputId);
+  const list  = document.getElementById(listId);
+  let idx = -1;
+  function show(val) {
+    const q = val.toLowerCase();
+    const data = dataFn();
+    const matches = q ? data.filter(p => p.Player.toLowerCase().includes(q)).slice(0,8) : [];
+    if (!matches.length) { list.classList.remove('open'); return; }
+    idx = -1;
+    list.innerHTML = matches.map(p => { const rank = data.findIndex(d => d.Player===p.Player)+1; return `<div class="search-item" data-val="${p.Player}"><span>${p.Player}</span><span class="search-item-rank">#${rank}</span></div>`; }).join('');
+    list.classList.add('open');
+    list.querySelectorAll('.search-item').forEach(item => item.addEventListener('mousedown', e => { input.value=e.currentTarget.dataset.val; list.classList.remove('open'); loadFn(e.currentTarget.dataset.val); }));
+  }
+  input.addEventListener('input',  () => show(input.value));
+  input.addEventListener('focus',  () => show(input.value));
+  input.addEventListener('blur',   () => setTimeout(() => list.classList.remove('open'), 150));
+  input.addEventListener('keydown', e => {
+    const items = list.querySelectorAll('.search-item');
+    if (e.key==='ArrowDown') { idx=Math.min(idx+1,items.length-1); items.forEach((el,i)=>el.classList.toggle('selected',i===idx)); e.preventDefault(); }
+    else if (e.key==='ArrowUp') { idx=Math.max(idx-1,0); items.forEach((el,i)=>el.classList.toggle('selected',i===idx)); e.preventDefault(); }
+    else if (e.key==='Enter' && idx>=0 && items[idx]) { input.value=items[idx].dataset.val; list.classList.remove('open'); loadFn(items[idx].dataset.val); e.preventDefault(); }
+    else if (e.key==='Escape') list.classList.remove('open');
+  });
+}
+
+function setupAutocomplete(inputId, listId) {
+  const input = document.getElementById(inputId);
+  const list  = document.getElementById(listId);
+  let idx = -1;
+  function show(val) {
+    const q = val.toLowerCase();
+    const matches = q ? allPlayerNames.filter(n => n.toLowerCase().includes(q)).slice(0,8) : [];
+    if (!matches.length) { list.classList.remove('open'); return; }
+    idx = -1;
+    list.innerHTML = matches.map(n => `<div class="autocomplete-item" data-val="${n}">${n}</div>`).join('');
+    list.classList.add('open');
+    list.querySelectorAll('.autocomplete-item').forEach(item => item.addEventListener('mousedown', e => { input.value=e.currentTarget.dataset.val; list.classList.remove('open'); }));
+  }
+  input.addEventListener('input',  () => show(input.value));
+  input.addEventListener('focus',  () => show(input.value));
+  input.addEventListener('blur',   () => setTimeout(() => list.classList.remove('open'), 150));
+  input.addEventListener('keydown', e => {
+    const items = list.querySelectorAll('.autocomplete-item');
+    if (e.key==='ArrowDown') { idx=Math.min(idx+1,items.length-1); items.forEach((el,i)=>el.classList.toggle('selected',i===idx)); e.preventDefault(); }
+    else if (e.key==='ArrowUp') { idx=Math.max(idx-1,0); items.forEach((el,i)=>el.classList.toggle('selected',i===idx)); e.preventDefault(); }
+    else if (e.key==='Enter') { if (idx>=0&&items[idx]) { input.value=items[idx].dataset.val; list.classList.remove('open'); e.preventDefault(); } else searchH2H(); }
+    else if (e.key==='Escape') list.classList.remove('open');
+  });
+}
+
+
+// ── LIGA ──────────────────────────────────────────────────
+let ligaMode    = '3v3';
+let ligaRegion  = null;
+let ligaShowAll = false;
+let ligaPlayersData = [];
+let allHeroStats = [];
+
+async function loadHeroStats() {
+  try {
+    const rows = await fetchSheet('HeroStats');
+    allHeroStats = rows;
+  } catch(e) { allHeroStats = []; }
+}
+
+function ligaSheetName(region, mode) {
+  if (region === 'EU') return mode === '5v5' ? 'LeaguePlayers5v5EU' : 'LeaguePlayersEU';
+  return mode === '5v5' ? 'LeaguePlayers5v5' : 'LeaguePlayers';
+}
+
+async function loadLiga(highlightPlayer = null) {
+  if (!ligaRegion) return;
+  const sheetName = ligaSheetName(ligaRegion, ligaMode);
+  const rows = await fetchSheet(sheetName);
+  document.getElementById('liga-label').textContent =
+    `Liga ${ligaMode === '5v5' ? '5v5' : '3v3'} — ${ligaRegion === 'EU' ? 'Europe' : 'North America'}`;
+  const pKey = r => col(r,'Player','player','Name','name');
+  const sorted = rows.filter(r => pKey(r)).sort((a,b) => Number(col(b,'ELO','elo')||0) - Number(col(a,'ELO','elo')||0));
+  ligaPlayersData = sorted.map(r => ({ ...r, Player: pKey(r) }));
+  if (highlightPlayer) ligaShowAll = true;
+  renderTop10(
+    document.getElementById('liga-list'),
+    document.getElementById('liga-load-more'),
+    document.getElementById('liga-count'),
+    ligaPlayersData, ligaMode === '5v5' ? 'liga5' : 'liga', highlightPlayer, ligaShowAll
+  );
+}
+
+function loadMoreLiga() {
+  ligaShowAll = true;
+  renderTop10(
+    document.getElementById('liga-list'),
+    document.getElementById('liga-load-more'),
+    document.getElementById('liga-count'),
+    ligaPlayersData, ligaMode === '5v5' ? 'liga5' : 'liga', null, true
+  );
+}
+
+function setLigaRegion(region) { /* handled by setGameRegion */ }
+
+function setLigaMode(mode) {
+  ligaMode = mode; ligaShowAll = false;
+  document.getElementById('liga-sub-3v3').removeAttribute('style');
+  document.getElementById('liga-sub-5v5').removeAttribute('style');
+  const activeBtn = mode === '3v3' ? document.getElementById('liga-sub-3v3') : document.getElementById('liga-sub-5v5');
+  activeBtn.style.cssText = 'background:var(--bg3);color:#f87171;font-weight:600;border-radius:6px';
+  document.getElementById('liga-list').innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+  loadLiga();
+}
+
+// ── COLLECTED ITEMS POPUP ─────────────────────────────────
+const COLLECT_CATEGORIES = [
+  { id: 'tiers',     label: '🏅 Tiers',      epic: false },
+  { id: 'skins',     label: '🎨 Skins',       epic: false },
+  { id: 'hats',      label: '🎭 Hats',        epic: true  },
+  { id: 'abilities', label: '⚡ Abilities',   epic: false },
+  { id: 'shop',      label: '🛒 Shop Items',  epic: false },
+];
+
+// Tier items (30 total: 10 tiers × 3 subtiers)
+const TIER_COLLECT_ITEMS = [];
+const TIER_NAMES = ['Ask Again Later','Working On It','Getting There','Not Bad','Decent-ish','Pretty Good','Hotness','Simply Amazing','Pinnacle of Awesome','Vainglorious'];
+const TIER_KEYS_SHORT = ['AskAgainLater','WorkingOnIt','GettingThere','NotBad','Decentish','PrettyGood','Hotness','SimplyAmazing','PinnacleOfAwesome','Vainglorious'];
+for (let i = 1; i <= 10; i++) {
+  ['BRONZE','SILVER','GOLD'].forEach(st => {
+    const stNum = st === 'BRONZE' ? 'a' : st === 'SILVER' ? 'b' : 'c';
+    TIER_COLLECT_ITEMS.push({
+      id: `tier_${i}_${st.toLowerCase()}`,
+      name: `${TIER_NAMES[i-1]}`,
+      sub: st,
+      img: `${ASSETS_BASE}skill%20tiers/${i}${stNum}_${TIER_KEYS_SHORT[i-1]}_${st}.webp`,
+      unlockLv: i * 10 - (st === 'BRONZE' ? 9 : st === 'SILVER' ? 5 : 1),
+    });
+  });
+}
+
+// Hat items (7 epic hats from shop items)
+const HAT_ITEMS = [
+  { id: 'hat_1', name: 'Conejito', icon: '🐰', unlockLv: 15 },
+  { id: 'hat_2', name: 'Vikingo',  icon: '⚔️', unlockLv: 25 },
+  { id: 'hat_3', name: 'Bruja',    icon: '🧙', unlockLv: 35 },
+  { id: 'hat_4', name: 'Corona',   icon: '👑', unlockLv: 50 },
+  { id: 'hat_5', name: 'Ninja',    icon: '🥷', unlockLv: 60 },
+  { id: 'hat_6', name: 'Dragón',   icon: '🐉', unlockLv: 75 },
+  { id: 'hat_7', name: 'Legendario', icon: '⭐', unlockLv: 100 },
+];
+
+// Splash art skins — heroes visible in splash art 1/2/3
+const SKIN_HEROES = [
+  'Anka','Ardan','Baptiste','Baron','Blackfeather','Caine','Catherine','Celeste',
+  'Churnwalker','Flicker','Fortress','Glaive','Grace','Grumpjaw','Gwen',
+  'Idris','Joule','Kensei','Kestrel','Koshka','Krul','Lance',
+  'Lorelai','Lyra','Malene','Ozo','Petal','Phinn','Reim','Reza','Ringo',
+  'SAW','Samuel','Skaarf','Skye','Taka','Tony','Varya','Vox','Yates'
+];
+const SKIN_ITEMS = SKIN_HEROES.map((h, i) => ({
+  id: `skin_${h.toLowerCase()}`,
+  name: h,
+  img: `${ASSETS_BASE}foto%20perfil/${encodeURIComponent(h.toLowerCase())}.webp`,
+  unlockLv: Math.min(5 + i * 2, 99),
+}));
+
+// Shop items (generic cosmetics)
+const SHOP_ITEMS = [
+  { id: 'shop_1',  name: 'Gold Border',  icon: '🔶', unlockLv: 5  },
+  { id: 'shop_2',  name: 'MVP Banner',   icon: '🏆', unlockLv: 10 },
+  { id: 'shop_3',  name: 'Kill Streak',  icon: '🔥', unlockLv: 20 },
+  { id: 'shop_4',  name: 'Recall FX',    icon: '✨', unlockLv: 30 },
+  { id: 'shop_5',  name: 'Death FX',     icon: '💀', unlockLv: 40 },
+  { id: 'shop_6',  name: 'Spawn FX',     icon: '🌟', unlockLv: 55 },
+  { id: 'shop_7',  name: 'Name Color',   icon: '🎨', unlockLv: 65 },
+  { id: 'shop_8',  name: 'Emote Pack',   icon: '🎭', unlockLv: 70 },
+  { id: 'shop_9',  name: 'Chat Badge',   icon: '💬', unlockLv: 80 },
+  { id: 'shop_10', name: 'Legendary FX', icon: '🌈', unlockLv: 95 },
+];
+
+// Ability icons (hero skills — just using emoji for now)
+const ABILITY_ITEMS = [
+  { id: 'ab_1',  name: 'Ult Alpha',   icon: '💥', unlockLv: 8  },
+  { id: 'ab_2',  name: 'Poke Mastery',icon: '🎯', unlockLv: 16 },
+  { id: 'ab_3',  name: 'Stealth',     icon: '👁️', unlockLv: 22 },
+  { id: 'ab_4',  name: 'Shield',      icon: '🛡️', unlockLv: 32 },
+  { id: 'ab_5',  name: 'Speed Boost', icon: '⚡', unlockLv: 44 },
+  { id: 'ab_6',  name: 'Stun',        icon: '⚡', unlockLv: 54 },
+  { id: 'ab_7',  name: 'Lifesteal',   icon: '🩸', unlockLv: 63 },
+  { id: 'ab_8',  name: 'Blink',       icon: '🌀', unlockLv: 72 },
+  { id: 'ab_9',  name: 'AOE',         icon: '💣', unlockLv: 85 },
+  { id: 'ab_10', name: 'True Dmg',    icon: '⚔️', unlockLv: 98 },
+];
+
+const CATEGORY_ITEMS = {
+  tiers:     TIER_COLLECT_ITEMS,
+  skins:     SKIN_ITEMS,
+  hats:      HAT_ITEMS,
+  abilities: ABILITY_ITEMS,
+  shop:      SHOP_ITEMS,
+};
+
+let collectCurrentCat = 'tiers';
+let collectPlayerLevel = 1;
+let collectPlayerName  = '';
+
+function openCollectedItems(playerName) {
+  const accInfo = accountsData[playerName.toLowerCase()];
+  const level   = accInfo ? accInfo.level : 1;
+  collectPlayerName  = playerName;
+  collectPlayerLevel = level;
+  collectCurrentCat  = 'tiers';
+  renderBPPopup(playerName, level);
+}
+
+function renderBPPopup(playerName, level) {
+  const overlay = document.getElementById('bp-popup-overlay');
+  const content = document.getElementById('bp-popup-content');
+
+  // Category tabs
+  const catTabsHTML = COLLECT_CATEGORIES.map(c => {
+    const items     = CATEGORY_ITEMS[c.id] || [];
+    const owned     = items.filter(it => level >= it.unlockLv).length;
+    return `<div class="collect-tab${collectCurrentCat === c.id ? ' active' : ''}" onclick="switchCollectCat('${c.id}')">${c.label} <span style="font-size:0.55rem;opacity:0.7">${owned}/${items.length}</span></div>`;
+  }).join('');
+
+  // Current category grid
+  const gridHTML = renderCollectGrid(collectCurrentCat, level);
+
+  content.innerHTML = `
+    <div class="bp-title">🃏 Collected Items</div>
+    <div class="bp-subtitle">${playerName} · Lv.${level}</div>
+    <div class="collect-tabs">${catTabsHTML}</div>
+    ${gridHTML}
+  `;
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderCollectGrid(catId, level) {
+  const items   = CATEGORY_ITEMS[catId] || [];
+  const cat     = COLLECT_CATEGORIES.find(c => c.id === catId) || {};
+  const owned   = items.filter(it => level >= it.unlockLv).length;
+  const cardsHTML = items.map(item => {
+    const isOwned = level >= item.unlockLv;
+    const isEpic  = cat.epic;
+    const cls     = isOwned ? (isEpic ? 'collect-card owned-epic' : 'collect-card owned') : 'collect-card locked';
+    const imgEl   = item.img
+      ? `<img src="${item.img}" class="collect-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="collect-img-icon" style="display:none">${item.icon || '🎁'}</div>`
+      : `<div class="collect-img-icon">${item.icon || '🎁'}</div>`;
+    const rarityLabel = isEpic ? '<div class="collect-rarity" style="color:var(--purple)">EPIC</div>' : item.sub ? `<div class="collect-rarity">${item.sub}</div>` : '';
+    return `<div class="${cls}" title="${item.name}">
+      ${imgEl}
+      <div class="collect-name">${item.name}</div>
+      ${rarityLabel}
+      ${!isOwned ? `<div class="collect-rarity">Lv.${item.unlockLv}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="collect-count">Items desbloqueados: <span>${owned}</span> / ${items.length}</div>
+    <div class="collect-grid">${cardsHTML}</div>
+  `;
+}
+
+function switchCollectCat(catId) {
+  collectCurrentCat = catId;
+  renderBPPopup(collectPlayerName, collectPlayerLevel);
+}
+
+// BP popup close
+(function() {
+  const bpOverlay = document.getElementById('bp-popup-overlay');
+  const bpClose   = document.getElementById('bp-popup-close');
+  function closeBP() { bpOverlay.classList.remove('open'); document.body.style.overflow = ''; }
+  if (bpClose)   bpClose.addEventListener('click', closeBP);
+  if (bpOverlay) bpOverlay.addEventListener('click', e => { if (e.target === bpOverlay) closeBP(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && bpOverlay.classList.contains('open')) closeBP(); });
+})();
+
+setInterval(() => { if (rankedRegion) loadRanked(); }, 60000);
+
+// ── Init ──────────────────────────────────────────────────
+// Pick random splash art for header
+pickRandomSplash();
+
+// Start at landing — user picks GAME or TOURNEY
+// No section active by default
+</script>
+</body>
+</html>
