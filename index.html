@@ -103,6 +103,155 @@ body {
 .countdown-label { font-size: 0.5rem; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
 .countdown-separator { font-size: 1.2rem; color: var(--text3); font-weight: 300; align-self: flex-start; margin-top: 2px; }
 
+/* ── MAIN MENU ── */
+.main-menu {
+  display: flex; gap: 8px; margin: 10px 0;
+}
+.main-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 16px 10px; border-radius: 14px;
+  border: 1px solid var(--border); background: var(--bg2);
+  color: var(--text3); font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 2px; cursor: pointer; transition: all 0.25s ease;
+}
+.main-btn .main-btn-icon { font-size: 1.5rem; }
+.main-btn.active {
+  background: var(--bg3); color: #ffffff;
+  border-color: rgba(212,168,67,0.4);
+  box-shadow: 0 0 20px rgba(212,168,67,0.1);
+}
+.main-btn:hover:not(.active) { color: var(--text2); border-color: rgba(255,255,255,0.12); }
+
+.main-section { display: none; }
+.main-section.active { display: block; }
+
+/* ── GAME TAB CONTENT ── */
+.game-tab-content { display: none; }
+.game-tab-content.active { display: block; }
+
+/* ── SECONDARY BUTTONS (History & H2H) ── */
+.secondary-btns {
+  display: flex; gap: 8px; margin: 6px 0 8px;
+}
+.sec-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 10px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text3); font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1px; cursor: pointer; transition: all 0.2s ease;
+}
+.sec-btn.active {
+  background: var(--bg3); color: var(--gold);
+  border-color: rgba(212,168,67,0.3);
+}
+.sec-btn:hover:not(.active) { color: var(--text2); border-color: rgba(255,255,255,0.1); }
+
+/* ── COLLECTED ITEMS POPUP ── */
+.bp-popup-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+  backdrop-filter: blur(10px); z-index: 9500;
+  display: none; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; transition: opacity 0.25s;
+}
+.bp-popup-overlay.open { display: flex; opacity: 1; }
+.bp-popup-card {
+  background: linear-gradient(180deg,#14141e 0%,#1a1a28 50%,#12121a 100%);
+  border: 1px solid rgba(212,168,67,0.25); border-radius: 18px;
+  width: 100%; max-width: 420px; max-height: 88vh; overflow-y: auto;
+  padding: 20px 18px 18px; position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(212,168,67,0.08);
+  animation: popupSlideIn 0.3s ease forwards;
+}
+.bp-popup-close {
+  position: absolute; top: 12px; right: 14px;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text3); font-size: 1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; z-index: 2;
+}
+.bp-popup-close:hover { border-color: var(--gold-dim); color: var(--gold); }
+.bp-title {
+  font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700;
+  color: #ffffff; letter-spacing: 2px; text-transform: uppercase;
+  text-align: center; margin-bottom: 4px; margin-top: 6px;
+}
+.bp-subtitle { font-size: 0.55rem; color: var(--text3); letter-spacing: 3px; text-transform: uppercase; text-align: center; margin-bottom: 14px; }
+
+/* Battle Pass progress bar */
+.bp-level-section {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 14px; margin-bottom: 14px;
+}
+.bp-level-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.bp-level-num { font-size: 1.8rem; font-weight: 900; color: var(--purple); line-height: 1; }
+.bp-level-max { font-size: 0.6rem; color: var(--text3); }
+.bp-xp-total { font-size: 1rem; font-weight: 700; color: var(--gold); }
+.bp-progress-wrap { position: relative; height: 24px; background: var(--bg3); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+.bp-progress-fill {
+  height: 100%; border-radius: 12px;
+  background: linear-gradient(90deg, var(--purple), #c084fc, var(--gold));
+  transition: width 0.6s ease;
+}
+.bp-progress-text {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; font-weight: 700; color: #fff; letter-spacing: 1px;
+}
+.bp-progress-labels { display: flex; justify-content: space-between; margin-top: 4px; font-size: 0.45rem; color: var(--text3); }
+
+/* Reward track */
+.bp-track { display: flex; gap: 4px; overflow-x: auto; padding: 6px 0 10px; margin-bottom: 10px; scrollbar-width: thin; }
+.bp-track::-webkit-scrollbar { height: 3px; }
+.bp-track::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.bp-reward-slot {
+  flex-shrink: 0; width: 52px; text-align: center;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 4px 4px;
+  position: relative; transition: border-color 0.2s;
+}
+.bp-reward-slot.unlocked { border-color: rgba(212,168,67,0.4); }
+.bp-reward-slot.current { border-color: var(--gold); box-shadow: 0 0 8px rgba(212,168,67,0.4); }
+.bp-reward-icon { font-size: 1.3rem; line-height: 1; margin-bottom: 3px; }
+.bp-reward-img { width: 36px; height: 36px; object-fit: contain; margin: 0 auto 3px; display: block; }
+.bp-reward-lv { font-size: 0.45rem; color: var(--text3); letter-spacing: 1px; }
+.bp-reward-slot.unlocked .bp-reward-lv { color: var(--gold); }
+.bp-reward-lock { position: absolute; top: 2px; right: 3px; font-size: 0.5rem; opacity: 0.4; }
+
+/* Category tabs for collected items */
+.collect-tabs {
+  display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap;
+}
+.collect-tab {
+  padding: 5px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 600;
+  color: var(--text3); cursor: pointer; background: var(--bg3); border: 1px solid var(--border);
+  letter-spacing: 0.5px; transition: all 0.2s;
+}
+.collect-tab.active { color: var(--gold); border-color: rgba(212,168,67,0.4); background: rgba(212,168,67,0.08); }
+
+/* Collected items grid */
+.collect-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+}
+.collect-card {
+  background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+  padding: 8px 4px 6px; text-align: center; position: relative;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.collect-card.owned { border-color: rgba(212,168,67,0.3); }
+.collect-card.owned-epic { border-color: rgba(167,139,250,0.5); box-shadow: 0 0 8px rgba(167,139,250,0.2); }
+.collect-card.locked { opacity: 0.3; }
+.collect-card:not(.locked):active { transform: scale(0.95); }
+.collect-img { width: 40px; height: 40px; object-fit: contain; margin: 0 auto 4px; display: block; }
+.collect-img-icon { font-size: 1.6rem; line-height: 1; margin-bottom: 3px; }
+.collect-name { font-size: 0.42rem; color: var(--text2); letter-spacing: 0.3px; line-height: 1.2; }
+.collect-card.owned .collect-name { color: var(--text); }
+.collect-card.owned-epic .collect-name { color: var(--purple); }
+.collect-rarity { font-size: 0.38rem; color: var(--text3); letter-spacing: 0.5px; margin-top: 1px; }
+.collect-count { text-align: center; font-size: 0.55rem; color: var(--text3); margin-bottom: 6px; letter-spacing: 1px; }
+.collect-count span { color: var(--gold); font-weight: 700; }
+
 /* ── SEARCH ── */
 .search-container { margin-bottom: 12px; position: relative; }
 .search-input { width: 100%; padding: 11px 14px 11px 38px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg2); color: var(--text); font-family: 'Outfit', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
@@ -150,6 +299,10 @@ body {
 .sub-tab.active-blue    { background: var(--bg3); color: #7aadff;       font-weight: 600; }
 .sub-tab:hover:not(.active):not(.active-purple):not(.active-green):not(.active-white):not(.active-blue) { color: var(--text2); }
 
+/* game server select tabs */
+#game-region-tabs .sub-tab { padding: 13px 0; font-size: 0.85rem; font-weight: 800; letter-spacing: 2px; }
+#game-region-tabs .sub-tab.active-green,
+#game-region-tabs .sub-tab.active-blue { background: var(--bg3); color: #ffffff; font-weight: 800; }
 #ranked-region-tabs .sub-tab,
 #priv-region-tabs .sub-tab,
 #hist-region-tabs .sub-tab,
@@ -596,8 +749,12 @@ body {
   .match-player-name  { font-size: 0.65rem; }
   .match-player-score { font-size: 0.58rem; }
   .match-player-gold  { font-size: 0.5rem; }
+  .main-btn { font-size: 0.85rem; padding: 14px 6px; letter-spacing: 1px; }
+  .main-btn .main-btn-icon { font-size: 1.2rem; }
   .tab { font-size: 0.72rem; padding: 16px 2px; }
   .tab .tab-icon { font-size: 1.2rem; }
+  .sec-btn { font-size: 0.65rem; padding: 8px 6px; }
+  .collect-grid { grid-template-columns: repeat(4, 1fr); gap: 5px; }
   .popup-card { padding: 20px 16px 16px; }
   .popup-player-name { font-size: 1.3rem; }
   .popup-tier-image { width: 280px; height: 280px; margin: -5px 0 -75px 0; }
@@ -628,219 +785,215 @@ body {
   <!-- ═══ HEADER ═══ -->
   <div class="header">
     <div class="header-bg">
-      <img src="images/IMG_7054.GIF" alt="Banner">
+      <img id="header-splash-img" src="" alt="Banner" onerror="this.src=''">
     </div>
     <img src="images/VAINGLORY__crossplatform_logo.png" alt="Vainglory" class="header-logo">
     <div class="header-subtitle">community competitive rankings</div>
     <div class="live-text"><span class="live-dot"></span>Live — auto-updates every 60s</div>
   </div>
 
-  <!-- ═══ SEASON COUNTDOWN ═══ -->
-  <div class="season-container">
-    <div class="season-label">Season 2026</div>
-    <div class="countdown" id="countdown">
-      <div class="countdown-item"><div class="countdown-value" id="cd-days">000</div><div class="countdown-label">Days</div></div>
-      <div class="countdown-separator">:</div>
-      <div class="countdown-item"><div class="countdown-value" id="cd-hours">00</div><div class="countdown-label">Hours</div></div>
-      <div class="countdown-separator">:</div>
-      <div class="countdown-item"><div class="countdown-value" id="cd-mins">00</div><div class="countdown-label">Mins</div></div>
-      <div class="countdown-separator">:</div>
-      <div class="countdown-item"><div class="countdown-value" id="cd-secs">00</div><div class="countdown-label">Secs</div></div>
-    </div>
-    <a href="https://discord.gg/K5Thqmayys" target="_blank" class="discord-btn">
-      <span class="discord-btn-icon">💬</span>Join our Discord to participate
-    </a>
+  <!-- ═══ MAIN MENU ═══ -->
+  <div class="main-menu">
+    <button class="main-btn active" id="main-btn-game" onclick="showMainMenu('game')"><span class="main-btn-icon">🎮</span>Game</button>
+    <button class="main-btn" id="main-btn-tourney" onclick="showMainMenu('tourney')"><span class="main-btn-icon">🎖️</span>Tourney</button>
   </div>
 
-  <!-- ═══ 5 TABS ═══ -->
-  <div class="tabs">
-    <div class="tab active"  onclick="showTab('ranked')"><span class="tab-icon">🏆</span>Public</div>
-    <div class="tab"         onclick="showTab('private')"><span class="tab-icon">⚔️</span>Private</div>
-    <div class="tab"         onclick="showTab('liga')"><span class="tab-icon">🏟️</span>Liga</div>
-    <div class="tab"         onclick="showTab('history')"><span class="tab-icon">📋</span>History</div>
-    <div class="tab"         onclick="showTab('h2h')"><span class="tab-icon">🤝🏻</span>H2H</div>
-    <div class="tab"         onclick="showTab('torneos')"><span class="tab-icon">🎖️</span>Tourney</div>
-  </div>
-
-  <!-- ═══ TAB: PUBLIC ═══ -->
-  <div id="tab-ranked" class="tab-content active">
-    <div class="section-group-label">Select Server Region</div>
-    <div class="sub-tabs" id="ranked-region-tabs">
-      <div class="sub-tab" id="ranked-reg-na" onclick="setRankedRegion('NA')">NORTH AMERICA</div>
-      <div class="sub-tab" id="ranked-reg-eu" onclick="setRankedRegion('EU')">EUROPE</div>
-    </div>
-
-    <div id="ranked-mode-section" style="display:none">
-      <div class="section-group-label" style="margin-top:12px">Game Mode</div>
-      <div class="sub-tabs" id="ranked-mode-tabs">
-        <div class="sub-tab active-green" id="ranked-sub-3v3" onclick="setRankedMode('3v3')">Ranked 3v3</div>
-        <div class="sub-tab"             id="ranked-sub-5v5" onclick="setRankedMode('5v5')">Ranked 5v5</div>
+  <!-- ═══ GAME SECTION ═══ -->
+  <div id="main-game" class="main-section active">
+    <!-- Server select (acts as light login) -->
+    <div id="game-server-select">
+      <div class="section-group-label" style="margin-top:8px">Select Your Server</div>
+      <div class="sub-tabs" id="game-region-tabs">
+        <div class="sub-tab" id="game-reg-na" onclick="setGameRegion('NA')">NORTH AMERICA</div>
+        <div class="sub-tab" id="game-reg-eu" onclick="setGameRegion('EU')">EUROPE</div>
       </div>
-
-      <div class="search-container">
-        <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="search-ranked" placeholder="Search your profile..." autocomplete="off">
-        <div class="search-autocomplete" id="search-ranked-list"></div>
-      </div>
-      <div class="section-label" id="ranked-label">Public Ranked 3v3 — North America</div>
-      <div id="ranked-list"></div>
-      <button class="top10-load-more" id="ranked-load-more" onclick="loadMoreRanked()">Show all players</button>
-      <div class="top10-count" id="ranked-count"></div>
     </div>
 
-    <div id="ranked-placeholder" class="region-placeholder">
-      <div class="region-placeholder-icon">🌎</div>
-      <div class="region-placeholder-title">Select a region to continue</div>
-      <div class="region-placeholder-sub">Choose North America or Europe above</div>
-    </div>
-  </div>
-
-  <!-- ═══ TAB: PRIVATE ═══ -->
-  <div id="tab-private" class="tab-content">
-    <div class="section-group-label">Select Server Region</div>
-    <div class="sub-tabs" id="priv-region-tabs">
-      <div class="sub-tab" id="priv-reg-na" onclick="setPrivateRegion('NA')">NORTH AMERICA</div>
-      <div class="sub-tab" id="priv-reg-eu" onclick="setPrivateRegion('EU')">EUROPE</div>
-    </div>
-
-    <div id="priv-mode-section" style="display:none">
-      <div class="section-group-label" style="margin-top:12px">Game Mode</div>
-      <div class="sub-tabs" id="priv-mode-tabs">
-        <div class="sub-tab active-green" id="priv-sub-3v3" onclick="setPrivateMode('3v3')">3v3</div>
-        <div class="sub-tab"             id="priv-sub-5v5" onclick="setPrivateMode('5v5')">5v5</div>
-      </div>
-
-      <div class="search-container">
-        <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="search-private" placeholder="Search your profile..." autocomplete="off">
-        <div class="search-autocomplete" id="search-private-list"></div>
-      </div>
-      <div class="section-label" id="private-label">NA · 3v3 — ELO ranking</div>
-      <div id="private-list"></div>
-      <button class="top10-load-more" id="priv-load-more" onclick="loadMorePrivate()">Show all players</button>
-      <div class="top10-count" id="priv-count"></div>
-    </div>
-
-    <div id="priv-placeholder" class="region-placeholder">
-      <div class="region-placeholder-icon">🌎</div>
-      <div class="region-placeholder-title">Select a region to continue</div>
-      <div class="region-placeholder-sub">Choose North America or Europe above</div>
-    </div>
-  </div>
-
-
-  <!-- ═══ TAB: LIGA ═══ -->
-  <div id="tab-liga" class="tab-content">
-    <div style="margin-bottom:10px;padding:10px 14px;background:rgba(248,113,113,0.07);border:1px solid rgba(248,113,113,0.25);border-radius:10px;text-align:center;">
-      <div style="font-size:0.55rem;font-weight:800;color:#f87171;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;">🏟️ COMPETITIVE LEAGUE</div>
-      <div style="font-size:0.7rem;color:var(--text2);line-height:1.5;">Cuentas validadas &#x2022; Código de hoy requerido &#x2022; Solo en Discord</div>
-    </div>
-    <div class="section-group-label">Select Server Region</div>
-    <div class="sub-tabs" id="liga-region-tabs">
-      <div class="sub-tab" id="liga-reg-na" onclick="setLigaRegion('NA')">NORTH AMERICA</div>
-      <div class="sub-tab" id="liga-reg-eu" onclick="setLigaRegion('EU')">EUROPE</div>
-    </div>
-    <div id="liga-mode-section" style="display:none">
-      <div class="section-group-label" style="margin-top:12px">Game Mode</div>
-      <div class="sub-tabs" id="liga-mode-tabs">
-        <div class="sub-tab" style="color:#f87171;font-weight:600" id="liga-sub-3v3" onclick="setLigaMode('3v3')">Liga 3v3</div>
-        <div class="sub-tab" id="liga-sub-5v5" onclick="setLigaMode('5v5')">Liga 5v5</div>
-      </div>
-      <div class="search-container">
-        <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="search-liga" placeholder="Search liga player..." autocomplete="off">
-        <div class="search-autocomplete" id="search-liga-list"></div>
-      </div>
-      <div class="section-label" id="liga-label">Liga 3v3 — North America</div>
-      <div id="liga-list"></div>
-      <button class="top10-load-more" id="liga-load-more" onclick="loadMoreLiga()">Show all players</button>
-      <div class="top10-count" id="liga-count"></div>
-    </div>
-    <div id="liga-placeholder" class="region-placeholder">
-      <div class="region-placeholder-icon">🏟️</div>
-      <div class="region-placeholder-title">Select a region to continue</div>
-      <div class="region-placeholder-sub">Choose North America or Europe above</div>
-    </div>
-  </div>
-
-  <!-- ═══ TAB: HEAD TO HEAD ═══ -->
-  <div id="tab-h2h" class="tab-content">
-    <div class="section-group-label">Select Server Region</div>
-    <div class="sub-tabs" id="h2h-region-tabs">
-      <div class="sub-tab" id="h2h-reg-na" onclick="setH2HRegion('NA')">NORTH AMERICA</div>
-      <div class="sub-tab" id="h2h-reg-eu" onclick="setH2HRegion('EU')">EUROPE</div>
-    </div>
-
-    <div id="h2h-mode-section" style="display:none">
-      <div class="section-group-label" style="margin-top:12px">Game Mode</div>
-      <div class="sub-tabs" id="h2h-mode-tabs">
-        <div class="sub-tab" id="h2h-m-all"     onclick="setH2HMode('all')">All</div>
-        <div class="sub-tab" id="h2h-m-ranked"  onclick="setH2HMode('ranked')">Public 3v3</div>
-        <div class="sub-tab" id="h2h-m-ranked5" onclick="setH2HMode('ranked5')">Public 5v5</div>
-        <div class="sub-tab" id="h2h-m-3v3"     onclick="setH2HMode('3v3')">Private 3v3</div>
-        <div class="sub-tab" id="h2h-m-5v5"     onclick="setH2HMode('5v5')">Private 5v5</div>
-      </div>
-
-      <div class="h2h-card">
-        <div class="h2h-inputs">
-          <div class="autocomplete-wrap"><input type="text" id="h2h-p1" placeholder="Player 1" autocomplete="off"><div class="autocomplete-list" id="ac-list-1"></div></div>
-          <div class="vs-badge">VS</div>
-          <div class="autocomplete-wrap"><input type="text" id="h2h-p2" placeholder="Player 2" autocomplete="off"><div class="autocomplete-list" id="ac-list-2"></div></div>
+    <!-- Game tabs shown after server selection -->
+    <div id="game-content" style="display:none">
+      <!-- Season countdown moved inside Game -->
+      <div class="season-container" style="margin-top:10px">
+        <div class="season-label">Season 2026</div>
+        <div class="countdown" id="countdown">
+          <div class="countdown-item"><div class="countdown-value" id="cd-days">000</div><div class="countdown-label">Days</div></div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-item"><div class="countdown-value" id="cd-hours">00</div><div class="countdown-label">Hours</div></div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-item"><div class="countdown-value" id="cd-mins">00</div><div class="countdown-label">Mins</div></div>
+          <div class="countdown-separator">:</div>
+          <div class="countdown-item"><div class="countdown-value" id="cd-secs">00</div><div class="countdown-label">Secs</div></div>
         </div>
-        <button class="h2h-btn" onclick="searchH2H()">SEARCH</button>
-        <div id="h2h-result" class="h2h-result"></div>
+        <a href="https://discord.gg/K5Thqmayys" target="_blank" class="discord-btn">
+          <span class="discord-btn-icon">💬</span>Join our Discord to participate
+        </a>
       </div>
-    </div>
 
-    <div id="h2h-placeholder" class="region-placeholder">
-      <div class="region-placeholder-icon">🌎</div>
-      <div class="region-placeholder-title">Select a region to continue</div>
-      <div class="region-placeholder-sub">Choose North America or Europe above</div>
+      <!-- Primary game tabs -->
+      <div class="tabs" style="margin-top:10px">
+        <div class="tab active" id="gtab-ranked" onclick="showGameTab('ranked')"><span class="tab-icon">🏆</span>Public</div>
+        <div class="tab" id="gtab-private" onclick="showGameTab('private')"><span class="tab-icon">⚔️</span>Private</div>
+        <div class="tab" id="gtab-liga" onclick="showGameTab('liga')"><span class="tab-icon">🏟️</span>Liga</div>
+      </div>
+
+      <!-- Secondary buttons: History + H2H -->
+      <div class="secondary-btns">
+        <button class="sec-btn" id="sec-btn-history" onclick="showGameTab('history')"><span>📋</span> History</button>
+        <button class="sec-btn" id="sec-btn-h2h" onclick="showGameTab('h2h')"><span>🤝🏻</span> H2H</button>
+      </div>
+
+      <!-- ── TAB CONTENTS ── -->
+      <!-- Public -->
+      <div id="gtab-content-ranked" class="game-tab-content active">
+        <div id="ranked-mode-section" style="display:none">
+          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="sub-tabs" id="ranked-mode-tabs">
+            <div class="sub-tab active-green" id="ranked-sub-3v3" onclick="setRankedMode('3v3')">Ranked 3v3</div>
+            <div class="sub-tab" id="ranked-sub-5v5" onclick="setRankedMode('5v5')">Ranked 5v5</div>
+          </div>
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="search-ranked" placeholder="Search your profile..." autocomplete="off">
+            <div class="search-autocomplete" id="search-ranked-list"></div>
+          </div>
+          <div class="section-label" id="ranked-label">Public Ranked 3v3</div>
+          <div id="ranked-list"></div>
+          <button class="top10-load-more" id="ranked-load-more" onclick="loadMoreRanked()">Show all players</button>
+          <div class="top10-count" id="ranked-count"></div>
+        </div>
+        <div id="ranked-placeholder" class="region-placeholder">
+          <div class="region-placeholder-icon">🌎</div>
+          <div class="region-placeholder-title">Select a server above to continue</div>
+          <div class="region-placeholder-sub">Choose North America or Europe</div>
+        </div>
+      </div>
+
+      <!-- Private -->
+      <div id="gtab-content-private" class="game-tab-content">
+        <div id="priv-mode-section" style="display:none">
+          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="sub-tabs" id="priv-mode-tabs">
+            <div class="sub-tab active-green" id="priv-sub-3v3" onclick="setPrivateMode('3v3')">3v3</div>
+            <div class="sub-tab" id="priv-sub-5v5" onclick="setPrivateMode('5v5')">5v5</div>
+          </div>
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="search-private" placeholder="Search your profile..." autocomplete="off">
+            <div class="search-autocomplete" id="search-private-list"></div>
+          </div>
+          <div class="section-label" id="private-label">NA · 3v3 — ELO ranking</div>
+          <div id="private-list"></div>
+          <button class="top10-load-more" id="priv-load-more" onclick="loadMorePrivate()">Show all players</button>
+          <div class="top10-count" id="priv-count"></div>
+        </div>
+        <div id="priv-placeholder" class="region-placeholder">
+          <div class="region-placeholder-icon">🌎</div>
+          <div class="region-placeholder-title">Select a server above to continue</div>
+          <div class="region-placeholder-sub">Choose North America or Europe</div>
+        </div>
+      </div>
+
+      <!-- Liga -->
+      <div id="gtab-content-liga" class="game-tab-content">
+        <div style="margin-bottom:10px;padding:10px 14px;background:rgba(248,113,113,0.07);border:1px solid rgba(248,113,113,0.25);border-radius:10px;text-align:center;">
+          <div style="font-size:0.55rem;font-weight:800;color:#f87171;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;">🏟️ COMPETITIVE LEAGUE</div>
+          <div style="font-size:0.7rem;color:var(--text2);line-height:1.5;">Cuentas validadas &#x2022; Código de hoy requerido &#x2022; Solo en Discord</div>
+        </div>
+        <div id="liga-mode-section" style="display:none">
+          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="sub-tabs" id="liga-mode-tabs">
+            <div class="sub-tab" style="color:#f87171;font-weight:600" id="liga-sub-3v3" onclick="setLigaMode('3v3')">Liga 3v3</div>
+            <div class="sub-tab" id="liga-sub-5v5" onclick="setLigaMode('5v5')">Liga 5v5</div>
+          </div>
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="search-liga" placeholder="Search liga player..." autocomplete="off">
+            <div class="search-autocomplete" id="search-liga-list"></div>
+          </div>
+          <div class="section-label" id="liga-label">Liga 3v3</div>
+          <div id="liga-list"></div>
+          <button class="top10-load-more" id="liga-load-more" onclick="loadMoreLiga()">Show all players</button>
+          <div class="top10-count" id="liga-count"></div>
+        </div>
+        <div id="liga-placeholder" class="region-placeholder">
+          <div class="region-placeholder-icon">🏟️</div>
+          <div class="region-placeholder-title">Select a server above to continue</div>
+          <div class="region-placeholder-sub">Choose North America or Europe</div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div id="gtab-content-history" class="game-tab-content">
+        <div id="hist-mode-section" style="display:none">
+          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="sub-tabs" id="hist-mode-tabs">
+            <div class="sub-tab" id="hist-m-all" onclick="setHistoryMode('all')">All</div>
+            <div class="sub-tab" id="hist-m-ranked" onclick="setHistoryMode('ranked')">Public 3v3</div>
+            <div class="sub-tab" id="hist-m-ranked5" onclick="setHistoryMode('ranked5')">Public 5v5</div>
+            <div class="sub-tab" id="hist-m-3v3" onclick="setHistoryMode('3v3')">Private 3v3</div>
+            <div class="sub-tab" id="hist-m-5v5" onclick="setHistoryMode('5v5')">Private 5v5</div>
+          </div>
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="search-history" placeholder="Search player in history..." autocomplete="off">
+          </div>
+          <div class="section-label" id="history-label">Select a game mode above</div>
+          <div id="history-list"></div>
+          <button class="match-history-load-more" id="history-load-more" style="display:none" onclick="loadMoreHistory()">Load more matches</button>
+          <div class="match-history-count" id="history-count"></div>
+        </div>
+        <div id="hist-placeholder" class="region-placeholder">
+          <div class="region-placeholder-icon">🌎</div>
+          <div class="region-placeholder-title">Select a server above to continue</div>
+          <div class="region-placeholder-sub">Choose North America or Europe</div>
+        </div>
+      </div>
+
+      <!-- H2H -->
+      <div id="gtab-content-h2h" class="game-tab-content">
+        <div id="h2h-mode-section" style="display:none">
+          <div class="section-group-label" style="margin-top:8px">Game Mode</div>
+          <div class="sub-tabs" id="h2h-mode-tabs">
+            <div class="sub-tab" id="h2h-m-all"     onclick="setH2HMode('all')">All</div>
+            <div class="sub-tab" id="h2h-m-ranked"  onclick="setH2HMode('ranked')">Public 3v3</div>
+            <div class="sub-tab" id="h2h-m-ranked5" onclick="setH2HMode('ranked5')">Public 5v5</div>
+            <div class="sub-tab" id="h2h-m-3v3"     onclick="setH2HMode('3v3')">Private 3v3</div>
+            <div class="sub-tab" id="h2h-m-5v5"     onclick="setH2HMode('5v5')">Private 5v5</div>
+          </div>
+          <div class="h2h-card">
+            <div class="h2h-inputs">
+              <div class="autocomplete-wrap"><input type="text" id="h2h-p1" placeholder="Player 1" autocomplete="off"><div class="autocomplete-list" id="ac-list-1"></div></div>
+              <div class="vs-badge">VS</div>
+              <div class="autocomplete-wrap"><input type="text" id="h2h-p2" placeholder="Player 2" autocomplete="off"><div class="autocomplete-list" id="ac-list-2"></div></div>
+            </div>
+            <button class="h2h-btn" onclick="searchH2H()">SEARCH</button>
+            <div id="h2h-result" class="h2h-result"></div>
+          </div>
+        </div>
+        <div id="h2h-placeholder" class="region-placeholder">
+          <div class="region-placeholder-icon">🌎</div>
+          <div class="region-placeholder-title">Select a server above to continue</div>
+          <div class="region-placeholder-sub">Choose North America or Europe</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ═══ TAB: HISTORY ═══ -->
-  <div id="tab-history" class="tab-content">
-    <div class="section-group-label">Select Server Region</div>
-    <div class="sub-tabs" id="hist-region-tabs">
-      <div class="sub-tab" id="hist-reg-na" onclick="setHistoryRegion('NA')">NORTH AMERICA</div>
-      <div class="sub-tab" id="hist-reg-eu" onclick="setHistoryRegion('EU')">EUROPE</div>
-    </div>
-
-    <div id="hist-mode-section" style="display:none">
-      <div class="section-group-label" style="margin-top:12px">Game Mode</div>
-      <div class="sub-tabs" id="hist-mode-tabs">
-        <div class="sub-tab" id="hist-m-all" onclick="setHistoryMode('all')">All</div>
-        <div class="sub-tab" id="hist-m-ranked" onclick="setHistoryMode('ranked')">Public 3v3</div>
-        <div class="sub-tab" id="hist-m-ranked5" onclick="setHistoryMode('ranked5')">Public 5v5</div>
-        <div class="sub-tab" id="hist-m-3v3" onclick="setHistoryMode('3v3')">Private 3v3</div>
-        <div class="sub-tab" id="hist-m-5v5" onclick="setHistoryMode('5v5')">Private 5v5</div>
-      </div>
-      <div class="search-container">
-        <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="search-history" placeholder="Search player in history..." autocomplete="off">
-      </div>
-      <div class="section-label" id="history-label">Select a game mode above</div>
-      <div id="history-list"></div>
-      <button class="match-history-load-more" id="history-load-more" style="display:none" onclick="loadMoreHistory()">Load more matches</button>
-      <div class="match-history-count" id="history-count"></div>
-    </div>
-
-    <div id="hist-placeholder" class="region-placeholder">
-      <div class="region-placeholder-icon">🌎</div>
-      <div class="region-placeholder-title">Select a region to continue</div>
-      <div class="region-placeholder-sub">Choose North America or Europe above</div>
-    </div>
-  </div>
-
-  <!-- ═══ TAB: TOURNAMENT ═══ -->
-  <div id="tab-torneos" class="tab-content">
+  <!-- ═══ TOURNEY SECTION ═══ -->
+  <div id="main-tourney" class="main-section">
     <div id="tourney-next-container">
       <div class="loading"><div class="spinner"></div>Loading tournament info...</div>
     </div>
     <div class="tourney-section-divider"><span>Past Tournaments</span></div>
     <div id="tourney-past-list" class="tourney-past-list">
       <div class="tourney-past-loading"><div class="spinner"></div>Loading tournaments...</div>
+    </div>
+  </div>
+
+  <!-- ═══ BATTLE PASS POPUP ═══ -->
+  <div class="bp-popup-overlay" id="bp-popup-overlay">
+    <div class="bp-popup-card" id="bp-popup-card">
+      <button class="bp-popup-close" id="bp-popup-close">&times;</button>
+      <div id="bp-popup-content"></div>
     </div>
   </div>
 
@@ -854,10 +1007,130 @@ body {
 </div>
 
 <script>
-const SHEET_ID = '1xAeP5YFnkME0G5jCZPBy0H3QpgJZBEaCYJyuNDn3Fdw';
+const SHEET_ID = '1ayb5WWXXtLs8dUPFBHBxvGxs2qsloAmcuMMRfFiejbA';
 const TOP10_LIMIT = 10;
 const ASSETS_BASE = 'https://raw.githubusercontent.com/ivanvg10/playvgelo.com/main/';
 let accountsData = {}; // {playerName.lower(): {level, xp, status, discordTag}}
+
+// ── Splashart pool (heroes from splash art 1 folder based on repo) ──
+const SPLASH_HEROES_FOLDER1 = ['Anka','Ardan','Baptiste','Baron','Blackfeather','Caine','Catherine','Celeste','Churnwalker','Flicker','Fortress','Glaive','Grace','Grumpjaw','Gwen','adagio'];
+const SPLASH_HEROES_FOLDER2 = ['Idris','Joule','Kensei','Kestrel','Koshka','Krul','Lance','Lorelai','Lyra','Malene','Ozo','Petal','Phinn','Reim','Reza','Ringo'];
+const SPLASH_HEROES_FOLDER3 = ['SAW','Samuel','Skaarf','Skye','Taka','Tony','Varya','Vox','Yates'];
+const ALL_SPLASH_HEROES = [...SPLASH_HEROES_FOLDER1, ...SPLASH_HEROES_FOLDER2, ...SPLASH_HEROES_FOLDER3];
+
+function pickRandomSplash() {
+  const hero = ALL_SPLASH_HEROES[Math.floor(Math.random() * ALL_SPLASH_HEROES.length)];
+  // Try splash art 1 first, fallback chain
+  const folder = SPLASH_HEROES_FOLDER3.includes(hero) ? 'splash%20art%203' : SPLASH_HEROES_FOLDER2.includes(hero) ? 'splash%20art%202' : 'splash%20art%201';
+  // Each hero folder has a main splash; use the base splash filename pattern
+  const img = document.getElementById('header-splash-img');
+  if (!img) return;
+  // Try hero splash (filename: HeroName_splash de tamaño pequeño.webp or hero name_splash.webp)
+  const heroLower = hero.toLowerCase();
+  const url = `${ASSETS_BASE}${folder}/${encodeURIComponent(hero)}/${encodeURIComponent(hero)}_splash%20de%20tama%C3%B1o%20peque%C3%B1o.webp`;
+  img.src = url;
+  img.onerror = function() {
+    // fallback: try splash art folder directly with a generic hero splash
+    this.onerror = null;
+    this.src = '';
+  };
+}
+
+// ── Global region for Game ──
+let gameRegion = null;
+let currentGameTab = 'ranked';
+
+function showMainMenu(section) {
+  document.querySelectorAll('.main-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.main-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`main-${section}`).classList.add('active');
+  document.getElementById(`main-btn-${section}`).classList.add('active');
+  if (section === 'tourney') loadTournaments();
+}
+
+function setGameRegion(region) {
+  gameRegion = region;
+  rankedRegion = region;
+  privateRegion = region;
+  ligaRegion = region;
+  historyRegion = region;
+  h2hRegion = region;
+
+  // Update server buttons
+  const na = document.getElementById('game-reg-na');
+  const eu = document.getElementById('game-reg-eu');
+  na.classList.remove('active-green','active-blue','active');
+  eu.classList.remove('active-green','active-blue','active');
+  if (region === 'NA') na.classList.add('active-green');
+  else eu.classList.add('active-blue');
+
+  // Show game content
+  document.getElementById('game-content').style.display = 'block';
+
+  // Pre-show mode sections for all tabs
+  document.getElementById('ranked-mode-section').style.display = 'block';
+  document.getElementById('ranked-placeholder').style.display = 'none';
+  document.getElementById('priv-mode-section').style.display = 'block';
+  document.getElementById('priv-placeholder').style.display = 'none';
+  document.getElementById('liga-mode-section').style.display = 'block';
+  document.getElementById('liga-placeholder').style.display = 'none';
+  document.getElementById('hist-mode-section').style.display = 'block';
+  document.getElementById('hist-placeholder').style.display = 'none';
+  document.getElementById('h2h-mode-section').style.display = 'block';
+  document.getElementById('h2h-placeholder').style.display = 'none';
+
+  // Auto-set modes and load current tab
+  rankedMode = '3v3';
+  privateMode = '3v3';
+  ligaMode = '3v3';
+  h2hMode = 'all';
+
+  document.getElementById('ranked-label').textContent = `Public Ranked 3v3 — ${region === 'EU' ? 'Europe' : 'North America'}`;
+  document.getElementById('private-label').textContent = `${region} · 3v3 — ELO ranking`;
+  document.getElementById('liga-label').textContent = `Liga 3v3 — ${region === 'EU' ? 'Europe' : 'North America'}`;
+
+  // Set H2H all mode active
+  document.querySelectorAll('#h2h-mode-tabs .sub-tab').forEach(t => t.classList.remove('active','active-white','active-green','active-purple','active-blue'));
+  document.getElementById('h2h-m-all').classList.add('active-white');
+
+  // Load current tab
+  showGameTab(currentGameTab);
+
+  // Load history in background
+  if (!historyLoaded) loadMatchHistory();
+}
+
+function showGameTab(tab) {
+  currentGameTab = tab;
+  // Update primary tabs
+  ['ranked','private','liga'].forEach(t => {
+    const el = document.getElementById(`gtab-${t}`);
+    if (el) el.classList.toggle('active', t === tab);
+  });
+  // Update secondary btns
+  ['history','h2h'].forEach(t => {
+    const el = document.getElementById(`sec-btn-${t}`);
+    if (el) el.classList.toggle('active', t === tab);
+  });
+  // Remove active from primary if secondary active
+  if (tab === 'history' || tab === 'h2h') {
+    ['ranked','private','liga'].forEach(t => {
+      const el = document.getElementById(`gtab-${t}`);
+      if (el) el.classList.remove('active');
+    });
+  }
+  // Show content
+  document.querySelectorAll('.game-tab-content').forEach(c => c.classList.remove('active'));
+  const content = document.getElementById(`gtab-content-${tab}`);
+  if (content) content.classList.add('active');
+
+  // Load data
+  if (!gameRegion) return;
+  if (tab === 'ranked') { rankedShowAll = false; loadRanked(); }
+  if (tab === 'private') { privShowAll = false; loadPrivate(gameRegion, privateMode); }
+  if (tab === 'liga') { ligaShowAll = false; loadLiga(); }
+  if (tab === 'history' && historyLoaded && historyModeSelected) applyHistoryFilters();
+}
 
 let h2hMode       = 'all';
 let h2hRegion     = null;
@@ -895,16 +1168,16 @@ const TIERS = [
   { min: 2700, max: 3200, num: 10, name: 'Vainglorious' }
 ];
 const TIER_IMAGES = {
-  '1_bronze':'images/1a_AskAgainLater_BRONZE.png','1_silver':'images/1b_AskAgainLater_SILVER.png','1_gold':'images/1c_AskAgainLater_GOLD.png',
-  '2_bronze':'images/2a_WorkingOnIt_BRONZE.png','2_silver':'images/2b_WorkingOnIt_SILVER.png','2_gold':'images/2c_WorkingOnIt_GOLD.png',
-  '3_bronze':'images/3a_GettingThere_BRONZE.png','3_silver':'images/3b_GettingThere_SILVER.png','3_gold':'images/3c_GettingThere_GOLD.png',
-  '4_bronze':'images/4a_NotBad_BRONZE.png','4_silver':'images/4b_NotBad_SILVER.png','4_gold':'images/4c_NotBad_GOLD.png',
-  '5_bronze':'images/5a_Decentish_BRONZE.png','5_silver':'images/5b_Decentish_SILVER.png','5_gold':'images/5c_Decentish_GOLD.png',
-  '6_bronze':'images/6a_PrettyGood_BRONZE.png','6_silver':'images/6b_PrettyGood_SILVER.png','6_gold':'images/6C_PrettyGood_GOLD.png',
-  '7_bronze':'images/7a_Hotness_BRONZE.png','7_silver':'images/7a_Hotness_SILVER.png','7_gold':'images/7a_Hotness_GOLD.png',
-  '8_bronze':'images/8a_SimplyAmazing_BRONZE.png','8_silver':'images/8b_SimplyAmazing_SILVER.png','8_gold':'images/8c_SimplyAmazing_GOLD.png',
-  '9_bronze':'images/9a_PinnacleOfAwesome_BRONZE.png','9_silver':'images/9b_PinnacleOfAwesome_SILVER.png','9_gold':'images/9c_PinnacleOfAwesome_GOLD.png',
-  '10_bronze':'images/10a_Vainglorious_BRONZE.png','10_silver':'images/10b_Vainglorious_SILVER.png','10_gold':'images/10c_Vainglorious_GOLD.png'
+  '1_bronze':`${ASSETS_BASE}skill%20tiers/1a_AskAgainLater_BRONZE.webp`,'1_silver':`${ASSETS_BASE}skill%20tiers/1b_AskAgainLater_SILVER.webp`,'1_gold':`${ASSETS_BASE}skill%20tiers/1c_AskAgainLater_GOLD.webp`,
+  '2_bronze':`${ASSETS_BASE}skill%20tiers/2a_WorkingOnIt_BRONZE.webp`,'2_silver':`${ASSETS_BASE}skill%20tiers/2b_WorkingOnIt_SILVER.webp`,'2_gold':`${ASSETS_BASE}skill%20tiers/2c_WorkingOnIt_GOLD.webp`,
+  '3_bronze':`${ASSETS_BASE}skill%20tiers/3a_GettingThere_BRONZE.webp`,'3_silver':`${ASSETS_BASE}skill%20tiers/3b_GettingThere_SILVER.webp`,'3_gold':`${ASSETS_BASE}skill%20tiers/3c_GettingThere_GOLD.webp`,
+  '4_bronze':`${ASSETS_BASE}skill%20tiers/4a_NotBad_BRONZE.webp`,'4_silver':`${ASSETS_BASE}skill%20tiers/4b_NotBad_SILVER.webp`,'4_gold':`${ASSETS_BASE}skill%20tiers/4c_NotBad_GOLD.webp`,
+  '5_bronze':`${ASSETS_BASE}skill%20tiers/5a_Decentish_BRONZE.webp`,'5_silver':`${ASSETS_BASE}skill%20tiers/5b_Decentish_SILVER.webp`,'5_gold':`${ASSETS_BASE}skill%20tiers/5c_Decentish_GOLD.webp`,
+  '6_bronze':`${ASSETS_BASE}skill%20tiers/6a_PrettyGood_BRONZE.webp`,'6_silver':`${ASSETS_BASE}skill%20tiers/6b_PrettyGood_SILVER.webp`,'6_gold':`${ASSETS_BASE}skill%20tiers/6C_PrettyGood_GOLD.webp`,
+  '7_bronze':`${ASSETS_BASE}skill%20tiers/7a_Hotness_BRONZE.webp`,'7_silver':`${ASSETS_BASE}skill%20tiers/7b_Hotness_SILVER.webp`,'7_gold':`${ASSETS_BASE}skill%20tiers/7c_Hotness_GOLD.webp`,
+  '8_bronze':`${ASSETS_BASE}skill%20tiers/8a_SimplyAmazing_BRONZE.webp`,'8_silver':`${ASSETS_BASE}skill%20tiers/8b_SimplyAmazing_SILVER.webp`,'8_gold':`${ASSETS_BASE}skill%20tiers/8c_SimplyAmazing_GOLD.webp`,
+  '9_bronze':`${ASSETS_BASE}skill%20tiers/9a_PinnacleOfAwesome_BRONZE.webp`,'9_silver':`${ASSETS_BASE}skill%20tiers/9b_PinnacleOfAwesome_SILVER.webp`,'9_gold':`${ASSETS_BASE}skill%20tiers/9c_PinnacleOfAwesome_GOLD.webp`,
+  '10_bronze':`${ASSETS_BASE}skill%20tiers/10a_Vainglorious_BRONZE.webp`,'10_silver':`${ASSETS_BASE}skill%20tiers/10b_Vainglorious_SILVER.webp`,'10_gold':`${ASSETS_BASE}skill%20tiers/10c_Vainglorious_GOLD.webp`
 };
 
 function getTierInfo(elo) {
@@ -1145,27 +1418,15 @@ async function loadRanked(highlightPlayer = null) {
 
 function loadMoreRanked() { rankedShowAll = true; renderTop10(document.getElementById('ranked-list'), document.getElementById('ranked-load-more'), document.getElementById('ranked-count'), rankedPlayersData, rankedMode, null, true); }
 
-function setRankedRegion(region) {
-  rankedRegion = region; rankedShowAll = false;
-  const na = document.getElementById('ranked-reg-na'), eu = document.getElementById('ranked-reg-eu');
-  na.classList.remove('active','active-green','active-blue'); eu.classList.remove('active','active-green','active-blue');
-  if (region === 'NA') na.classList.add('active-green'); else eu.classList.add('active-blue');
-  document.getElementById('ranked-mode-section').style.display = 'block';
-  document.getElementById('ranked-placeholder').style.display  = 'none';
-  rankedMode = '3v3';
-  document.getElementById('ranked-sub-3v3').classList.remove('active','active-green','active-purple');
-  document.getElementById('ranked-sub-5v5').classList.remove('active','active-green','active-purple');
-  document.getElementById('ranked-sub-3v3').classList.add('active-green');
-  document.getElementById('ranked-list').innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
-  loadRanked();
-}
+function setRankedRegion(region) { /* handled by setGameRegion */ }
 
 function setRankedMode(mode) {
   rankedMode = mode; rankedShowAll = false;
-  document.getElementById('ranked-sub-3v3').classList.remove('active','active-green','active-purple');
-  document.getElementById('ranked-sub-5v5').classList.remove('active','active-green','active-purple');
+  document.getElementById('ranked-sub-3v3').classList.remove('active','active-green','active-purple','active-blue');
+  document.getElementById('ranked-sub-5v5').classList.remove('active','active-green','active-purple','active-blue');
   if (mode === '3v3') document.getElementById('ranked-sub-3v3').classList.add('active-green');
-  else                document.getElementById('ranked-sub-5v5').classList.add('active-purple');
+  else                document.getElementById('ranked-sub-5v5').classList.add('active-blue');
+  document.getElementById('ranked-label').textContent = `Public ${mode === '5v5' ? 'Ranked 5v5' : 'Ranked 3v3'} — ${rankedRegion === 'EU' ? 'Europe' : 'North America'}`;
   document.getElementById('ranked-list').innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
   loadRanked();
 }
@@ -1382,34 +1643,10 @@ function renderMatchCard(match, animIndex) {
   </div>`;
 }
 
-// ── Tab switching ──────────────────────────────────────────
-function showTab(tab) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tabs > .tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(`tab-${tab}`).classList.add('active');
-  const tabs = document.querySelectorAll('.tabs > .tab');
-  const idx = { ranked:0, private:1, liga:2, history:3, h2h:4, torneos:5 };
-  if (idx[tab] !== undefined) tabs[idx[tab]].classList.add('active');
-  if (tab === 'ranked' && rankedRegion)  loadRanked();
-  if (tab === 'private' && privateRegion) loadPrivate(privateRegion, privateMode);
-  if (tab === 'liga' && ligaRegion) loadLiga();
-  if (tab === 'torneos') loadTournaments();
-}
+// ── Tab switching (legacy, kept for compatibility) ──────────
+function showTab(tab) { showGameTab(tab); }
 
-function setPrivateRegion(region) {
-  privateRegion = region; privShowAll = false;
-  const na = document.getElementById('priv-reg-na'), eu = document.getElementById('priv-reg-eu');
-  na.classList.remove('active','active-green','active-blue'); eu.classList.remove('active','active-green','active-blue');
-  if (region === 'NA') na.classList.add('active-green'); else eu.classList.add('active-blue');
-  document.getElementById('priv-mode-section').style.display = 'block';
-  document.getElementById('priv-placeholder').style.display  = 'none';
-  privateMode = '3v3';
-  document.getElementById('priv-sub-3v3').classList.remove('active','active-green','active-purple');
-  document.getElementById('priv-sub-5v5').classList.remove('active','active-green','active-purple');
-  document.getElementById('priv-sub-3v3').classList.add('active-green');
-  document.getElementById('private-list').innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
-  loadPrivate(privateRegion, privateMode);
-}
+function setPrivateRegion(region) { /* handled by setGameRegion */ }
 
 function setPrivateMode(mode) {
   privateMode = mode; privShowAll = false;
@@ -1421,23 +1658,7 @@ function setPrivateMode(mode) {
   loadPrivate(privateRegion, privateMode);
 }
 
-function setHistoryRegion(region) {
-  historyRegion = region;
-  historyModeSelected = false;
-  document.getElementById('hist-reg-na').classList.remove('active','active-green','active-blue');
-  document.getElementById('hist-reg-eu').classList.remove('active','active-green','active-blue');
-  if (region === 'NA') document.getElementById('hist-reg-na').classList.add('active-green');
-  else                 document.getElementById('hist-reg-eu').classList.add('active-blue');
-  document.getElementById('hist-mode-section').style.display = 'block';
-  document.getElementById('hist-placeholder').style.display  = 'none';
-  const modeTabs = document.querySelectorAll('#hist-mode-tabs .sub-tab');
-  modeTabs.forEach(t => t.classList.remove('active','active-white','active-green','active-purple','active-blue'));
-  document.getElementById('history-list').innerHTML = '';
-  document.getElementById('history-label').textContent = 'Select a game mode above';
-  document.getElementById('history-count').textContent = '';
-  document.getElementById('history-load-more').style.display = 'none';
-  if (!historyLoaded) loadMatchHistory();
-}
+function setHistoryRegion(region) { /* handled by setGameRegion */ }
 
 function setHistoryMode(mode) {
   historyMode = mode;
@@ -1454,23 +1675,7 @@ function setHistoryMode(mode) {
 }
 
 // ── H2H ───────────────────────────────────────────────────
-function setH2HRegion(region) {
-  h2hRegion = region;
-  const na = document.getElementById('h2h-reg-na'), eu = document.getElementById('h2h-reg-eu');
-  na.classList.remove('active','active-green','active-blue'); eu.classList.remove('active','active-green','active-blue');
-  if (region === 'NA') na.classList.add('active-green'); else eu.classList.add('active-blue');
-  document.getElementById('h2h-mode-section').style.display = 'block';
-  document.getElementById('h2h-placeholder').style.display  = 'none';
-  h2hMode = 'all';
-  const allModes = ['all','ranked','ranked5','3v3','5v5'];
-  allModes.forEach(m => {
-    const btn = document.getElementById(`h2h-m-${m}`);
-    if (!btn) return;
-    btn.classList.remove('active','active-green','active-purple','active-white','active-blue');
-    if (m === 'all') btn.classList.add('active-white');
-  });
-  document.getElementById('h2h-result').classList.remove('visible');
-}
+function setH2HRegion(region) { /* handled by setGameRegion */ }
 
 function setH2HMode(mode) {
   h2hMode = mode;
@@ -1618,7 +1823,7 @@ function renderNextTourney(nt) {
     <div class="tourney-next-glow"></div>
     <div class="tourney-next-badge"><span class="badge-dot"></span>Upcoming Tournament</div>
     ${tourneyName ? `<div class="tourney-next-name">${tourneyName}</div>` : ''}
-    <img src="images/10c_Vainglorious_GOLD.png" alt="Tier 10 Gold" class="tourney-next-tier-img" onerror="this.style.display='none'">
+    <img src="${ASSETS_BASE}skill%20tiers/10c_Vainglorious_GOLD.webp" alt="Tier 10 Gold" class="tourney-next-tier-img" onerror="this.style.display='none'">
     ${prize ? `<div class="tourney-prize-highlight">
       <div class="tourney-prize-row">
         <div class="tourney-prize-value">$${prizeAmount}</div>
@@ -1656,9 +1861,9 @@ function renderNextTourney(nt) {
 }
 
 const TOURNEY_TIER_IMAGES = {
-  1: 'images/10c_Vainglorious_GOLD.png',
-  2: 'images/9b_PinnacleOfAwesome_SILVER.png',
-  3: 'images/8a_SimplyAmazing_BRONZE.png'
+  1: `${ASSETS_BASE}skill%20tiers/10c_Vainglorious_GOLD.webp`,
+  2: `${ASSETS_BASE}skill%20tiers/9b_PinnacleOfAwesome_SILVER.webp`,
+  3: `${ASSETS_BASE}skill%20tiers/8a_SimplyAmazing_BRONZE.webp`
 };
 
 function renderTournamentAccordion(t, idx) {
@@ -1863,33 +2068,64 @@ function toggleTourneyAccordion(idx) {
       const xpProgress = Math.min((xpInLevel / xpPerLevel) * 100, 100);
       const maxLevel   = 100;
       const pctToMax   = Math.min((accInfo.level / maxLevel) * 100, 100);
+
+      // Tier images for reward track (every 10 levels a tier reward)
+      const trackRewards = [
+        { lv: 10,  icon: '🎭', label: 'Hat' },
+        { lv: 20,  icon: '🎨', label: 'Skin' },
+        { lv: 30,  tierKey: '3_gold' },
+        { lv: 40,  icon: '🎭', label: 'Hat' },
+        { lv: 50,  tierKey: '5_gold' },
+        { lv: 60,  icon: '🎨', label: 'Skin' },
+        { lv: 70,  tierKey: '7_gold' },
+        { lv: 80,  icon: '🎭', label: 'Hat' },
+        { lv: 90,  tierKey: '9_gold' },
+        { lv: 100, tierKey: '10_gold' },
+      ];
+
+      const trackHTML = trackRewards.map(r => {
+        const unlocked = accInfo.level >= r.lv;
+        const current  = accInfo.level >= r.lv - 9 && accInfo.level < r.lv;
+        const cls = unlocked ? 'bp-reward-slot unlocked' : current ? 'bp-reward-slot current' : 'bp-reward-slot';
+        const innerImg = r.tierKey
+          ? `<img src="${TIER_IMAGES[r.tierKey]}" class="bp-reward-img" onerror="this.style.display='none'">`
+          : `<div class="bp-reward-icon">${r.icon}</div>`;
+        return `<div class="${cls}">
+          ${innerImg}
+          <div class="bp-reward-lv">Lv.${r.lv}</div>
+          ${!unlocked ? '<div class="bp-reward-lock">🔒</div>' : ''}
+        </div>`;
+      }).join('');
+
       html += `<div class="validated-badge">✓ Verified Account · Lv.${accInfo.level}</div>`;
-      html += `<div class="popup-level-bar" style="margin-top:10px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-          <div style="text-align:left">
-            <div class="popup-level-label" style="text-align:left">Account Level</div>
-            <div class="popup-level-value">${accInfo.level} <span style="font-size:0.65rem;color:var(--text3);font-weight:400">/ ${maxLevel}</span></div>
+      html += `
+      <div class="bp-level-section" style="margin-top:10px">
+        <div class="bp-level-row">
+          <div>
+            <div style="font-size:0.45rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Account Level</div>
+            <div class="bp-level-num">${accInfo.level} <span class="bp-level-max">/ ${maxLevel}</span></div>
           </div>
           <div style="text-align:right">
-            <div class="popup-level-label" style="text-align:right">Total XP</div>
-            <div style="font-size:0.85rem;font-weight:700;color:var(--gold)">${accInfo.xp.toLocaleString()}</div>
+            <div style="font-size:0.45rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Total XP</div>
+            <div class="bp-xp-total">${accInfo.xp.toLocaleString()}</div>
           </div>
         </div>
-        <div style="font-size:0.45rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px">Progress to Max Account</div>
-        <div style="height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;border:1px solid var(--border)">
-          <div style="height:100%;width:${pctToMax}%;background:linear-gradient(90deg,#f87171,var(--gold));border-radius:4px;transition:width 0.3s"></div>
+        <div class="bp-progress-wrap" style="margin-bottom:4px">
+          <div class="bp-progress-fill" style="width:${pctToMax}%"></div>
+          <div class="bp-progress-text">${pctToMax.toFixed(1)}% to MAX</div>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-top:2px">
-          <div style="font-size:0.45rem;color:var(--text3)">Lv.1</div>
-          <div style="font-size:0.45rem;color:var(--text3)">${pctToMax.toFixed(1)}% complete</div>
-          <div style="font-size:0.45rem;color:var(--text3)">Lv.${maxLevel} MAX</div>
-        </div>
-        <div style="margin-top:6px;padding-top:5px;border-top:1px solid var(--border)">
-          <div style="font-size:0.45rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Next Level</div>
+        <div class="bp-progress-labels"><span>Lv.1</span><span>Lv.${maxLevel} MAX</span></div>
+        <div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--border)">
+          <div style="font-size:0.45rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Next Level</div>
           <div class="popup-xp-bar"><div class="popup-xp-fill" style="width:${xpProgress}%"></div></div>
           <div class="popup-xp-text">${xpInLevel} / ${xpPerLevel} XP</div>
         </div>
-      </div>`;
+        <div style="margin-top:10px">
+          <div style="font-size:0.45rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Season Rewards Track</div>
+          <div class="bp-track">${trackHTML}</div>
+        </div>
+      </div>
+      <button onclick="openCollectedItems('${name}')" style="width:100%;margin-top:8px;padding:10px;border-radius:10px;border:1px solid rgba(167,139,250,0.4);background:rgba(167,139,250,0.07);color:var(--purple);font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='rgba(167,139,250,0.14)'" onmouseout="this.style.background='rgba(167,139,250,0.07)'">🃏 View Collected Items</button>`;
     }
 
     if (lastRival||lastMatch) {
@@ -2098,27 +2334,7 @@ function loadMoreLiga() {
   );
 }
 
-function setLigaRegion(region) {
-  ligaRegion = region; ligaShowAll = false;
-  const na = document.getElementById('liga-reg-na'), eu = document.getElementById('liga-reg-eu');
-  na.classList.remove('active','active-green','active-blue','active-red');
-  eu.classList.remove('active','active-green','active-blue','active-red');
-  if (region === 'NA') na.style.cssText='background:var(--bg3);color:#f87171;font-weight:600';
-  else                 eu.style.cssText='background:var(--bg3);color:#f87171;font-weight:600';
-  if (region !== 'NA') na.style.cssText='';
-  if (region !== 'EU') eu.style.cssText='';
-  // reset both then set active
-  na.removeAttribute('style'); eu.removeAttribute('style');
-  const activeEl = region === 'NA' ? na : eu;
-  activeEl.style.cssText = 'background:var(--bg3);color:#f87171;font-weight:600;border-radius:6px';
-  document.getElementById('liga-mode-section').style.display = 'block';
-  document.getElementById('liga-placeholder').style.display  = 'none';
-  ligaMode = '3v3';
-  document.getElementById('liga-sub-3v3').style.cssText = 'color:#f87171;font-weight:600';
-  document.getElementById('liga-sub-5v5').removeAttribute('style');
-  document.getElementById('liga-list').innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
-  loadLiga();
-}
+function setLigaRegion(region) { /* handled by setGameRegion */ }
 
 function setLigaMode(mode) {
   ligaMode = mode; ligaShowAll = false;
@@ -2130,7 +2346,181 @@ function setLigaMode(mode) {
   loadLiga();
 }
 
+// ── COLLECTED ITEMS POPUP ─────────────────────────────────
+const COLLECT_CATEGORIES = [
+  { id: 'tiers',     label: '🏅 Tiers',      epic: false },
+  { id: 'skins',     label: '🎨 Skins',       epic: false },
+  { id: 'hats',      label: '🎭 Hats',        epic: true  },
+  { id: 'abilities', label: '⚡ Abilities',   epic: false },
+  { id: 'shop',      label: '🛒 Shop Items',  epic: false },
+];
+
+// Tier items (30 total: 10 tiers × 3 subtiers)
+const TIER_COLLECT_ITEMS = [];
+const TIER_NAMES = ['Ask Again Later','Working On It','Getting There','Not Bad','Decent-ish','Pretty Good','Hotness','Simply Amazing','Pinnacle of Awesome','Vainglorious'];
+const TIER_KEYS_SHORT = ['AskAgainLater','WorkingOnIt','GettingThere','NotBad','Decentish','PrettyGood','Hotness','SimplyAmazing','PinnacleOfAwesome','Vainglorious'];
+for (let i = 1; i <= 10; i++) {
+  ['BRONZE','SILVER','GOLD'].forEach(st => {
+    const stNum = st === 'BRONZE' ? 'a' : st === 'SILVER' ? 'b' : 'c';
+    TIER_COLLECT_ITEMS.push({
+      id: `tier_${i}_${st.toLowerCase()}`,
+      name: `${TIER_NAMES[i-1]}`,
+      sub: st,
+      img: `${ASSETS_BASE}skill%20tiers/${i}${stNum}_${TIER_KEYS_SHORT[i-1]}_${st}.webp`,
+      unlockLv: i * 10 - (st === 'BRONZE' ? 9 : st === 'SILVER' ? 5 : 1),
+    });
+  });
+}
+
+// Hat items (7 epic hats from shop items)
+const HAT_ITEMS = [
+  { id: 'hat_1', name: 'Conejito', icon: '🐰', unlockLv: 15 },
+  { id: 'hat_2', name: 'Vikingo',  icon: '⚔️', unlockLv: 25 },
+  { id: 'hat_3', name: 'Bruja',    icon: '🧙', unlockLv: 35 },
+  { id: 'hat_4', name: 'Corona',   icon: '👑', unlockLv: 50 },
+  { id: 'hat_5', name: 'Ninja',    icon: '🥷', unlockLv: 60 },
+  { id: 'hat_6', name: 'Dragón',   icon: '🐉', unlockLv: 75 },
+  { id: 'hat_7', name: 'Legendario', icon: '⭐', unlockLv: 100 },
+];
+
+// Splash art skins — heroes visible in splash art 1/2/3
+const SKIN_HEROES = [
+  'Anka','Ardan','Baptiste','Baron','Blackfeather','Caine','Catherine','Celeste',
+  'Churnwalker','Flicker','Fortress','Glaive','Grace','Grumpjaw','Gwen',
+  'Idris','Joule','Kensei','Kestrel','Koshka','Krul','Lance',
+  'Lorelai','Lyra','Malene','Ozo','Petal','Phinn','Reim','Reza','Ringo',
+  'SAW','Samuel','Skaarf','Skye','Taka','Tony','Varya','Vox','Yates'
+];
+const SKIN_ITEMS = SKIN_HEROES.map((h, i) => ({
+  id: `skin_${h.toLowerCase()}`,
+  name: h,
+  img: `${ASSETS_BASE}foto%20perfil/${encodeURIComponent(h.toLowerCase())}.webp`,
+  unlockLv: Math.min(5 + i * 2, 99),
+}));
+
+// Shop items (generic cosmetics)
+const SHOP_ITEMS = [
+  { id: 'shop_1',  name: 'Gold Border',  icon: '🔶', unlockLv: 5  },
+  { id: 'shop_2',  name: 'MVP Banner',   icon: '🏆', unlockLv: 10 },
+  { id: 'shop_3',  name: 'Kill Streak',  icon: '🔥', unlockLv: 20 },
+  { id: 'shop_4',  name: 'Recall FX',    icon: '✨', unlockLv: 30 },
+  { id: 'shop_5',  name: 'Death FX',     icon: '💀', unlockLv: 40 },
+  { id: 'shop_6',  name: 'Spawn FX',     icon: '🌟', unlockLv: 55 },
+  { id: 'shop_7',  name: 'Name Color',   icon: '🎨', unlockLv: 65 },
+  { id: 'shop_8',  name: 'Emote Pack',   icon: '🎭', unlockLv: 70 },
+  { id: 'shop_9',  name: 'Chat Badge',   icon: '💬', unlockLv: 80 },
+  { id: 'shop_10', name: 'Legendary FX', icon: '🌈', unlockLv: 95 },
+];
+
+// Ability icons (hero skills — just using emoji for now)
+const ABILITY_ITEMS = [
+  { id: 'ab_1',  name: 'Ult Alpha',   icon: '💥', unlockLv: 8  },
+  { id: 'ab_2',  name: 'Poke Mastery',icon: '🎯', unlockLv: 16 },
+  { id: 'ab_3',  name: 'Stealth',     icon: '👁️', unlockLv: 22 },
+  { id: 'ab_4',  name: 'Shield',      icon: '🛡️', unlockLv: 32 },
+  { id: 'ab_5',  name: 'Speed Boost', icon: '⚡', unlockLv: 44 },
+  { id: 'ab_6',  name: 'Stun',        icon: '⚡', unlockLv: 54 },
+  { id: 'ab_7',  name: 'Lifesteal',   icon: '🩸', unlockLv: 63 },
+  { id: 'ab_8',  name: 'Blink',       icon: '🌀', unlockLv: 72 },
+  { id: 'ab_9',  name: 'AOE',         icon: '💣', unlockLv: 85 },
+  { id: 'ab_10', name: 'True Dmg',    icon: '⚔️', unlockLv: 98 },
+];
+
+const CATEGORY_ITEMS = {
+  tiers:     TIER_COLLECT_ITEMS,
+  skins:     SKIN_ITEMS,
+  hats:      HAT_ITEMS,
+  abilities: ABILITY_ITEMS,
+  shop:      SHOP_ITEMS,
+};
+
+let collectCurrentCat = 'tiers';
+let collectPlayerLevel = 1;
+let collectPlayerName  = '';
+
+function openCollectedItems(playerName) {
+  const accInfo = accountsData[playerName.toLowerCase()];
+  const level   = accInfo ? accInfo.level : 1;
+  collectPlayerName  = playerName;
+  collectPlayerLevel = level;
+  collectCurrentCat  = 'tiers';
+  renderBPPopup(playerName, level);
+}
+
+function renderBPPopup(playerName, level) {
+  const overlay = document.getElementById('bp-popup-overlay');
+  const content = document.getElementById('bp-popup-content');
+
+  // Category tabs
+  const catTabsHTML = COLLECT_CATEGORIES.map(c => {
+    const items     = CATEGORY_ITEMS[c.id] || [];
+    const owned     = items.filter(it => level >= it.unlockLv).length;
+    return `<div class="collect-tab${collectCurrentCat === c.id ? ' active' : ''}" onclick="switchCollectCat('${c.id}')">${c.label} <span style="font-size:0.55rem;opacity:0.7">${owned}/${items.length}</span></div>`;
+  }).join('');
+
+  // Current category grid
+  const gridHTML = renderCollectGrid(collectCurrentCat, level);
+
+  content.innerHTML = `
+    <div class="bp-title">🃏 Collected Items</div>
+    <div class="bp-subtitle">${playerName} · Lv.${level}</div>
+    <div class="collect-tabs">${catTabsHTML}</div>
+    ${gridHTML}
+  `;
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderCollectGrid(catId, level) {
+  const items   = CATEGORY_ITEMS[catId] || [];
+  const cat     = COLLECT_CATEGORIES.find(c => c.id === catId) || {};
+  const owned   = items.filter(it => level >= it.unlockLv).length;
+  const cardsHTML = items.map(item => {
+    const isOwned = level >= item.unlockLv;
+    const isEpic  = cat.epic;
+    const cls     = isOwned ? (isEpic ? 'collect-card owned-epic' : 'collect-card owned') : 'collect-card locked';
+    const imgEl   = item.img
+      ? `<img src="${item.img}" class="collect-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="collect-img-icon" style="display:none">${item.icon || '🎁'}</div>`
+      : `<div class="collect-img-icon">${item.icon || '🎁'}</div>`;
+    const rarityLabel = isEpic ? '<div class="collect-rarity" style="color:var(--purple)">EPIC</div>' : item.sub ? `<div class="collect-rarity">${item.sub}</div>` : '';
+    return `<div class="${cls}" title="${item.name}">
+      ${imgEl}
+      <div class="collect-name">${item.name}</div>
+      ${rarityLabel}
+      ${!isOwned ? `<div class="collect-rarity">Lv.${item.unlockLv}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="collect-count">Items desbloqueados: <span>${owned}</span> / ${items.length}</div>
+    <div class="collect-grid">${cardsHTML}</div>
+  `;
+}
+
+function switchCollectCat(catId) {
+  collectCurrentCat = catId;
+  renderBPPopup(collectPlayerName, collectPlayerLevel);
+}
+
+// BP popup close
+(function() {
+  const bpOverlay = document.getElementById('bp-popup-overlay');
+  const bpClose   = document.getElementById('bp-popup-close');
+  function closeBP() { bpOverlay.classList.remove('open'); document.body.style.overflow = ''; }
+  if (bpClose)   bpClose.addEventListener('click', closeBP);
+  if (bpOverlay) bpOverlay.addEventListener('click', e => { if (e.target === bpOverlay) closeBP(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && bpOverlay.classList.contains('open')) closeBP(); });
+})();
+
 setInterval(() => { if (rankedRegion) loadRanked(); }, 60000);
+
+// ── Init ──────────────────────────────────────────────────
+// Pick random splash art for header
+pickRandomSplash();
+
+// Show Game section by default
+showMainMenu('game');
 </script>
 </body>
 </html>
