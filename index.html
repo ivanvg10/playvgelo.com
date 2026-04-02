@@ -45,10 +45,10 @@ body {
 .container { max-width: 750px; margin: 0 auto; padding: 1.5rem 1.25rem; position: relative; z-index: 1; }
 
 /* ── HEADER ── */
-.header { text-align: center; position: relative; display: flex; flex-direction: column; align-items: center; padding-bottom: 0.8rem; }
+.header { text-align: center; position: relative; display: flex; flex-direction: column; align-items: center; padding-bottom: 0; }
 .header-bg {
-  position: relative; width: 120%; height: 220px;
-  overflow: hidden; margin-top: -40px; margin-left: -10%; margin-bottom: 0;
+  position: relative; width: 120%; height: 200px;
+  overflow: hidden; margin-top: 0; margin-left: -10%; margin-bottom: 0;
   pointer-events: none; z-index: 0;
 }
 .header-bg::after {
@@ -64,8 +64,6 @@ body {
   transition: opacity 0.6s ease;
 }
 .header > *:not(.header-bg) { position: relative; z-index: 1; }
-
-.header-logo { width: 85px; height: auto; margin-bottom: -2px; margin-top: -80px; z-index: 2; }
 
 .header-subtitle { font-size: 0.85rem; color: var(--text); letter-spacing: 3px; text-transform: uppercase; margin-top: 4px; font-weight: 700; }
 
@@ -868,7 +866,65 @@ body {
 .lang-toggle:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.22); color: var(--text); }
 
 
-/* ── VALIDATED NAME STYLE ── */
+/* ── HEADER OVERLAY TEXT (inside GIF) ── */
+.header-overlay-text {
+  position: absolute;
+  bottom: 18px; left: 0; right: 0;
+  text-align: center;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ── LANDING SCREEN ── */
+#landing-screen { display: block; }
+.landing-disclaimer {
+  font-size: 0.7rem; color: var(--text2); text-align: center;
+  line-height: 1.7; margin: 18px 0 24px; padding: 0 12px;
+  letter-spacing: 0.3px;
+}
+.landing-menu {
+  display: flex; flex-direction: column; gap: 10px;
+  margin: 0 0 24px;
+}
+.landing-btn {
+  width: 100%; padding: 20px 10px;
+  border-radius: 14px; border: 1px solid var(--border);
+  background: var(--bg2); color: var(--text3);
+  font-family: 'Outfit', sans-serif; font-size: 1.3rem;
+  font-weight: 800; text-transform: uppercase; letter-spacing: 3px;
+  cursor: pointer; transition: all 0.25s ease; text-align: center;
+}
+.landing-btn:hover {
+  background: var(--bg3); color: #ffffff;
+  border-color: rgba(212,168,67,0.4);
+  box-shadow: 0 0 24px rgba(212,168,67,0.1);
+}
+.landing-btn.active {
+  background: var(--bg3); color: #ffffff;
+  border-color: rgba(212,168,67,0.5);
+  box-shadow: 0 0 24px rgba(212,168,67,0.15);
+}
+
+/* ── CONTENT NAV (back button bar) ── */
+.content-nav {
+  display: flex; align-items: center; gap: 10px;
+  margin: 10px 0 14px;
+}
+.content-back-btn {
+  padding: 6px 14px; border-radius: 20px;
+  border: 1px solid var(--border); background: var(--bg2);
+  color: var(--text2); font-family: 'Outfit', sans-serif;
+  font-size: 0.7rem; font-weight: 600; cursor: pointer;
+  transition: all 0.2s; letter-spacing: 0.5px;
+}
+.content-back-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+.content-nav-label {
+  font-family: 'Outfit', sans-serif; font-size: 0.65rem;
+  font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--gold);
+}
+
+
 .player-name-validated {
   color: #ffffff;
 }
@@ -1095,29 +1151,42 @@ body {
 
 <div class="container">
 
-  <!-- ═══ HEADER ═══ -->
+  <!-- ═══ HEADER (GIF banner with text overlaid inside) ═══ -->
   <div class="header">
     <div class="header-bg">
       <img id="header-splash-img" src="https://raw.githubusercontent.com/ivanvg10/playvgelo.com/main/IMG_7054.GIF" alt="Banner" onerror="this.style.opacity='0'; pickRandomSplash();">
     </div>
-    <div class="header-subtitle" data-i18n="subtitle">Community Leaderboards</div>
-    <div class="live-text"><span class="live-dot"></span><span data-i18n="live_text">Live — auto-updates every 60s</span></div>
-    <button class="lang-toggle" id="lang-toggle" onclick="toggleLang()" title="Cambiar idioma / Change language">
-      <span id="lang-flag">🇲🇽</span><span id="lang-label">Español</span>
-    </button>
+    <!-- Text sits inside the GIF area via z-index -->
+    <div class="header-overlay-text">
+      <div class="header-subtitle" data-i18n="subtitle">Community Leaderboards</div>
+      <div class="live-text"><span class="live-dot"></span><span data-i18n="live_text">Live — auto-updates every 60s</span></div>
+    </div>
   </div>
 
-  <!-- ═══ MAIN MENU ═══ -->
-  <div class="main-menu">
-    <button class="main-btn" id="main-btn-game" onclick="showMainMenu('game')" data-i18n="menu_game">GAME</button>
-    <button class="main-btn" id="main-btn-tourney" onclick="showMainMenu('tourney')" data-i18n="menu_tourney">TOURNEY</button>
-    <button class="main-btn" id="main-btn-more" onclick="showMainMenu('more')" data-i18n="menu_more">MORE</button>
+  <!-- Language button fixed top-left, rendered outside flow -->
+  <button class="lang-toggle" id="lang-toggle" onclick="toggleLang()" title="Cambiar idioma / Change language">
+    <span id="lang-flag">🇲🇽</span><span id="lang-label">Español</span>
+  </button>
+
+  <!-- ═══ LANDING: disclaimer + vertical 3-button menu ═══ -->
+  <div id="landing-screen">
+    <div class="landing-disclaimer" data-i18n="disclaimer">
+      Fan-made community tool · Not affiliated with Super Evil Megacorp · Vainglory and related assets are property of their respective owners.
+    </div>
+    <div class="landing-menu">
+      <button class="landing-btn" id="main-btn-game" onclick="selectSection('game')" data-i18n="menu_game">GAME</button>
+      <button class="landing-btn" id="main-btn-tourney" onclick="selectSection('tourney')" data-i18n="menu_tourney">TOURNEY</button>
+      <button class="landing-btn" id="main-btn-more" onclick="selectSection('more')" data-i18n="menu_more">MORE</button>
+    </div>
   </div>
 
-  <!-- ═══ DISCLAIMER ═══ -->
-  <div class="main-disclaimer" id="main-disclaimer" data-i18n="disclaimer">
-    Fan-made community tool · Not affiliated with Super Evil Megacorp · Vainglory and related assets are property of their respective owners.
-  </div>
+  <!-- ═══ CONTENT AREA (hidden until section selected) ═══ -->
+  <div id="content-area" style="display:none">
+    <!-- Back button + active section label -->
+    <div class="content-nav">
+      <button class="content-back-btn" onclick="goBackToLanding()">← Back</button>
+      <span class="content-nav-label" id="content-nav-label"></span>
+    </div>
 
   <!-- ═══ GAME SECTION ═══ -->
   <div id="main-game" class="main-section">
@@ -1368,6 +1437,8 @@ body {
     </div>
   </div>
 
+  </div><!-- end content-area -->
+
   <div class="footer" data-i18n="footer_text">
     Powered by Vainglory Community Members
   </div>
@@ -1467,13 +1538,35 @@ function pickRandomSplash() {
 let gameRegion = null;
 let currentGameTab = 'ranked';
 
-function showMainMenu(section) {
+let _currentSection = null;
+
+function selectSection(section) {
+  _currentSection = section;
+  document.getElementById('landing-screen').style.display = 'none';
+  document.getElementById('content-area').style.display = 'block';
+  const labels = { game: 'GAME', tourney: 'TOURNEY', more: 'MORE' };
+  const navEl = document.getElementById('content-nav-label');
+  if (navEl) navEl.textContent = labels[section] || section.toUpperCase();
+  document.querySelectorAll('.landing-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById(`main-btn-${section}`);
+  if (btn) btn.classList.add('active');
   document.querySelectorAll('.main-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.main-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(`main-${section}`).classList.add('active');
-  document.getElementById(`main-btn-${section}`).classList.add('active');
+  const sec = document.getElementById(`main-${section}`);
+  if (sec) sec.classList.add('active');
   if (section === 'tourney') loadTournaments();
-}(region) {
+}
+
+function goBackToLanding() {
+  document.getElementById('landing-screen').style.display = 'block';
+  document.getElementById('content-area').style.display = 'none';
+  document.querySelectorAll('.main-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.landing-btn').forEach(b => b.classList.remove('active'));
+  _currentSection = null;
+}
+
+function showMainMenu(section) { selectSection(section); }
+
+function setGameRegion(region) {
   gameRegion = region;
   rankedRegion = region;
   privateRegion = region;
