@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vainglory Eternal — Rankings</title>
+<title>Community Leaderboards — Vainglory</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -49,21 +49,25 @@ body {
 .header-bg {
   position: relative; width: 120%; height: 220px;
   overflow: hidden; margin-top: -40px; margin-left: -10%; margin-bottom: 0;
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 65%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 65%, transparent 100%);
   pointer-events: none; z-index: 0;
-  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.8));
+}
+.header-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(10,10,15,0.7) 70%, rgba(10,10,15,0.95) 100%),
+              linear-gradient(to bottom, rgba(10,10,15,0) 40%, rgba(10,10,15,0.98) 100%);
+  z-index: 1;
 }
 .header-bg img {
   width: 100%; height: 100%; object-fit: cover; object-position: center 30%;
-  opacity: 0.55;
+  opacity: 0.65;
   transition: opacity 0.6s ease;
 }
 .header > *:not(.header-bg) { position: relative; z-index: 1; }
 
 .header-logo { width: 85px; height: auto; margin-bottom: -2px; margin-top: -80px; z-index: 2; }
 
-.header-subtitle { font-size: 0.65rem; color: var(--text3); letter-spacing: 4px; text-transform: uppercase; margin-top: 4px; }
+.header-subtitle { font-size: 0.85rem; color: var(--text); letter-spacing: 3px; text-transform: uppercase; margin-top: 4px; font-weight: 700; }
 
 .live-dot { display: inline-block; width: 6px; height: 6px; background: var(--green); border-radius: 50%; margin-right: 6px; animation: pulse 2s ease-in-out infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -300,8 +304,8 @@ body {
 }
 .bp-popup-close:hover { border-color: var(--gold-dim); color: var(--gold); }
 .bp-title {
-  font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700;
-  color: #ffffff; letter-spacing: 2px; text-transform: uppercase;
+  font-family: 'Outfit', sans-serif; font-size: 1.0rem; font-weight: 800;
+  color: #ffffff; letter-spacing: 3px; text-transform: uppercase;
   text-align: center; margin-bottom: 4px; margin-top: 6px;
 }
 .bp-subtitle { font-size: 0.55rem; color: var(--text3); letter-spacing: 3px; text-transform: uppercase; text-align: center; margin-bottom: 14px; }
@@ -854,28 +858,22 @@ body {
 
 .lang-toggle {
   display: inline-flex; align-items: center; gap: 5px;
-  margin-top: 7px; padding: 4px 11px;
+  padding: 5px 11px;
   background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
   border-radius: 20px; color: var(--text2);
   font-family: 'Outfit', sans-serif; font-size: 0.6rem; font-weight: 600;
   letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s;
-  position: relative; z-index: 3;
+  position: fixed; top: 12px; left: 12px; z-index: 1000;
 }
 .lang-toggle:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.22); color: var(--text); }
 
 
 /* ── VALIDATED NAME STYLE ── */
 .player-name-validated {
-  text-decoration: underline;
-  text-decoration-color: #5bc8c8;
-  text-underline-offset: 3px;
-  color: #b8e8ff;
+  color: #ffffff;
 }
 .popup-player-name-validated {
-  text-decoration: underline;
-  text-decoration-color: #5bc8c8;
-  text-underline-offset: 4px;
-  color: #c8f0ff;
+  color: #ffffff;
 }
 
 /* ── HERO PROGRESS PREVIEW (in profile popup, validated only) ── */
@@ -885,6 +883,7 @@ body {
   border-radius: 10px;
 }
 .hp-label {
+  font-family: 'Outfit', sans-serif;
   font-size: 0.45rem; color: var(--text3); letter-spacing: 3px;
   text-transform: uppercase; margin-bottom: 8px; text-align: center;
 }
@@ -945,10 +944,11 @@ body {
   flex-shrink: 0;
 }
 .bp-view-title {
-  font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700;
-  color: #fff; letter-spacing: 2px;
+  font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 800;
+  color: #fff; letter-spacing: 3px; text-transform: uppercase;
 }
 .bp-view-subtitle {
+  font-family: 'Outfit', sans-serif;
   font-size: 0.5rem; color: var(--gold); letter-spacing: 2px;
   text-transform: uppercase; margin-top: 2px;
 }
@@ -1017,6 +1017,10 @@ body {
 .bp-lv-slot:hover:not(.lv-locked) { transform: scale(1.08); border-color: var(--gold-dim); }
 .bp-lv-slot.lv-current:hover { transform: scale(1.12); }
 .bp-lv-icon { font-size: 1.15rem; line-height: 1; margin-bottom: 3px; }
+.bp-lv-img {
+  width: 28px; height: 28px; border-radius: 6px; object-fit: cover;
+  margin-bottom: 3px; display: block;
+}
 .bp-lv-num {
   font-size: 0.38rem; color: var(--text3); letter-spacing: 0.5px;
 }
@@ -1077,7 +1081,7 @@ body {
   <div class="bp-view-card">
     <div class="bp-view-header">
       <div>
-        <div class="bp-view-title">BATTLE PASS</div>
+        <div class="bp-view-title">ACCOUNT LEVEL</div>
         <div class="bp-view-subtitle" id="bp-view-subtitle">Season 2026</div>
       </div>
       <button class="bp-view-back" id="bp-view-back" onclick="closeBPView()">← Back</button>
@@ -1094,9 +1098,9 @@ body {
   <!-- ═══ HEADER ═══ -->
   <div class="header">
     <div class="header-bg">
-      <img id="header-splash-img" src="" alt="Banner" onerror="this.style.opacity='0'">
+      <img id="header-splash-img" src="https://raw.githubusercontent.com/ivanvg10/playvgelo.com/main/IMG_7054.GIF" alt="Banner" onerror="this.style.opacity='0'; pickRandomSplash();">
     </div>
-    <div class="header-subtitle" data-i18n="subtitle">community competitive rankings</div>
+    <div class="header-subtitle" data-i18n="subtitle">Community Leaderboards</div>
     <div class="live-text"><span class="live-dot"></span><span data-i18n="live_text">Live — auto-updates every 60s</span></div>
     <button class="lang-toggle" id="lang-toggle" onclick="toggleLang()" title="Cambiar idioma / Change language">
       <span id="lang-flag">🇲🇽</span><span id="lang-label">Español</span>
@@ -1107,6 +1111,7 @@ body {
   <div class="main-menu">
     <button class="main-btn" id="main-btn-game" onclick="showMainMenu('game')" data-i18n="menu_game">GAME</button>
     <button class="main-btn" id="main-btn-tourney" onclick="showMainMenu('tourney')" data-i18n="menu_tourney">TOURNEY</button>
+    <button class="main-btn" id="main-btn-more" onclick="showMainMenu('more')" data-i18n="menu_more">MORE</button>
   </div>
 
   <!-- ═══ DISCLAIMER ═══ -->
@@ -1116,6 +1121,23 @@ body {
 
   <!-- ═══ GAME SECTION ═══ -->
   <div id="main-game" class="main-section">
+    <!-- Season Countdown (always visible when GAME is open) -->
+    <div class="season-container" style="margin-top:10px">
+      <div class="season-label" data-i18n="season_label">Season 2026</div>
+      <div class="countdown" id="countdown">
+        <div class="countdown-item"><div class="countdown-value" id="cd-days">000</div><div class="countdown-label" data-i18n="cd_days">Days</div></div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-item"><div class="countdown-value" id="cd-hours">00</div><div class="countdown-label" data-i18n="cd_hours">Hours</div></div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-item"><div class="countdown-value" id="cd-mins">00</div><div class="countdown-label" data-i18n="cd_mins">Mins</div></div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-item"><div class="countdown-value" id="cd-secs">00</div><div class="countdown-label" data-i18n="cd_secs">Secs</div></div>
+      </div>
+      <a href="https://discord.gg/K5Thqmayys" target="_blank" class="discord-btn">
+        <span class="discord-btn-icon">💬</span><span data-i18n="discord_btn">Join our Discord to participate</span>
+      </a>
+    </div>
+
     <!-- Level 2: Server select -->
     <div id="game-server-select">
       <div class="section-group-label" style="margin-top:8px" data-i18n="select_server_label">Select Server</div>
@@ -1125,26 +1147,8 @@ body {
       </div>
     </div>
 
-    <!-- Level 3: Season countdown + category row -->
+    <!-- Level 3: category row (shown after server select) -->
     <div id="game-content" style="display:none">
-      <!-- Season Countdown -->
-      <div class="season-container" style="margin-top:10px">
-        <div class="season-label" data-i18n="season_label">Season 2026</div>
-        <div class="countdown" id="countdown">
-          <div class="countdown-item"><div class="countdown-value" id="cd-days">000</div><div class="countdown-label" data-i18n="cd_days">Days</div></div>
-          <div class="countdown-separator">:</div>
-          <div class="countdown-item"><div class="countdown-value" id="cd-hours">00</div><div class="countdown-label" data-i18n="cd_hours">Hours</div></div>
-          <div class="countdown-separator">:</div>
-          <div class="countdown-item"><div class="countdown-value" id="cd-mins">00</div><div class="countdown-label" data-i18n="cd_mins">Mins</div></div>
-          <div class="countdown-separator">:</div>
-          <div class="countdown-item"><div class="countdown-value" id="cd-secs">00</div><div class="countdown-label" data-i18n="cd_secs">Secs</div></div>
-        </div>
-        <a href="https://discord.gg/K5Thqmayys" target="_blank" class="discord-btn">
-          <span class="discord-btn-icon">💬</span><span data-i18n="discord_btn">Join our Discord to participate</span>
-        </a>
-      </div>
-
-      <!-- Category row -->
       <div class="category-grid">
         <button class="cat-btn" id="catbtn-ranked" onclick="showGameTab('ranked')"><span class="cat-icon">🏆</span><span data-i18n="tab_public">Public</span></button>
         <button class="cat-btn" id="catbtn-private" onclick="showGameTab('private')"><span class="cat-icon">⚔️</span><span data-i18n="tab_private">Private</span></button>
@@ -1336,6 +1340,34 @@ body {
     </div>
   </div>
 
+  <!-- ═══ MORE SECTION ═══ -->
+  <div id="main-more" class="main-section">
+    <div style="padding:20px 0;text-align:center">
+      <div style="font-family:'Cinzel',serif;font-size:1rem;font-weight:700;color:#fff;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px">MORE</div>
+      <div style="font-size:0.6rem;color:var(--text3);letter-spacing:2px;margin-bottom:20px">Community resources & links</div>
+      <a href="https://discord.gg/K5Thqmayys" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(122,173,255,0.08);border:1px solid rgba(122,173,255,0.2);border-radius:12px;text-decoration:none;margin-bottom:10px;transition:all 0.2s" onmouseover="this.style.borderColor='rgba(122,173,255,0.5)'" onmouseout="this.style.borderColor='rgba(122,173,255,0.2)'">
+        <span style="font-size:1.4rem">💬</span>
+        <div style="text-align:left">
+          <div style="font-size:0.8rem;font-weight:700;color:#7aadff">Discord Community</div>
+          <div style="font-size:0.6rem;color:var(--text3);margin-top:2px">Join to participate in leagues & tournaments</div>
+        </div>
+        <span style="margin-left:auto;color:var(--text3);font-size:0.7rem">→</span>
+      </a>
+      <a href="https://playvgelo.com" target="_blank" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.2);border-radius:12px;text-decoration:none;margin-bottom:10px;transition:all 0.2s" onmouseover="this.style.borderColor='rgba(212,168,67,0.4)'" onmouseout="this.style.borderColor='rgba(212,168,67,0.2)'">
+        <span style="font-size:1.4rem">🌐</span>
+        <div style="text-align:left">
+          <div style="font-size:0.8rem;font-weight:700;color:var(--gold)">playvgelo.com</div>
+          <div style="font-size:0.6rem;color:var(--text3);margin-top:2px">Main community site</div>
+        </div>
+        <span style="margin-left:auto;color:var(--text3);font-size:0.7rem">→</span>
+      </a>
+      <div style="margin-top:20px;padding:12px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px">
+        <div style="font-size:0.5rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Fan-Made Tool</div>
+        <div style="font-size:0.6rem;color:var(--text2);line-height:1.6" data-i18n="disclaimer">Fan-made community tool · Not affiliated with Super Evil Megacorp · Vainglory and related assets are property of their respective owners.</div>
+      </div>
+    </div>
+  </div>
+
   <div class="footer" data-i18n="footer_text">
     Powered by Vainglory Community Members
   </div>
@@ -1411,24 +1443,21 @@ const SPLASH_POOL = [
 function pickRandomSplash() {
   const img = document.getElementById('header-splash-img');
   if (!img) return;
-  // Shuffle and try each until one loads
+  // Fallback: splash art if GIF fails
   const pool = [...SPLASH_POOL].sort(() => Math.random() - 0.5);
   let idx = 0;
   function tryNext() {
     if (idx >= pool.length) { img.style.opacity = '0'; return; }
     const { folder, hero } = pool[idx++];
-    // Primary: HeroName_splash de tamaño pequeño.webp
-    // Fallback: first skin alphabetically (we try _splash first then give up)
     const heroEnc = encodeURIComponent(hero);
     const url = `${ASSETS_BASE}${folder}/${heroEnc}/${heroEnc}_splash%20de%20tama%C3%B1o%20peque%C3%B1o.webp`;
     img.onerror = () => {
-      // Try alternate: hero lowercase
       const heroLower = encodeURIComponent(hero.toLowerCase());
       const url2 = `${ASSETS_BASE}${folder}/${heroLower}/${heroLower}_splash%20de%20tama%C3%B1o%20peque%C3%B1o.webp`;
       img.onerror = tryNext;
       img.src = url2;
     };
-    img.onload = () => { img.style.opacity = '0.55'; };
+    img.onload = () => { img.style.opacity = '0.65'; };
     img.src = url;
   }
   tryNext();
@@ -1444,9 +1473,7 @@ function showMainMenu(section) {
   document.getElementById(`main-${section}`).classList.add('active');
   document.getElementById(`main-btn-${section}`).classList.add('active');
   if (section === 'tourney') loadTournaments();
-}
-
-function setGameRegion(region) {
+}(region) {
   gameRegion = region;
   rankedRegion = region;
   privateRegion = region;
@@ -1579,8 +1606,18 @@ const TIER_IMAGES = {
 };
 
 
-// ── Battle Pass: 57 level icons (matches bot's BP_LEVEL_ICONS) ──────
-const BP_LEVEL_ICONS = {
+// ── Battle Pass: 57 level icons — hero profile photos (alphabetical) ──────
+const BP_HERO_PHOTOS = [
+  'adagio','alpha','amael','anka','ardan','baptiste','baron','blackfeather',
+  'caine','catherine','celeste','churnwalker','flicker','fortress','glaive',
+  'grace','grumpjaw','gwen','idris','inara','ishtar','joule','karas','kensei',
+  'kinetic','koshka','krestel','krul','lance','leo','lorelai','lyra',
+  'magnus','malene','ozo','petal','phinn','reim','reza','ringo','rona',
+  'samuel','sanfeng','saw','shin','silvernail','skaarf','skye','taka',
+  'tony','varya','viola','vox','warhawk','yates','ylva','vox'
+];
+// Build level icons as image URLs (fallback emoji for overflow)
+const BP_LEVEL_ICONS_EMOJI = {
   1:'🌱',2:'⭐',3:'🔥',4:'💧',5:'🌊',
   6:'🌙',7:'☀️',8:'⚡',9:'🌪️',10:'🏅',
   11:'💎',12:'🛡️',13:'⚔️',14:'🗡️',15:'🏹',
@@ -1594,6 +1631,12 @@ const BP_LEVEL_ICONS = {
   51:'🗼',52:'🏯',53:'🌋',54:'⛰️',55:'🌍',
   56:'🌟',57:'👑'
 };
+function getBPLevelPhoto(lv) {
+  const hero = BP_HERO_PHOTOS[lv - 1];
+  if (hero) return `${ASSETS_BASE}foto%20perfil/${encodeURIComponent(hero)}.webp`;
+  return null;
+}
+const BP_LEVEL_ICONS = BP_LEVEL_ICONS_EMOJI;
 const BP_MAX_LEVEL = 57;
 
 function getTierInfo(elo) {
@@ -1785,9 +1828,12 @@ function renderPlayerCard(p, index, mode, highlight) {
   const nameDisplayCard = isValidatedCard
     ? `<span class="player-name-validated">${name}</span>`
     : name;
+  const discordTag = isValidatedCard && accountsData[name.toLowerCase()].discordTag
+    ? accountsData[name.toLowerCase()].discordTag : '';
+  const discordTagHTML = discordTag ? `<span style="font-size:0.5rem;color:#7aadff;letter-spacing:0.5px;font-weight:500;margin-left:6px;opacity:0.85">${discordTag}</span>` : '';
 
   return `<div class="player-card ${topClass} ${hlClass} ${perfClass}" style="animation-delay:${index*0.02}s" data-player="${name.toLowerCase()}" data-player-index="${index}" data-player-mode="${mode}">
-    <div class="player-header"><div class="rank-position">#${index+1}</div><div class="player-name">${nameDisplayCard}</div></div>
+    <div class="player-header"><div class="rank-position">#${index+1}${discordTagHTML}</div><div class="player-name">${nameDisplayCard}</div></div>
     <div class="tier-section">
       <img src="${ti.image}" alt="Tier ${ti.num}" class="tier-image">
       <div class="tier-display">
@@ -2646,11 +2692,11 @@ function toggleTourneyAccordion(idx) {
       html += `<div class="bp-level-section" style="margin-top:10px">
         <div class="bp-level-row">
           <div>
-            <div style="font-size:0.42rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Level</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:0.42rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Account Level</div>
             <div class="bp-level-num">${playerLevel} <span class="bp-level-max">/ ${BP_MAX_LEVEL}</span></div>
           </div>
           <div style="text-align:right">
-            <div style="font-size:0.42rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Total XP</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:0.42rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Total XP</div>
             <div class="bp-xp-total">${playerXP.toLocaleString()}</div>
           </div>
         </div>
@@ -2665,7 +2711,9 @@ function toggleTourneyAccordion(idx) {
       const PREVIEW_COUNT = 21;
       let iconGridHTML = '';
       for (let lv = 1; lv <= BP_MAX_LEVEL; lv++) {
-        const icon = BP_LEVEL_ICONS[lv] || '⭐';
+        const photoUrl = getBPLevelPhoto(lv);
+        const fallbackEmoji = BP_LEVEL_ICONS_EMOJI[lv] || '⭐';
+        const hero = BP_HERO_PHOTOS[lv - 1] || '';
         const isCurrent = lv === playerLevel;
         const isUnlocked = lv < playerLevel;
         let cls = 'hp-icon';
@@ -2673,15 +2721,18 @@ function toggleTourneyAccordion(idx) {
         else if (isUnlocked) cls += ' unlocked';
         else cls += ' locked';
         if (lv <= PREVIEW_COUNT) {
-          iconGridHTML += `<div class="${cls}" title="Level ${lv}: ${icon}" onclick="openBPView('${name}')">${icon}</div>`;
+          const imgHTML = photoUrl
+            ? `<img src="${photoUrl}" alt="${hero}" style="width:100%;height:100%;object-fit:cover;border-radius:6px" onerror="this.style.display='none';this.nextSibling.style.display='block'"><span style="display:none;font-size:1.1rem">${fallbackEmoji}</span>`
+            : `<span style="font-size:1.1rem">${fallbackEmoji}</span>`;
+          iconGridHTML += `<div class="${cls}" title="${hero || 'Level'} · Lv.${lv}" onclick="openBPView('${name}')">${imgHTML}</div>`;
         }
       }
       const remaining = BP_MAX_LEVEL - PREVIEW_COUNT;
 
       html += `<div class="hp-section" style="margin-top:10px">
-        <div class="hp-label">Hero Icons Progress</div>
+        <div class="hp-label">Account Level Progress</div>
         <div class="hp-grid">${iconGridHTML}</div>
-        ${remaining > 0 ? `<div class="hp-more" onclick="openBPView('${name}')">+${remaining} more — View all 57 →</div>` : ''}
+        ${remaining > 0 ? `<div class="hp-more" onclick="openBPView('${name}')">+${remaining} more — View all ${BP_MAX_LEVEL} →</div>` : ''}
       </div>`;
     }
 
@@ -2712,7 +2763,7 @@ function toggleTourneyAccordion(idx) {
       const isMVP = mvpName && name.toLowerCase()===mvpName;
       const isValidated = accountsData[name.toLowerCase()] && accountsData[name.toLowerCase()].status !== 'banned';
       const baseCls = 'popup-match-player-name'+(isAfk?' afk':isMVP?' mvp':'');
-      const validatedStyle = isValidated ? ' style="text-decoration:underline;text-decoration-color:#5bc8c8;text-underline-offset:3px;color:#b8e8ff"' : '';
+      const validatedStyle = isValidated ? ' style="color:#ffffff;font-weight:600"' : '';
       const scoreDisp = score&&score!=='0/0/0'?score:'';
       const goldDisp  = gold&&gold!=='0'?`<span class="popup-match-player-gold">💰${gold}</span>`:'';
       return `<div class="popup-match-player"><span class="${baseCls}"${validatedStyle}>${name}${isAfk?' 💤':''}${isMVP?' ⭐':''}</span><div class="popup-match-player-details"><span class="popup-match-player-score">${scoreDisp}</span>${goldDisp}</div></div>`;
@@ -2833,11 +2884,11 @@ function renderBPView() {
   let progressHTML = `<div class="bp-view-progress">
     <div class="bp-view-progress-row">
       <div>
-        <div style="font-size:0.4rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Level</div>
+        <div style="font-family:'Outfit',sans-serif;font-size:0.4rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Account Level</div>
         <div class="bp-view-lv-num">${bpViewLevel} <span class="bp-view-lv-max">/ ${BP_MAX_LEVEL}</span></div>
       </div>
       <div style="text-align:right">
-        <div style="font-size:0.4rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Total XP</div>
+        <div style="font-family:'Outfit',sans-serif;font-size:0.4rem;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Total XP</div>
         <div class="bp-view-xp">${bpViewXP.toLocaleString()}</div>
       </div>
     </div>
@@ -2850,19 +2901,23 @@ function renderBPView() {
     </div>
   </div>`;
 
-  // Build 57-level grid
+  // Build 57-level grid with hero photos
   let gridHTML = '<div class="bp-levels-grid">';
   for (let lv = 1; lv <= BP_MAX_LEVEL; lv++) {
-    const icon = BP_LEVEL_ICONS[lv] || '⭐';
+    const photoUrl = getBPLevelPhoto(lv);
+    const fallbackEmoji = BP_LEVEL_ICONS_EMOJI[lv] || '⭐';
+    const hero = BP_HERO_PHOTOS[lv - 1] || '';
     const isCurrent = lv === bpViewLevel;
     const isUnlocked = lv < bpViewLevel;
-    const isLocked = lv > bpViewLevel;
     let cls = 'bp-lv-slot';
     if (isCurrent) cls += ' lv-current';
     else if (isUnlocked) cls += ' lv-unlocked';
     else cls += ' lv-locked';
-    gridHTML += `<div class="${cls}" title="Level ${lv}">
-      <div class="bp-lv-icon">${icon}</div>
+    const iconHTML = photoUrl
+      ? `<img src="${photoUrl}" alt="${hero}" class="bp-lv-img" onerror="this.style.display='none';this.nextSibling.style.display='block'"><span class="bp-lv-icon" style="display:none">${fallbackEmoji}</span>`
+      : `<span class="bp-lv-icon">${fallbackEmoji}</span>`;
+    gridHTML += `<div class="${cls}" title="${hero || 'Level'} · Lv.${lv}">
+      ${iconHTML}
       <div class="bp-lv-num">${lv}</div>
     </div>`;
   }
@@ -3160,11 +3215,12 @@ setInterval(() => { if (rankedRegion) loadRanked(); }, 60000);
 const I18N = {
   en: {
     // Header
-    subtitle:            'community competitive rankings',
+    subtitle:            'Community Leaderboards',
     live_text:           'Live — auto-updates every 60s',
     // Main menu
     menu_game:           'GAME',
     menu_tourney:        'TOURNEY',
+    menu_more:           'MORE',
     disclaimer:          'Fan-made community tool · Not affiliated with Super Evil Megacorp · Vainglory and related assets are property of their respective owners.',
     // Server
     select_server_label: 'Select Server',
@@ -3257,11 +3313,12 @@ const I18N = {
   },
   es: {
     // Header
-    subtitle:            'rankings competitivos de la comunidad',
+    subtitle:            'Community Leaderboards',
     live_text:           'En vivo — actualización cada 60s',
     // Main menu
     menu_game:           'JUEGO',
     menu_tourney:        'TORNEO',
+    menu_more:           'MÁS',
     disclaimer:          'Herramienta fan-made · No afiliada a Super Evil Megacorp · Vainglory y sus activos son propiedad de sus respectivos dueños.',
     // Server
     select_server_label: 'Seleccionar Servidor',
@@ -3424,9 +3481,6 @@ function toggleLang() {
 }
 
 // ── Init ──────────────────────────────────────────────────
-// Pick random splash art for header
-pickRandomSplash();
-
 // Start at landing — user picks GAME or TOURNEY
 // No section active by default
 </script>
