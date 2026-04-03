@@ -720,7 +720,7 @@ body {
 }
 .tourney-prize-row { display: flex; align-items: baseline; justify-content: center; gap: 6px; }
 .tourney-prize-value { font-size: 2.2rem; font-weight: 900; color: var(--green); text-shadow: 0 0 20px rgba(74,222,128,0.3); line-height: 1.1; }
-.tourney-prize-currency { font-size: 0.9rem; font-weight: 700; color: var(--green); opacity: 0.75; align-self: flex-end; padding-bottom: 4px; }
+.tourney-prize-currency { font-size: 0.9rem; font-weight: 700; color: #ffffff; opacity: 0.75; align-self: flex-end; padding-bottom: 4px; }
 .tourney-prize-sub { font-size: 0.75rem; font-weight: 500; color: #ffffff; margin-top: 2px; letter-spacing: 1px; line-height: 1.1; }
 
 .tourney-register-now { font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700; color: #ffffff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; position: relative; z-index: 2; }
@@ -861,7 +861,7 @@ body {
   border-radius: 20px; color: var(--text2);
   font-family: 'Outfit', sans-serif; font-size: 0.6rem; font-weight: 600;
   letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s;
-  position: fixed; top: 12px; left: 12px; z-index: 1000;
+  position: fixed; top: 12px; right: 12px; z-index: 1000;
 }
 .lang-toggle:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.22); color: var(--text); }
 
@@ -1360,9 +1360,7 @@ body {
               <div class="sub-tab" id="h2h-m-liga3" onclick="setH2HMode('liga3')" data-i18n="tab_league_3v3">League 3v3</div>
               <div class="sub-tab" id="h2h-m-liga5" onclick="setH2HMode('liga5')" data-i18n="tab_league_5v5">League 5v5</div>
             </div>
-            <div id="h2h-history-btn-wrap" style="display:none">
-              <button class="sec-btn" style="width:100%;margin:6px 0 8px;" onclick="openHistoryPopup()"><span>📋</span> <span data-i18n="history_btn">History</span></button>
-            </div>
+            <!-- History button hidden for H2H -->
             <div class="h2h-card">
               <div class="h2h-inputs">
                 <div class="autocomplete-wrap">
@@ -1653,10 +1651,8 @@ function showGameTab(tab) {
   if (content) content.classList.add('active');
 
   // Show history wrap when entering PUBLIC or PRIVATE (after mode already set)
-  // H2H history shown immediately since mode defaults to 'all'
   if (tab === 'h2h') {
-    const hw = document.getElementById('h2h-history-btn-wrap');
-    if (hw) hw.style.display = 'block';
+    // History button removed from H2H view
   }
 
   // Load data
@@ -1772,9 +1768,15 @@ async function loadAccountsData() {
     rows.forEach(row => {
       const name = col(row, 'PlayerName', 'Name', 'player') || '';
       if (!name) return;
+      const rawLevel = Number(col(row, 'AccountLevel', 'Level') || 1);
+      const xp = Number(col(row, 'TotalXP', 'XP') || 0);
+      // Compute level from XP: every 100 XP = 1 level, starting at level 1
+      // Use computed level if XP is available, otherwise fall back to sheet value
+      const xpPerLevel = 100;
+      const computedLevel = xp > 0 ? Math.min(Math.floor(xp / xpPerLevel) + 1, BP_MAX_LEVEL) : rawLevel;
       accountsData[name.toLowerCase()] = {
-        level: Number(col(row, 'AccountLevel', 'Level') || 1),
-        xp: Number(col(row, 'TotalXP', 'XP') || 0),
+        level: computedLevel,
+        xp: xp,
         status: col(row, 'Status', 'status') || 'active',
         discordTag: col(row, 'DiscordTag', 'Discord') || '',
         discordId: col(row, 'DiscordID') || ''
@@ -3580,8 +3582,12 @@ function toggleLang() {
 }
 
 // ── Init ──────────────────────────────────────────────────
-// Start at landing — user picks GAME or TOURNEY
-// No section active by default
+// Default state: Game > North America > Public selected on load
+document.addEventListener('DOMContentLoaded', () => {
+  selectSection('game');
+  setGameRegion('NA');
+  showGameTab('ranked');
+});
 </script>
 </body>
 </html>
